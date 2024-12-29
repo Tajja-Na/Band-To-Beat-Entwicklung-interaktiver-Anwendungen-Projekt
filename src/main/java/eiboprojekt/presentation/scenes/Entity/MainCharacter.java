@@ -3,7 +3,6 @@ package eiboprojekt.presentation.scenes.Entity;
 import java.io.File;
 import java.io.IOException;
 
-
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
 import javafx.scene.canvas.GraphicsContext;
