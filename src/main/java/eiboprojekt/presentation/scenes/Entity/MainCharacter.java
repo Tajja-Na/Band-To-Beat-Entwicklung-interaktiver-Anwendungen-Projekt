@@ -33,15 +33,16 @@ public class MainCharacter extends Entity {
 
     public void getPlayerImage() {
         try {
-            String basePath = "assets/Character/Charakter1/";
-            front = new Image(new File(basePath + "front.png").toURI().toString());
-            back = new Image(new File(basePath + "back.png").toURI().toString());
-            walk1 = new Image(new File(basePath + "walk1.png").toURI().toString());
-            walk2 = new Image(new File(basePath + "walk2.png").toURI().toString());
-            walkL1 = new Image(new File(basePath + "walkL1.png").toURI().toString());
-            walkL2 = new Image(new File(basePath + "walkL2.png").toURI().toString());
-            walkR1 = new Image(new File(basePath + "walkR1.png").toURI().toString());
-            walkR2 = new Image(new File(basePath + "walkR2.png").toURI().toString());
+            String basePath = "assets/Character/Charakter3/";
+            front = new Image(new File(basePath + "timmy pixel front stand.png").toURI().toString());
+            back1 = new Image(new File(basePath + "timmy pixel sprint hinten 1.png").toURI().toString());
+            back2 = new Image(new File(basePath + "timmy pixel sprint hinten 2.png").toURI().toString());
+            walk1 = new Image(new File(basePath + "timmy pixel sprint front 1.png").toURI().toString());
+            walk2 = new Image(new File(basePath + "timmy pixel sprint front 2.png").toURI().toString());
+            walkL1 = new Image(new File(basePath + "timmy pixel sprint 1 L.png").toURI().toString());
+            walkL2 = new Image(new File(basePath + "timmy pixel sprint 2 L.png").toURI().toString());
+            walkR1 = new Image(new File(basePath + "timmy pixel sprint 1 R.png").toURI().toString());
+            walkR2 = new Image(new File(basePath + "timmy pixel sprint 2 R.png").toURI().toString());
             standL = new Image(new File(basePath + "standL.png").toURI().toString());
             standR = new Image(new File(basePath + "standR.png").toURI().toString());
             jumpL = new Image(new File(basePath + "jumpL.png").toURI().toString());
@@ -93,7 +94,7 @@ public class MainCharacter extends Entity {
         Image image;
         switch (direction) {
             case "up":
-                image = sprintNum == 1 ? walk1 : walk2;
+                image = sprintNum == 1 ? back1 : back2;
                 break;
             case "down":
                 image = sprintNum == 1 ? walk1 : walk2;
