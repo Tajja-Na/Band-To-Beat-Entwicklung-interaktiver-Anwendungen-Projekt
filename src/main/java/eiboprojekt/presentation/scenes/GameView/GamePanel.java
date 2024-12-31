@@ -1,5 +1,7 @@
 package eiboprojekt.presentation.scenes.GameView;
 
+import java.io.InterruptedIOException;
+
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.Member1;
@@ -19,8 +21,8 @@ public class GamePanel extends BorderPane {
     final int scale = 1; // damit man es halt passend skalieren kann
 
     public final int tileSize = originalTileSize * scale; // hier 128x128
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
 
     public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
     public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
@@ -82,11 +84,16 @@ public class GamePanel extends BorderPane {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // 1. Update: Update information like character position
-                update();
+                
+                if(!app.isImLevel()){
+                    // 1. Update: Update information like character position
+                    update();
 
-                // 2. Draw: Draw the screen with updated information
-                draw();
+                    // 2. Draw: Draw the screen with updated information
+                    draw();
+                } else{
+                    stop();
+                }
             }
         };
         gameLoop.start();
@@ -110,7 +117,6 @@ public class GamePanel extends BorderPane {
         player.draw(gc, tileSize);
 
         member1.draw(gc);
-
     }
 
     // diese methode ist da für die keyanwendungen also wenn man was drücken sollte

@@ -1,5 +1,6 @@
 package eiboprojekt;
 
+import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.GameView.DialogPage;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
@@ -19,10 +20,22 @@ public class App extends Application {
 
     private GamePanel gamePanel;
     private GameLevel gameLevel;
+    private FeldManager fm;
     private Scene scene;
+
+    private boolean ImLevel = false;
+
+    public void setImLevel(boolean imLevel) {
+        ImLevel = imLevel;
+    }
+
+    public boolean isImLevel() {
+        return ImLevel;
+    }
 
     @Override
     public void start(Stage primaryStage) {
+  
         // Null-Prüfung und Initialisierung
         if (gamePanel == null) {
             gamePanel = new GamePanel(this);
@@ -35,7 +48,9 @@ public class App extends Application {
         }
         introductionView = new Introduction(gamePanel.screenWidth, gamePanel.screenHeight);
 
-        gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight);
+        fm = new FeldManager(gamePanel);
+
+        gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, fm);
 
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
@@ -52,6 +67,7 @@ public class App extends Application {
         // für die verschiedenen sdialoge?
         dialogPage = new DialogPage();
         dialogPage.getNextButton().setOnAction(e -> switchView("GAMELevel1"));
+        
 
         // hier vllt auch so ein action ding für gamePanel
 
@@ -74,6 +90,7 @@ public class App extends Application {
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
                 gamePanel.startGameThread();
+                setImLevel(false);
                 break;
             case "DIALOG1":
                 // Dialog für Member1 anzeigen
@@ -83,6 +100,7 @@ public class App extends Application {
                 rootPane.getChildren().add(gameLevel);
                 gamePanel.requestFocus();
                 gamePanel.startGameThread();
+                setImLevel(true);
                 break;
             default:
                 System.err.println("Unbekannte Ansicht: " + viewName);
