@@ -10,8 +10,8 @@ public class Haus extends Entity {
     private Image image;
 
     public Haus(int startX, int startY) {
-        this.weltX = startX;
-        this.weltY = startY;
+        this.x = startX;
+        this.y = startY;
         getPlayerImage(); // Methode zum Laden des NPC-Bildes
     }
 

@@ -8,8 +8,8 @@ public class Member extends Entity {
     private Image image;
 
     public Member(int startX, int startY) {
-        this.weltX = startX;
-        this.weltY = startY;
+        this.x = startX;
+        this.y = startY;
         getPlayerImage(); // Methode zum Laden des NPC-Bildes
     }
 
