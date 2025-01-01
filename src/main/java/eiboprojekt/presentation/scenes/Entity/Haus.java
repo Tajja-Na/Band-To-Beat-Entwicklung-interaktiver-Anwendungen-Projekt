@@ -10,8 +10,8 @@ public class Haus extends Entity {
     private Image image;
 
     public Haus(int startX, int startY) {
-        this.x = startX;
-        this.y = startY;
+        this.weltX = startX;
+        this.weltY = startY;
         getPlayerImage(); // Methode zum Laden des NPC-Bildes
     }
 
@@ -47,7 +47,7 @@ public class Haus extends Entity {
             double height = 200; // Beispielwert, anpassen nach Bedarf
 
             // Das Bild auf der gegebenen Position mit der angegebenen Größe zeichnen
-            gc.drawImage(image, x, y, width, height);
+            gc.drawImage(image, weltX, weltY, width, height);
             // System.out.println("Drawing Haus at: x=" + x + ", y=" + y + " with size: " +
             // width + "x" + height);
         } else {
@@ -58,11 +58,11 @@ public class Haus extends Entity {
 
     // getter
     public int getX() {
-        return this.x;
+        return this.weltX;
     }
 
     public int getY() {
-        return this.y;
+        return this.weltY;
     }
 
 }

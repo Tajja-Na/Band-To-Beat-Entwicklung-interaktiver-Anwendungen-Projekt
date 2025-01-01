@@ -8,8 +8,8 @@ public class Member extends Entity {
     private Image image;
 
     public Member(int startX, int startY) {
-        this.x = startX;
-        this.y = startY;
+        this.weltX = startX;
+        this.weltY = startY;
         getPlayerImage(); // Methode zum Laden des NPC-Bildes
     }
 
@@ -42,7 +42,7 @@ public class Member extends Entity {
     public void draw(GraphicsContext gc, int screenX, int screenY) {
         if (image != null) {
             // Das Bild auf der gegebenen Position zeichnen
-            gc.drawImage(image, x, y);
+            gc.drawImage(image, weltX, weltY);
             // System.out.println("Drawing Member1 at: x=" + x + ", y=" + y);
         } else {
             // Fehlerbehandlung, falls das Bild null ist
@@ -52,11 +52,11 @@ public class Member extends Entity {
 
     // getter
     public int getX() {
-        return this.x;
+        return this.weltX;
     }
 
     public int getY() {
-        return this.y;
+        return this.weltY;
     }
 
 }
