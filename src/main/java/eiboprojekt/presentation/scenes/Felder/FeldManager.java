@@ -44,8 +44,7 @@ public class FeldManager {
         //System.out.println("Working Directory = " + System.getProperty("user.dir"));
         //"assets/Karte/levelbase1.txt"
         try{
-            String path = zuladeneKarte;
-
+            String path = zuladeneKarte; 
             BufferedReader br = new BufferedReader(new FileReader(path));
 
             int col = 0;
