@@ -42,7 +42,8 @@ public class Member1 extends Entity {
     public void draw(GraphicsContext gc) {
         if (image != null) {
             // Das Bild auf der gegebenen Position zeichnen
-            gc.drawImage(image, weltX, weltY);  //hier muss nicht weltx und welty hin i think, der character bewegt sich aktuell mit dem screen, das soll aber nicht so sein
+            gc.drawImage(image, weltX, weltY); // hier muss nicht weltx und welty hin i think, der character bewegt sich
+                                               // aktuell mit dem screen, das soll aber nicht so sein
             System.out.println("Drawing Member1 at: x=" + weltX + ", y=" + weltY);
         } else {
             // Fehlerbehandlung, falls das Bild null ist
