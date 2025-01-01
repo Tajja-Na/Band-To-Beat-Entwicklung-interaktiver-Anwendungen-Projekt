@@ -5,6 +5,7 @@ import java.io.InterruptedIOException;
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.Member1;
+import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,6 +16,7 @@ import javafx.scene.paint.Color;
 public class GamePanel extends BorderPane {
     // zur referenz dass es mit dem switch geht
     private App app;
+    private FeldManager fm;
 
     // Screen settings
     final int originalTileSize = 64; // 64x64 tile
@@ -26,6 +28,12 @@ public class GamePanel extends BorderPane {
 
     public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
     public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
+
+
+    public final int MAX_WELT_COL = 16;
+    public final int MAX_WELT_ROW = 12;
+    public final int WORLS_WIDTH = tileSize * MAX_WELT_COL;
+    public final int WORLS_HEIGHT = tileSize * MAX_WELT_ROW;
 
     // Canvas für das Zeichnen
     private final Canvas canvas;
@@ -50,6 +58,7 @@ public class GamePanel extends BorderPane {
 
     public GamePanel(App app) {
         this.app = app;
+
         // Erstelle das Canvas und füge es zum Panel hinzu
         canvas = new Canvas(screenWidth, screenHeight);
         this.getChildren().add(canvas);
@@ -72,15 +81,20 @@ public class GamePanel extends BorderPane {
 
         member1 = new Member1(300, 300); // Beispielposition für den NPC
 
+        fm = new FeldManager(this);
         // Hintergrundfarbe für das Panel
-        this.setStyle("-fx-background-color: black;");
+        //this.setStyle("-fx-background-color: black;");
 
         canvas.setOnMouseClicked(event -> handleMouseClick(event));
+    }
 
+    public FeldManager getFM(){
+        return fm;
     }
 
     public void startGameThread() {
         // Erstelle einen AnimationTimer, der jedes Frame aufgerufen wird
+
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -113,10 +127,11 @@ public class GamePanel extends BorderPane {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+        fm.draw(gc);
+
         // Spieler zeichnen und tileSize übergeben
         player.draw(gc, tileSize);
-
-        member1.draw(gc);
+        member1.draw(gc); 
     }
 
     // diese methode ist da für die keyanwendungen also wenn man was drücken sollte

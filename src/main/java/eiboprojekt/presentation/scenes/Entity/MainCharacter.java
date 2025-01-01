@@ -12,20 +12,27 @@ import javafx.scene.paint.Color;
 public class MainCharacter extends Entity {
     GamePanel gp;
     KeyHandlern keyHandler;
+
     private int tileSize; // Hinzugefügt
+
+    public final int screenX;
+    public final int screenY;
 
     public MainCharacter(GamePanel gamePanel, KeyHandlern keyHandler) {
         this.gp = gamePanel;
         this.keyHandler = keyHandler;
         this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
 
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+
         setDefaultValues();
         getPlayerImage(); // Spielerbilder direkt laden
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        weltX = gp.tileSize * 6;
+        weltY = gp.tileSize * 8;
         speed = 5;
 
         direction = "default";
@@ -58,7 +65,7 @@ public class MainCharacter extends Entity {
     }
 
     public void update() {
-        System.out.println("Player position: x=" + x + ", y=" + y);
+        System.out.println("Player position: x=" + weltX + ", y=" + weltY);
         // Update der Spielerposition je nach gedrückter Taste
         // Eine einzige if-Bedingung für alle Tasteneingaben
         if (keyHandler.isUp() == true || keyHandler.isDown() == true || keyHandler.isLeft() == true
@@ -66,19 +73,19 @@ public class MainCharacter extends Entity {
             // Update der Spielerposition je nach gedrückter Taste
             if (keyHandler.isUp() == true) { // explizit true verwenden
                 direction = "up";
-                y -= speed;
+                weltY -= speed;
             }
             if (keyHandler.isDown() == true) { // explizit true verwenden
                 direction = "down";
-                y += speed;
+                weltY += speed;
             }
             if (keyHandler.isLeft() == true) { // explizit true verwenden
                 direction = "left";
-                x -= speed;
+                weltX -= speed;
             }
             if (keyHandler.isRight() == true) { // explizit true verwenden
                 direction = "right";
-                x += speed;
+                weltX += speed;
             }
             sprintCountr++;
             if (sprintCountr > 12) {
@@ -110,20 +117,20 @@ public class MainCharacter extends Entity {
                 break;
         }
         if (image != null) {
-            gc.drawImage(image, x, y, tileSize, tileSize);
-            System.out.println("Drawing player at: x=" + x + ", y=" + y + ", direction: " + direction);
+            gc.drawImage(image, screenX, screenY, tileSize, tileSize);
+            System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
         } else {
             System.err.println("Failed to draw player: Image is null");
             // Zeichne ein Ersatz-Rechteck
             gc.setFill(Color.RED);
-            gc.fillRect(x, y, tileSize, tileSize);
+            gc.fillRect(screenX, screenY, tileSize, tileSize);
         }
     }
 
     // für die interaktion
     public boolean isNear(Member1 member) {
-        int distanceX = Math.abs(this.x - member.getX());
-        int distanceY = Math.abs(this.y - member.getY());
+        int distanceX = Math.abs(this.screenX - member.getX());
+        int distanceY = Math.abs(this.screenY - member.getY());
 
         // definieren hier eine maximale Distanz -> z.B. 64 Pixel
         return distanceX < 64 && distanceY < 64;
