@@ -29,8 +29,8 @@ public class GamePanel extends BorderPane {
     public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
     public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
 
-    public final int MAX_WELT_COL = 32; //16*7
-    public final int MAX_WELT_ROW = 12; //12*4 oder *5 
+    public final int MAX_WELT_COL = 80; // 16*5
+    public final int MAX_WELT_ROW = 48; // 12*4 oder *5
     public final int WORLS_WIDTH = tileSize * MAX_WELT_COL;
     public final int WORLS_HEIGHT = tileSize * MAX_WELT_ROW;
 
@@ -82,12 +82,12 @@ public class GamePanel extends BorderPane {
 
         fm = new FeldManager(this);
         // Hintergrundfarbe für das Panel
-        //this.setStyle("-fx-background-color: black;");
+        // this.setStyle("-fx-background-color: black;");
 
         canvas.setOnMouseClicked(event -> handleMouseClick(event));
     }
 
-    public FeldManager getFM(){
+    public FeldManager getFM() {
         return fm;
     }
 
@@ -97,14 +97,14 @@ public class GamePanel extends BorderPane {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                
-                if(!app.isImLevel()){
+
+                if (!app.isImLevel()) {
                     // 1. Update: Update information like character position
                     update();
 
                     // 2. Draw: Draw the screen with updated information
                     draw();
-                } else{
+                } else {
                     stop();
                 }
             }
@@ -130,7 +130,7 @@ public class GamePanel extends BorderPane {
 
         // Spieler zeichnen und tileSize übergeben
         player.draw(gc, tileSize);
-        member1.draw(gc); 
+        member1.draw(gc);
     }
 
     // diese methode ist da für die keyanwendungen also wenn man was drücken sollte
