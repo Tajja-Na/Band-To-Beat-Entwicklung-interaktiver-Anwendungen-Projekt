@@ -37,12 +37,6 @@ public class FeldManager {
 
         alleFelder[1] = new Feld();
         alleFelder[1].image = new Image("file:assets/background/gras 1 tile.png");
-
-        alleFelder[0] = new Feld();
-        alleFelder[0].image = new Image("file:assets/background/himmel 1 tile.png");
-
-        alleFelder[1] = new Feld();
-        alleFelder[1].image = new Image("file:assets/background/gras 1 tile.png");
     }
 
     public void ladeKarte(String zuladeneKarte){
@@ -73,8 +67,8 @@ public class FeldManager {
                 col = 0;
                 row++;
             }
-
             br.close();
+
             System.out.println("hab die karte geladen!");
         }catch(Exception e){
             e.printStackTrace();
@@ -83,23 +77,32 @@ public class FeldManager {
 
     public void draw(GraphicsContext gc){
         System.out.println("hi ich bin in draw vom fm drinne");
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int weltCol = 0;
+        int weltRow = 0;
 
-        while(col < gp.maxScreenCol && row < gp.maxScreenRow){
-            int feldNr = karteFeldNr[col][row];
+        while(weltCol < gp.MAX_WELT_COL && weltRow < gp.MAX_WELT_ROW){
+            int feldNr = karteFeldNr[weltCol][weltRow];
 
-            gc.drawImage(alleFelder[feldNr].image, x, y, gp.tileSize, gp.tileSize);
-            col++;
-            x += gp.tileSize;
+            int weltX = weltCol * gp.tileSize;
+            int weltY = weltRow * gp.tileSize;
+            int screenX = weltX - gp.player.weltX + gp.player.screenX; 
+            //hier geht es darum wo die tiles gezeichnet werden, die karten koordinaten sind anders als die vom player, der sich auf dem screen bewegt, die karten koordinate 0 0 mag bei der karte zwar 0 0  sein aber sie ist zum beispiel vom player 500 500 entfernt, da er sich in der mitt bewegt
+            int screenY = weltY - gp.player.weltY + gp.player.screenY;
 
-            if(col == gp.maxScreenCol){
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.tileSize;
+            if(weltX + gp.tileSize*2 > gp.player.weltX - gp.player.screenX &&
+                weltX - gp.tileSize*2 < gp.player.weltX + gp.player.screenX &&
+                    weltY + gp.tileSize*2 > gp.player.weltY - gp.player.screenY &&
+                        weltY - gp.tileSize*2 < gp.player.weltY + gp.player.screenY){  //hier wird überprüft welche koordinate der karte sich auf dem screen befindet und nur diese werden dann gezeichnet, damit die performance geschont wird
+
+                gc.drawImage(alleFelder[feldNr].image, screenX, screenY, gp.tileSize, gp.tileSize);
+            }
+
+            
+            weltCol++;
+
+            if(weltCol == gp.MAX_WELT_COL){
+                weltCol = 0;
+                weltRow++;
             }
         }
     }
