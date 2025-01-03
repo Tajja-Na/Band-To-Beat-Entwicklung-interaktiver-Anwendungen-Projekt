@@ -29,7 +29,7 @@ public class GamePanel extends BorderPane {
     public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
     public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
 
-    public final int MAX_WELT_COL = 80; // 16*5
+    public final int MAX_WELT_COL = 64; // 16*4
     public final int MAX_WELT_ROW = 48; // 12*4 oder *5
     public final int WORLS_WIDTH = tileSize * MAX_WELT_COL;
     public final int WORLS_HEIGHT = tileSize * MAX_WELT_ROW;

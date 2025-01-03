@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class FeldManager {
-    private final int ANZAHL_FELDER_GESAMT = 30;
+    private final int ANZAHL_FELDER_GESAMT = 150;
     private GamePanel gp;
 
     private Feld[] alleFelder;
@@ -49,74 +49,73 @@ public class FeldManager {
         alleFelder[2] = new Feld();
         alleFelder[2].image = new Image("file:assets/background/worldBackground/grass.png");
 
+        // Dirt Weg
         alleFelder[3] = new Feld();
-        alleFelder[3].image = new Image("file:assets/background/worldBackground/dirt.png");
+        alleFelder[3].image = new Image("file:assets/background/worldBackground/W1.png");
 
         alleFelder[4] = new Feld();
-        alleFelder[4].image = new Image("file:assets/background/worldBackground/4.png");
+        alleFelder[4].image = new Image("file:assets/background/worldBackground/W2.png");
 
         alleFelder[5] = new Feld();
-        alleFelder[5].image = new Image("file:assets/background/worldBackground/3.png");
+        alleFelder[5].image = new Image("file:assets/background/worldBackground/WegB.png");
 
         alleFelder[6] = new Feld();
-        alleFelder[6].image = new Image("file:assets/background/worldBackground/6.png");
+        alleFelder[6].image = new Image("file:assets/background/worldBackground/OL.png");
 
         alleFelder[7] = new Feld();
-        alleFelder[7].image = new Image("file:assets/background/worldBackground/5.png");
+        alleFelder[7].image = new Image("file:assets/background/worldBackground/OR.png");
 
         alleFelder[8] = new Feld();
-        alleFelder[8].image = new Image("file:assets/background/worldBackground/7.png");
+        alleFelder[8].image = new Image("file:assets/background/worldBackground/UL.png");
 
         alleFelder[9] = new Feld();
-        alleFelder[9].image = new Image("file:assets/background/worldBackground/8.png");
+        alleFelder[9].image = new Image("file:assets/background/worldBackground/UR.png");
 
         alleFelder[10] = new Feld();
-        alleFelder[10].image = new Image("file:assets/background/worldBackground/9.png");
+        alleFelder[10].image = new Image("file:assets/background/worldBackground/Start.png");
 
         alleFelder[11] = new Feld();
-        alleFelder[11].image = new Image("file:assets/background/worldBackground/20.png");
+        alleFelder[11].image = new Image("file:assets/background/worldBackground/EndeL.png");
 
         alleFelder[12] = new Feld();
-        alleFelder[12].image = new Image("file:assets/background/worldBackground/K.png");
+        alleFelder[12].image = new Image("file:assets/background/worldBackground/EndeR.png");
 
+        // Haus 1 Alles
         alleFelder[13] = new Feld();
-        alleFelder[13].image = new Image("file:assets/background/worldBackground/I.png");
+        alleFelder[13].image = new Image("file:assets/background/worldBackground/H11.png");
 
         alleFelder[14] = new Feld();
-        alleFelder[14].image = new Image("file:assets/background/worldBackground/Kp.png");
+        alleFelder[14].image = new Image("file:assets/background/worldBackground/H12.png");
 
         alleFelder[15] = new Feld();
-        alleFelder[15].image = new Image("file:assets/background/worldBackground/O.png");
+        alleFelder[15].image = new Image("file:assets/background/worldBackground/H13.png");
 
         alleFelder[16] = new Feld();
-        alleFelder[16].image = new Image("file:assets/background/worldBackground/12.png");
+        alleFelder[16].image = new Image("file:assets/background/worldBackground/H14.png");
 
         alleFelder[17] = new Feld();
-        alleFelder[17].image = new Image("file:assets/background/worldBackground/13.png");
+        alleFelder[17].image = new Image("file:assets/background/worldBackground/H15.png");
 
         alleFelder[18] = new Feld();
-        alleFelder[18].image = new Image("file:assets/background/worldBackground/14.png");
+        alleFelder[18].image = new Image("file:assets/background/worldBackground/H16.png");
 
         alleFelder[19] = new Feld();
-        alleFelder[19].image = new Image("file:assets/background/worldBackground/15.png");
+        alleFelder[19].image = new Image("file:assets/background/worldBackground/H17.png");
 
         alleFelder[20] = new Feld();
-        alleFelder[20].image = new Image("file:assets/background/worldBackground/H21.png");
+        alleFelder[20].image = new Image("file:assets/background/worldBackground/H18.png");
 
         alleFelder[21] = new Feld();
-        alleFelder[21].image = new Image("file:assets/background/worldBackground/H22.png");
+        alleFelder[21].image = new Image("file:assets/background/worldBackground/H19.png");
 
         alleFelder[22] = new Feld();
-        alleFelder[22].image = new Image("file:assets/background/worldBackground/12.png");
+        alleFelder[22].image = new Image("file:assets/background/worldBackground/Z.png");
 
         alleFelder[23] = new Feld();
-        alleFelder[23].image = new Image("file:assets/background/worldBackground/H33.png");
+        alleFelder[23].image = new Image("file:assets/background/worldBackground/Zz.png");
 
         alleFelder[24] = new Feld();
-        alleFelder[24].image = new Image("file:assets/background/worldBackground/H31.png");
-
-        alleFelder[25] = new Feld();
-        alleFelder[25].image = new Image("file:assets/background/worldBackground/H32.png");
+        alleFelder[24].image = new Image("file:assets/background/worldBackground/Zzz.png");
 
     }
 
