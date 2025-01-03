@@ -14,4 +14,11 @@ public class Entity {
 
     public int sprintCountr = 0;
     public int sprintNum;
+
+    // Für die collision -> hier erstellen wie eine klasse die ein rechteck auf der
+    // figur
+    // produkziert dass man an diesen punkt die collision hat -> weil ansonsten wird
+    // das ganze 64x64 feld als Collisions Area ausgewählt
+    public SolideRec solideArea;
+    public boolean collisionON = false;
 }

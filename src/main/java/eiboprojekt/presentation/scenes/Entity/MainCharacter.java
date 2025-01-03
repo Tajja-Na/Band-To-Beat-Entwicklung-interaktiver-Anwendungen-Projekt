@@ -26,12 +26,15 @@ public class MainCharacter extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
+        solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
+                                                                                 // rechteck
+
         setDefaultValues();
         getPlayerImage(); // Spielerbilder direkt laden
     }
 
     public void setDefaultValues() {
-        weltX = gp.tileSize * 6;
+        weltX = gp.tileSize * 9;
         weltY = gp.tileSize * 8;
         speed = 5;
 
@@ -73,19 +76,40 @@ public class MainCharacter extends Entity {
             // Update der Spielerposition je nach gedrückter Taste
             if (keyHandler.isUp() == true) { // explizit true verwenden
                 direction = "up";
-                weltY -= speed;
             }
             if (keyHandler.isDown() == true) { // explizit true verwenden
                 direction = "down";
-                weltY += speed;
             }
             if (keyHandler.isLeft() == true) { // explizit true verwenden
                 direction = "left";
-                weltX -= speed;
             }
             if (keyHandler.isRight() == true) { // explizit true verwenden
                 direction = "right";
-                weltX += speed;
+            }
+            // checkt feld collision -> wenn false kann nicht laufen -> wenn true laufen
+            collisionON = false;
+            gp.cChecker.checkFeld(this);
+            if (collisionON == false) {
+                switch (direction) {
+                    case "up":
+                        weltY -= speed; // wurde von oben hier rein gesetzt -> bewegt sich so
+
+                        break;
+                    case "down":
+                        weltY += speed;
+
+                        break;
+                    case "left":
+                        weltX -= speed;
+
+                        break;
+                    case "right":
+                        weltX += speed;
+
+                        break;
+                    default:
+                        break;
+                }
             }
             sprintCountr++;
             if (sprintCountr > 12) {

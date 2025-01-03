@@ -16,8 +16,8 @@ public class FeldManager {
     private final int ANZAHL_FELDER_GESAMT = 150;
     private GamePanel gp;
 
-    private Feld[] alleFelder;
-    private int[][] karteFeldNr;
+    public Feld[] alleFelder;
+    public int[][] karteFeldNr;
 
     private String zuladeneKarte = "assets/Karte/bb.txt"; // vorerst erste levelkarte hardcoded drinne,
                                                           // danach dynamisch mit den npc interaktion zu
@@ -80,42 +80,54 @@ public class FeldManager {
         alleFelder[12] = new Feld();
         alleFelder[12].image = new Image("file:assets/background/worldBackground/EndeR.png");
 
-        // Haus 1 Alles
+        // Haus 1 Alles -> Soll Solide sein
         alleFelder[13] = new Feld();
-        alleFelder[13].image = new Image("file:assets/background/worldBackground/H11.png");
+        alleFelder[13].image = new Image("file:assets/Haus/Haus1/H11.png");
+        alleFelder[13].collision = true;
 
         alleFelder[14] = new Feld();
-        alleFelder[14].image = new Image("file:assets/background/worldBackground/H12.png");
+        alleFelder[14].image = new Image("file:assets/Haus/Haus1/H12.png");
+        alleFelder[14].collision = true;
 
         alleFelder[15] = new Feld();
-        alleFelder[15].image = new Image("file:assets/background/worldBackground/H13.png");
+        alleFelder[15].image = new Image("file:assets/Haus/Haus1/H13.png");
+        alleFelder[15].collision = true;
 
         alleFelder[16] = new Feld();
-        alleFelder[16].image = new Image("file:assets/background/worldBackground/H14.png");
+        alleFelder[16].image = new Image("file:assets/Haus/Haus1/H14.png");
+        alleFelder[16].collision = true;
 
         alleFelder[17] = new Feld();
-        alleFelder[17].image = new Image("file:assets/background/worldBackground/H15.png");
+        alleFelder[17].image = new Image("file:assets/Haus/Haus1/H15.png");
+        alleFelder[17].collision = true;
 
         alleFelder[18] = new Feld();
-        alleFelder[18].image = new Image("file:assets/background/worldBackground/H16.png");
+        alleFelder[18].image = new Image("file:assets/Haus/Haus1/H16.png");
+        alleFelder[18].collision = true;
 
         alleFelder[19] = new Feld();
-        alleFelder[19].image = new Image("file:assets/background/worldBackground/H17.png");
+        alleFelder[19].image = new Image("file:assets/Haus/Haus1/H17.png");
+        alleFelder[19].collision = true;
 
         alleFelder[20] = new Feld();
-        alleFelder[20].image = new Image("file:assets/background/worldBackground/H18.png");
+        alleFelder[20].image = new Image("file:assets/Haus/Haus1/H18.png");
+        alleFelder[20].collision = true;
 
         alleFelder[21] = new Feld();
-        alleFelder[21].image = new Image("file:assets/background/worldBackground/H19.png");
+        alleFelder[21].image = new Image("file:assets/Haus/Haus1/H19.png");
+        alleFelder[21].collision = true;
 
         alleFelder[22] = new Feld();
         alleFelder[22].image = new Image("file:assets/background/worldBackground/Z.png");
+        alleFelder[22].collision = true;
 
         alleFelder[23] = new Feld();
         alleFelder[23].image = new Image("file:assets/background/worldBackground/Zz.png");
+        alleFelder[23].collision = true;
 
         alleFelder[24] = new Feld();
         alleFelder[24].image = new Image("file:assets/background/worldBackground/Zzz.png");
+        alleFelder[24].collision = true;
 
     }
 

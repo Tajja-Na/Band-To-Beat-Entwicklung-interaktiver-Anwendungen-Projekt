@@ -3,6 +3,7 @@ package eiboprojekt.presentation.scenes.GameView;
 import java.io.InterruptedIOException;
 
 import eiboprojekt.App;
+import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.Member1;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
@@ -16,7 +17,7 @@ import javafx.scene.paint.Color;
 public class GamePanel extends BorderPane {
     // zur referenz dass es mit dem switch geht
     private App app;
-    private FeldManager fm;
+    public FeldManager feldM;
 
     // Screen settings
     final int originalTileSize = 64; // 64x64 tile
@@ -47,6 +48,9 @@ public class GamePanel extends BorderPane {
 
     // Dialog
     private DialogPage dialogPage; // Referenz für DialogPage
+
+    // Checker für die Collusion
+    public CollisionCheck cChecker;
 
     // AnimationTimer für die Spielschleife
     AnimationTimer gameLoop;
@@ -80,15 +84,18 @@ public class GamePanel extends BorderPane {
 
         member1 = new Member1(300, 300); // Beispielposition für den NPC
 
-        fm = new FeldManager(this);
+        feldM = new FeldManager(this);
         // Hintergrundfarbe für das Panel
         // this.setStyle("-fx-background-color: black;");
 
         canvas.setOnMouseClicked(event -> handleMouseClick(event));
+
+        // Collusion
+        cChecker = new CollisionCheck(this);
     }
 
     public FeldManager getFM() {
-        return fm;
+        return feldM;
     }
 
     public void startGameThread() {
@@ -126,7 +133,7 @@ public class GamePanel extends BorderPane {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        fm.draw(gc);
+        feldM.draw(gc);
 
         // Spieler zeichnen und tileSize übergeben
         player.draw(gc, tileSize);
