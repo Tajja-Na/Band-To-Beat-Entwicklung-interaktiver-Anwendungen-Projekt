@@ -19,7 +19,7 @@ public class Member1 extends Entity {
             String basePath = "assets/Character/Charakter2/";
 
             // Pfad zu Bild (stelle sicher, dass das Bild existiert)
-            File file = new File(basePath + "testPerson.png");
+            File file = new File(basePath + "front.png");
 
             if (file.exists()) {
                 image = new Image(file.toURI().toString()); // Bild aus der Datei laden

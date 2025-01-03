@@ -23,8 +23,8 @@ public class MainCharacter extends Entity {
         this.keyHandler = keyHandler;
         this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2);
-        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         setDefaultValues();
         getPlayerImage(); // Spielerbilder direkt laden
@@ -40,7 +40,7 @@ public class MainCharacter extends Entity {
 
     public void getPlayerImage() {
         try {
-            String basePath = "assets/Character/Charakter3/";
+            String basePath = "assets/Character/Charakter1/";
             front = new Image(new File(basePath + "timmy pixel front stand.png").toURI().toString());
             back1 = new Image(new File(basePath + "timmy pixel sprint hinten 1.png").toURI().toString());
             back2 = new Image(new File(basePath + "timmy pixel sprint hinten 2.png").toURI().toString());
