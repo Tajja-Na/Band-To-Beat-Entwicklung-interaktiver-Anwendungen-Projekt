@@ -1,0 +1,25 @@
+/* welcome.css */
+.view{
+    -fx-background-color: #2b2828; 
+}
+
+.start-button {
+    -fx-background-color: #ff914d; 
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-border-color: #f37640;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.start-button:hover {
+    -fx-background-color: #f2792d; 
+}
+
+.start-button:pressed {
+    -fx-background-color: #21bc5a; 
+}
