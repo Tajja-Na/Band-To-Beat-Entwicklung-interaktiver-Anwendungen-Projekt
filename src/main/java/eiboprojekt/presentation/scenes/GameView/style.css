@@ -17,9 +17,46 @@
 }
 
 .start-button:hover {
-    -fx-background-color: #f2792d; 
+    -fx-background-color: #ea5b02; 
 }
 
 .start-button:pressed {
-    -fx-background-color: #21bc5a; 
+    -fx-background-color: #ea4c02; 
 }
+
+/* introduction.css */
+
+.main-box {
+    -fx-background-color: #2b2828;
+}
+
+.text-box {
+    -fx-background-color: black;
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-padding: 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-font-family: Arial, sans-serif;
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-color: #ff914d; 
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #ea5b02; 
+}
+
+.button:pressed {
+    -fx-background-color: #ea4c02; 
+}
+
