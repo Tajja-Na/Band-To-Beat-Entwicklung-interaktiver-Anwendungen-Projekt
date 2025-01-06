@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class MainCharacter extends Entity {
-    GamePanel gp;
+    // GamePanel gp;
     KeyHandlern keyHandler;
 
     private int tileSize; // Hinzugefügt
@@ -19,6 +19,8 @@ public class MainCharacter extends Entity {
     public final int screenY;
 
     public MainCharacter(GamePanel gamePanel, KeyHandlern keyHandler) {
+        super(gamePanel); // damit es den gp vom Entity bekommz
+
         this.gp = gamePanel;
         this.keyHandler = keyHandler;
         this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
@@ -26,16 +28,16 @@ public class MainCharacter extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
-                                                                                 // rechteck
+        this.solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
+        // rechteck
 
         setDefaultValues();
         getPlayerImage(); // Spielerbilder direkt laden
     }
 
     public void setDefaultValues() {
-        weltX = gp.tileSize * 9;
-        weltY = gp.tileSize * 8;
+        weltX = gp.tileSize * 10; // Spalte 10
+        weltY = (gp.tileSize * 27) + (gp.tileSize / 2); // Zeile 27
         speed = 5;
 
         direction = "default";
@@ -152,12 +154,14 @@ public class MainCharacter extends Entity {
     }
 
     // für die interaktion
-    public boolean isNear(Member1 member) {
-        int distanceX = Math.abs(this.screenX - member.getX());
-        int distanceY = Math.abs(this.screenY - member.getY());
+    public boolean isNear(Entity member) {
+        int distanceX = Math.abs(this.weltX - member.weltX); // Weltkoordinaten vergleichen
+        int distanceY = Math.abs(this.weltY - member.weltY);
 
-        // definieren hier eine maximale Distanz -> z.B. 64 Pixel
-        return distanceX < 64 && distanceY < 64;
+        // Definiere eine maximale Distanz, z. B. 64 Pixel
+        int maxDistance = 64;
+
+        return distanceX < maxDistance && distanceY < maxDistance;
     }
 
     public void interact() {
@@ -165,6 +169,20 @@ public class MainCharacter extends Entity {
         System.out.println("Interacting with Member1");
         // In deinem Fall würdest du hier den Dialog öffnen
         // z.B. Öffnen eines neuen Fensters, das den Dialog zeigt
+    }
+
+    public int getX() {
+        return this.weltX;
+    }
+
+    public int getY() {
+        return this.weltY;
+    }
+
+    @Override
+    public void setPosition(int x, int y) {
+        this.weltX = x;
+        this.weltY = y;
     }
 
 }

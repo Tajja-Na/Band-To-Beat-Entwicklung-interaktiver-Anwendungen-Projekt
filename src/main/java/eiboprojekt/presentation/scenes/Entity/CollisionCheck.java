@@ -67,4 +67,29 @@ public class CollisionCheck {
 
         }
     }
+
+    public void checkPlayerMemberCollision(MainCharacter player, Entity[] members) {
+        // Wir gehen durch jedes Mitglied im Array
+        for (Entity member : members) {
+            // Berechne die Grenzen des Spielers und des Mitglieds
+            int playerLeftWeltX = player.weltX + player.solideArea.x;
+            int playerRightWeltX = player.weltX + player.solideArea.x + player.solideArea.width;
+            int playerTopWeltY = player.weltY + player.solideArea.y;
+            int playerBottomWeltY = player.weltY + player.solideArea.y + player.solideArea.height;
+
+            int memberLeftWeltX = member.weltX + member.solideArea.x;
+            int memberRightWeltX = member.weltX + member.solideArea.x + member.solideArea.width;
+            int memberTopWeltY = member.weltY + member.solideArea.y;
+            int memberBottomWeltY = member.weltY + member.solideArea.y + member.solideArea.height;
+
+            // Überprüfe, ob sich die Bereiche des Spielers und des Mitglieds überschneiden
+            if (playerLeftWeltX < memberRightWeltX && playerRightWeltX > memberLeftWeltX &&
+                    playerTopWeltY < memberBottomWeltY && playerBottomWeltY > memberTopWeltY) {
+                // Es gibt eine Kollision zwischen dem Spieler und dem Mitglied
+                player.collisionON = true;
+                member.collisionON = true;
+            }
+        }
+    }
+
 }

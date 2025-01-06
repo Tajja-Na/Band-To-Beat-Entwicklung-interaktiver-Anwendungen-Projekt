@@ -1,11 +1,15 @@
+
 package eiboprojekt.presentation.scenes.GameView;
 
 import java.io.InterruptedIOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
+import eiboprojekt.presentation.scenes.Entity.Entity;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
-import eiboprojekt.presentation.scenes.Entity.Member1;
+import eiboprojekt.presentation.scenes.Entity.Member;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -44,7 +48,8 @@ public class GamePanel extends BorderPane {
     // Player
     public final MainCharacter player;
 
-    private final Member1 member1;
+    // weil wir brauchen mehrere members
+    public Entity members[] = new Entity[3];
 
     // Dialog
     private DialogPage dialogPage; // Referenz für DialogPage
@@ -79,12 +84,22 @@ public class GamePanel extends BorderPane {
         this.setFocusTraversable(true);
         this.requestFocus(); // Fokus setzen
 
+        feldM = new FeldManager(this);
+
         // Beispiel aus GamePanel oder einer anderen Rendering-Schleife:
         player = new MainCharacter(this, keyHandler);
 
-        member1 = new Member1(300, 300); // Beispielposition für den NPC
+        // Member erstellen und in der Welt platzieren
+        // Member erstellen und hinzufügen
+        members[0] = new Member(this);
+        members[0].setPosition(tileSize * 30, tileSize * 27);
 
-        feldM = new FeldManager(this);
+        members[1] = new Member(this);
+        members[1].setPosition(tileSize * 45, tileSize * 4);
+
+        members[2] = new Member(this);
+        members[2].setPosition(tileSize * 33, tileSize * 41);
+
         // Hintergrundfarbe für das Panel
         // this.setStyle("-fx-background-color: black;");
 
@@ -122,33 +137,67 @@ public class GamePanel extends BorderPane {
     public void update() {
         // also hier wird das bild vom player geholt
         player.update();
-        // member1.update(); bewegt sich fürs erste nicht
+        // hier wird immer geupdated -> collision von member und player
+        cChecker.checkPlayerMemberCollision(player, members);
     }
 
     private void draw() {
         // Hole das GraphicsContext des Canvas, um darauf zu zeichnen
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        // GraphicsContext gc = canvas.getGraphicsContext2D();
 
         // Bildschirm löschen
+        // gc.setFill(Color.BLACK);
+        // gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        // feldM.draw(gc);
+
+        // Spieler zeichnen und tileSize übergeben
+        /// player.draw(gc, tileSize);
+
+        // da alle gezeichnet werden erstekken wir ein array dafür
+        // for (Entity member : members) {
+        // if (member != null) {
+        // member.draw(gc, tileSize);
+        // }
+        // }
+        GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         feldM.draw(gc);
 
-        // Spieler zeichnen und tileSize übergeben
-        player.draw(gc, tileSize);
-        member1.draw(gc);
+        // Erstelle ein Array aller zu zeichnenden Entities
+        Entity[] entitiesToDraw = new Entity[members.length + 1];
+        entitiesToDraw[0] = player;
+        System.arraycopy(members, 0, entitiesToDraw, 1, members.length);
+
+        // Sortiere das Array basierend auf der Y-Position
+        Arrays.sort(entitiesToDraw, Comparator.comparingInt(e -> e != null ? e.weltY : Integer.MAX_VALUE));
+
+        // Zeichne alle Entities in der sortierten Reihenfolge
+        for (Entity entity : entitiesToDraw) {
+            if (entity != null) {
+                entity.draw(gc, tileSize);
+            }
+        }
     }
 
     // diese methode ist da für die keyanwendungen also wenn man was drücken sollte
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);
 
-        if (event.getCode().toString().equals("E") && player.isNear(member1)) {
+        if (event.getCode().toString().equals("E")) {
+            for (Entity member : members) {
+                if (member != null && player.isNear(member)) {
+                    member.facePlayer(player); // Member dreht sich zum Spieler
+                    app.switchView("DIALOG"); // Wechsel zur Dialog-Seite
+                    break; // Nur ein Dialog zur Zeit
+                }
+            }
 
             // vllt hier einfach auch so ein getButton und dann im app mit setAction
             // aufrufen
-            app.switchView("DIALOG1"); // Wechsel zur DialogPage
+            app.switchView("DIALOG"); // Wechsel zur DialogPage
         }
     }
 
@@ -161,15 +210,24 @@ public class GamePanel extends BorderPane {
     public void handleMouseClick(javafx.scene.input.MouseEvent event) {
         // Überprüfe, ob der Mausklick in der Nähe von Member1 ist
         if (isNearMember1(event.getX(), event.getY())) {
-            app.switchView("DIALOG1"); // Wechsel zur DialogPage
+            app.switchView("DIALOG"); // Wechsel zur DialogPage
         }
     }
 
     private boolean isNearMember1(double mouseX, double mouseY) {
         // Definiere einen Bereich um Member1, in dem Klicks erkannt werden
         double distance = 20; // Anpassbar je nach Bedarf
-        return Math.abs(mouseX - member1.getX()) < distance &&
-                Math.abs(mouseY - member1.getY()) < distance;
+        for (Entity member : members) {
+            if (member != null) {
+                double memberX = member.weltX; // X-Koordinate des Members
+                double memberY = member.weltY; // Y-Koordinate des Members
+                if (Math.abs(mouseX - memberX) < distance &&
+                        Math.abs(mouseY - memberY) < distance) {
+                    return true; // Klick ist in der Nähe eines Members
+                }
+            }
+        }
+        return false; // Kein Member in der Nähe des Klicks
     }
 
 }
