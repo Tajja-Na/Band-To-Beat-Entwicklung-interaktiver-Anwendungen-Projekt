@@ -78,7 +78,7 @@ public class GamePanel extends BorderPane {
         setOnKeyReleased(this::handleKeyReleased);
 
         // MouseEvent handler
-        canvas.setOnMouseClicked(this::handleMouseClick);
+        // canvas.setOnMouseClicked(this::handleMouseClick);
 
         // Setze den Fokus für Tasteneingaben
         this.setFocusTraversable(true);
@@ -90,20 +90,20 @@ public class GamePanel extends BorderPane {
         player = new MainCharacter(this, keyHandler);
 
         // Member erstellen und in der Welt platzieren
-        // Member erstellen und hinzufügen
-        members[0] = new Member(this);
+        /// Member erstellen und in der Welt platzieren
+        members[0] = new Member(this, "assets/Character/Charakter2/");
         members[0].setPosition(tileSize * 30, tileSize * 27);
 
-        members[1] = new Member(this);
+        members[1] = new Member(this, "assets/Character/Charakter3/");
         members[1].setPosition(tileSize * 45, tileSize * 4);
 
-        members[2] = new Member(this);
+        members[2] = new Member(this, "assets/Character/Charakter4/");
         members[2].setPosition(tileSize * 33, tileSize * 41);
 
         // Hintergrundfarbe für das Panel
         // this.setStyle("-fx-background-color: black;");
 
-        canvas.setOnMouseClicked(event -> handleMouseClick(event));
+        // canvas.setOnMouseClicked(event -> handleMouseClick(event));
 
         // Collusion
         cChecker = new CollisionCheck(this);
@@ -113,18 +113,20 @@ public class GamePanel extends BorderPane {
         return feldM;
     }
 
+    // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
+    private boolean gameThreadRunning = false;
+
     public void startGameThread() {
-        // Erstelle einen AnimationTimer, der jedes Frame aufgerufen wird
+        if (gameThreadRunning) {
+            return; // Verhindere, dass der Game-Thread mehrfach gestartet wird
+        }
+        gameThreadRunning = true;
 
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                 if (!app.isImLevel()) {
-                    // 1. Update: Update information like character position
                     update();
-
-                    // 2. Draw: Draw the screen with updated information
                     draw();
                 } else {
                     stop();
@@ -132,6 +134,13 @@ public class GamePanel extends BorderPane {
             }
         };
         gameLoop.start();
+    }
+
+    public void stopGameThread() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+            gameThreadRunning = false;
+        }
     }
 
     public void update() {
@@ -186,48 +195,26 @@ public class GamePanel extends BorderPane {
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);
 
+        // Wenn "E" gedrückt wird, prüfe die Nähe zu einem Member
         if (event.getCode().toString().equals("E")) {
             for (Entity member : members) {
-                if (member != null && player.isNear(member)) {
-                    member.facePlayer(player); // Member dreht sich zum Spieler
-                    app.switchView("DIALOG"); // Wechsel zur Dialog-Seite
-                    break; // Nur ein Dialog zur Zeit
+                if (member instanceof Member) {
+                    Member m = (Member) member;
+
+                    // Verwende die isNear-Methode des Members
+                    if (m.isNear(player, tileSize)) { // Der Schwellenwert kann angepasst werden
+                        m.facePlayer(player); // Member dreht sich zum Spieler
+                        app.switchView("DIALOG"); // Wechsel zur Dialog-Seite
+                        break; // Nur ein Dialog zur Zeit
+                    }
                 }
             }
-
-            // vllt hier einfach auch so ein getButton und dann im app mit setAction
-            // aufrufen
-            app.switchView("DIALOG"); // Wechsel zur DialogPage
         }
     }
 
     public void handleKeyReleased(KeyEvent event) {
         System.out.println("Key Released: " + event.getCode()); // Testausgabe
         keyHandler.keyReleased(event);
-    }
-
-    // geht nnoch nicht dass man mit der maus auf die figur klickt
-    public void handleMouseClick(javafx.scene.input.MouseEvent event) {
-        // Überprüfe, ob der Mausklick in der Nähe von Member1 ist
-        if (isNearMember1(event.getX(), event.getY())) {
-            app.switchView("DIALOG"); // Wechsel zur DialogPage
-        }
-    }
-
-    private boolean isNearMember1(double mouseX, double mouseY) {
-        // Definiere einen Bereich um Member1, in dem Klicks erkannt werden
-        double distance = 20; // Anpassbar je nach Bedarf
-        for (Entity member : members) {
-            if (member != null) {
-                double memberX = member.weltX; // X-Koordinate des Members
-                double memberY = member.weltY; // Y-Koordinate des Members
-                if (Math.abs(mouseX - memberX) < distance &&
-                        Math.abs(mouseY - memberY) < distance) {
-                    return true; // Klick ist in der Nähe eines Members
-                }
-            }
-        }
-        return false; // Kein Member in der Nähe des Klicks
     }
 
 }

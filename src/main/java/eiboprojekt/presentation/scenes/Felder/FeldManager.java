@@ -40,45 +40,49 @@ public class FeldManager {
     public void getFeldImage() {
         // Im Level
         alleFelder[0] = new Feld();
-        alleFelder[0].image = new Image("file:assets/background/himmel 1 tile.png");
+        alleFelder[0].image = new Image("file:assets/Background/himmel 1 tile.png");
 
         alleFelder[1] = new Feld();
-        alleFelder[1].image = new Image("file:assets/background/gras 1 tile.png");
+        alleFelder[1].image = new Image("file:assets/Background/gras 1 tile.png");
 
         // In der Welt Ansicht
         alleFelder[2] = new Feld();
-        alleFelder[2].image = new Image("file:assets/background/worldBackground/grass.png");
+        alleFelder[2].image = new Image("file:assets/Background/worldBackground/grass.png");
+
+        alleFelder[25] = new Feld();
+        alleFelder[25].image = new Image("file:assets/Background/worldBackground/wall.png");
+        alleFelder[25].collision = true;
 
         // Dirt Weg
         alleFelder[3] = new Feld();
-        alleFelder[3].image = new Image("file:assets/background/worldBackground/W1.png");
+        alleFelder[3].image = new Image("file:assets/Background/worldBackground/W1.png");
 
         alleFelder[4] = new Feld();
-        alleFelder[4].image = new Image("file:assets/background/worldBackground/W2.png");
+        alleFelder[4].image = new Image("file:assets/Background/worldBackground/W2.png");
 
         alleFelder[5] = new Feld();
-        alleFelder[5].image = new Image("file:assets/background/worldBackground/WegB.png");
+        alleFelder[5].image = new Image("file:assets/Background/worldBackground/WegB.png");
 
         alleFelder[6] = new Feld();
-        alleFelder[6].image = new Image("file:assets/background/worldBackground/OL.png");
+        alleFelder[6].image = new Image("file:assets/Background/worldBackground/OL.png");
 
         alleFelder[7] = new Feld();
-        alleFelder[7].image = new Image("file:assets/background/worldBackground/OR.png");
+        alleFelder[7].image = new Image("file:assets/Background/worldBackground/OR.png");
 
         alleFelder[8] = new Feld();
-        alleFelder[8].image = new Image("file:assets/background/worldBackground/UL.png");
+        alleFelder[8].image = new Image("file:assets/Background/worldBackground/UL.png");
 
         alleFelder[9] = new Feld();
-        alleFelder[9].image = new Image("file:assets/background/worldBackground/UR.png");
+        alleFelder[9].image = new Image("file:assets/Background/worldBackground/UR.png");
 
         alleFelder[10] = new Feld();
-        alleFelder[10].image = new Image("file:assets/background/worldBackground/Start.png");
+        alleFelder[10].image = new Image("file:assets/Background/worldBackground/Start.png");
 
         alleFelder[11] = new Feld();
-        alleFelder[11].image = new Image("file:assets/background/worldBackground/EndeL.png");
+        alleFelder[11].image = new Image("file:assets/Background/worldBackground/EndeL.png");
 
         alleFelder[12] = new Feld();
-        alleFelder[12].image = new Image("file:assets/background/worldBackground/EndeR.png");
+        alleFelder[12].image = new Image("file:assets/Background/worldBackground/EndeR.png");
 
         // Haus 1 Alles -> Soll Solide sein
         alleFelder[13] = new Feld();

@@ -67,7 +67,7 @@ public class App extends Application {
         // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
         // dialogPage = new DialogPage("Dies ist ein Testdialog."); vllt man es sinnn
         // für die verschiedenen sdialoge?
-        dialogPage = new DialogPage();
+        dialogPage = new DialogPage(this); // Pass 'this' as the App instance
         dialogPage.getNextButton().setOnAction(e -> switchView("GAMELevel1"));
 
         // hier vllt auch so ein action ding für gamePanel
@@ -76,6 +76,7 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
     }
 
     public void switchView(String viewName) {
@@ -88,19 +89,21 @@ public class App extends Application {
                 rootPane.getChildren().add(introductionView);
                 break;
             case "GAMEPANEL":
+                gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
-                gamePanel.startGameThread();
+                gamePanel.startGameThread(); // Starte den Game-Thread neu
                 setImLevel(false);
                 break;
-            case "DIALOG1":
-                // Dialog für Member1 anzeigen
+            case "DIALOG":
+                gamePanel.stopGameThread(); // Beende den Game-Thread
                 rootPane.getChildren().add(dialogPage);
+                setImLevel(false);
                 break;
             case "GAMELevel1":
                 rootPane.getChildren().add(gameLevel);
                 gamePanel.requestFocus();
-                gamePanel.startGameThread();
+                gamePanel.startGameThread(); // Starte den Game-Thread
                 setImLevel(true);
                 break;
             default:

@@ -8,19 +8,19 @@ import java.io.File;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 
 public class Member extends Entity {
-    private Image image;
+    private String basePath;
 
-    public Member(GamePanel gp) {
+    public Member(GamePanel gp, String basePath) {
         super(gp);
+        this.basePath = basePath;
         direction = "default";
-        this.solideArea = new SolideRec(25, gp.tileSize, 6, gp.tileSize); // x,y, width und height vom
+        this.solideArea = new SolideRec(25, gp.tileSize, 6, gp.tileSize); // x, y, width, height
 
-        getPlayerImage(); // Methode zum Laden des NPC-Bildes
+        getPlayerImage(); // Bilder laden
     }
 
     public void getPlayerImage() {
         try {
-            String basePath = "assets/Character/Charakter2/";
             front = new Image(new File(basePath + "front.png").toURI().toString());
             back = new Image(new File(basePath + "back.png").toURI().toString());
             standL = new Image(new File(basePath + "standL.png").toURI().toString());
@@ -28,11 +28,9 @@ public class Member extends Entity {
             jumpL = new Image(new File(basePath + "jumpL.png").toURI().toString());
             jumpR = new Image(new File(basePath + "jumpR.png").toURI().toString());
 
-            System.out.println("Front image loaded: " + (front != null));
-            // Wiederholen Sie diese Prüfung für die anderen Bilder
-
+            System.out.println("Images loaded for Member: " + basePath);
         } catch (Exception e) {
-            System.err.println("Error loading images: " + e.getMessage());
+            System.err.println("Error loading images for Member from " + basePath + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -95,6 +93,26 @@ public class Member extends Entity {
         } else if (player.getY() > this.weltY) {
             this.direction = "down";
             System.out.println("Member schaut nach unten.");
+        }
+    }
+
+    // Methode, um zu prüfen, ob der Spieler in der Nähe ist
+    public boolean isNear(MainCharacter player, int distanceThreshold) {
+        int deltaX = Math.abs(player.getX() - this.weltX);
+        int deltaY = Math.abs(player.getY() - this.weltY);
+
+        if (deltaX < distanceThreshold && deltaY < distanceThreshold) {
+            System.out.println("Super, Spieler in der Nähe!");
+            System.out.println(" ");
+
+            // Spieler ist in der Nähe
+            return true;
+        } else {
+            System.out.println("Schade, Spieler NICHR in der Nähe!");
+            System.out.println(" ");
+            // Spieler ist nicht in der Nähe
+            return false;
+
         }
     }
 
