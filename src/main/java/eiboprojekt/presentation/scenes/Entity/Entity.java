@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public abstract class Entity {
 
     public int weltX, weltY;
+    public int levelX, levelY;
     public int speed;
     // jump ertsmal draußen
     public Image back, back1, back2, front, standL, standR, walk1, walk2, walkL1, walkL2, walkR1, walkR2, jumpL, jumpR;

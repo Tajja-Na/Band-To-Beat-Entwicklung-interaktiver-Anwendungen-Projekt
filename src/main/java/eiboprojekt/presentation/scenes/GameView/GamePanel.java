@@ -42,6 +42,10 @@ public class GamePanel extends BorderPane {
     // Canvas für das Zeichnen
     private final Canvas canvas;
 
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
     // KeyHandler -> Tasteneingaben
     public final KeyHandlern keyHandler;
 
@@ -116,7 +120,7 @@ public class GamePanel extends BorderPane {
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
     private boolean gameThreadRunning = false;
 
-    public void startGameThread() {
+    public void startGameThread(GraphicsContext gc) {
         if (gameThreadRunning) {
             return; // Verhindere, dass der Game-Thread mehrfach gestartet wird
         }
@@ -127,7 +131,7 @@ public class GamePanel extends BorderPane {
             public void handle(long now) {
                 if (!app.isImLevel()) {
                     update();
-                    draw();
+                    draw(gc);
                 } else {
                     stop();
                 }
@@ -150,7 +154,7 @@ public class GamePanel extends BorderPane {
         cChecker.checkPlayerMemberCollision(player, members);
     }
 
-    private void draw() {
+    private void draw(GraphicsContext gc) {
         // Hole das GraphicsContext des Canvas, um darauf zu zeichnen
         // GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -169,7 +173,7 @@ public class GamePanel extends BorderPane {
         // member.draw(gc, tileSize);
         // }
         // }
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         feldM.ladeKarte("assets/Karte/bb.txt");

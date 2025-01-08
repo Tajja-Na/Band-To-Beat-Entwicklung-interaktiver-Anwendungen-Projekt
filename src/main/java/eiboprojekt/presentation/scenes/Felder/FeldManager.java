@@ -169,10 +169,7 @@ public class FeldManager {
         }
     }
 
-    public void ladeKarte(String zuladeneKarte, int levelCol, int levelRow) {
-
-        // System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        // "assets/Karte/levelbase1.txt"
+    public void ladeKarte(String zuladeneKarte, int MaxlevelCol, int MaxlevelRow) {
         try {
             String path = zuladeneKarte;
             BufferedReader br = new BufferedReader(new FileReader(path));
@@ -180,11 +177,11 @@ public class FeldManager {
             int col = 0;
             int row = 0;
 
-            while (col < levelCol && row < levelRow) {
+            while (col < MaxlevelCol && row < MaxlevelRow) {
 
                 String temp = br.readLine();
 
-                while (col < levelCol) {
+                while (col < MaxlevelCol) {
                     String[] nummern = temp.split(" ");
 
                     int nr = Integer.parseInt(nummern[col]);
@@ -198,7 +195,7 @@ public class FeldManager {
             }
             br.close();
 
-            System.out.println("hab die karte geladen!");
+            System.out.println("hab die Levelkarte geladen!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,6 +234,45 @@ public class FeldManager {
             weltCol++;
 
             if (weltCol == gp.MAX_WELT_COL) {
+                weltCol = 0;
+                weltRow++;
+            }
+        }
+    }
+
+    public void drawLevel(GraphicsContext gc, int MaxLevelCol, int MaxLevelRow) {
+        System.out.println("hi ich bin in drawLevel vom fm drinne");
+        int weltCol = 0;
+        int weltRow = 0;
+
+        while (weltCol <  MaxLevelCol && weltRow < MaxLevelRow) {
+            int feldNr = karteFeldNr[weltCol][weltRow];
+
+            int weltX = weltCol * gp.tileSize;
+            int weltY = weltRow * gp.tileSize;
+            int screenX = weltX - gp.player.levelX + gp.player.screenX;
+            // hier geht es darum wo die tiles gezeichnet werden, die karten koordinaten
+            // sind anders als die vom player, der sich auf dem screen bewegt, die karten
+            // koordinate 0 0 mag bei der karte zwar 0 0 sein aber sie ist zum beispiel vom
+            // player 500 500 entfernt, da er sich in der mitt bewegt
+            int screenY = weltY - gp.player.levelY + gp.player.screenY;
+
+            if (weltX + gp.tileSize * 2 > gp.player.levelX - gp.player.screenX &&
+                    weltX - gp.tileSize * 2 < gp.player.levelX + gp.player.screenX &&
+                    weltY + gp.tileSize * 2 > gp.player.levelY - gp.player.screenY &&
+                    weltY - gp.tileSize * 2 < gp.player.levelY + gp.player.screenY) { // hier wird überprüft welche
+                                                                                     // koordinate der karte sich auf
+                                                                                     // dem screen befindet und nur
+                                                                                     // diese werden dann gezeichnet,
+                                                                                     // damit die performance geschont
+                                                                                     // wird
+
+                gc.drawImage(alleFelder[feldNr].image, screenX, screenY, gp.tileSize, gp.tileSize);
+            }
+
+            weltCol++;
+
+            if (weltCol == MaxLevelCol) {
                 weltCol = 0;
                 weltRow++;
             }

@@ -36,8 +36,12 @@ public class MainCharacter extends Entity {
     }
 
     public void setDefaultValues() {
-        weltX = gp.tileSize * 10; // Spalte 10
+        weltX = gp.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
         weltY = (gp.tileSize * 27) + (gp.tileSize / 2); // Zeile 27
+
+        levelX = gp.tileSize *2;
+        levelY = gp.tileSize *11;
+
         speed = 5;
 
         direction = "default";

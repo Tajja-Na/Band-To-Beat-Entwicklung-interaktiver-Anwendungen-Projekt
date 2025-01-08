@@ -74,7 +74,6 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
-
     }
 
     public void switchView(String viewName) {
@@ -90,7 +89,7 @@ public class App extends Application {
                 gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
-                gamePanel.startGameThread(); // Starte den Game-Thread neu
+                gamePanel.startGameThread(gamePanel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
                 setImLevel(false);
                 break;
             case "DIALOG":
@@ -101,7 +100,7 @@ public class App extends Application {
             case "GAMELevel1":
                 rootPane.getChildren().add(gameLevel);
                 gamePanel.requestFocus();
-                gamePanel.startGameThread(); // Starte den Game-Thread
+                gamePanel.startGameThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread
                 setImLevel(true);
                 break;
             default:
