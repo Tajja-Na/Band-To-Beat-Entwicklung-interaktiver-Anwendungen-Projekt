@@ -2,6 +2,7 @@ package eiboprojekt.presentation.scenes.GameView;
 
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
+import eiboprojekt.presentation.scenes.Entity.MainCharacterLevel;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
@@ -21,13 +22,15 @@ public class GameLevel extends BorderPane {
     private GamePanel gp;
     private KeyHandlern keyHandler;
     private Canvas canvas;
-    //private final MainCharacter player;  < das mit dem player und das er ins level gezeichnet wird kommt noch
+    private final MainCharacterLevel player;  
 
     public Canvas getCanvas() {
         return canvas;
     }
 
     public GameLevel(int width, int height, App app, GamePanel gp) {
+        
+
         setPrefSize(width, height);
         setMinSize(width, height);
         setMaxSize(width, height);
@@ -36,11 +39,15 @@ public class GameLevel extends BorderPane {
         this.gp = gp;
         this.fm = gp.getFM();
 
+        player = new MainCharacterLevel(gp, keyHandler, this);
+
         this.keyHandler = gp.keyHandler;
 
         this.canvas = new Canvas(gp.tileSize * 16, gp.tileSize * 12);
         drawLevel();
     }
+
+    //update methode fehlt
 
     private void drawLevel(){
         VBox centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
@@ -49,6 +56,8 @@ public class GameLevel extends BorderPane {
         
         fm.ladeKarte("assets/Karte/levelbase1.txt", MAX_LEVEL_COL, MAX_LEVEL_ROW);
         fm.drawLevel(canvas.getGraphicsContext2D(), MAX_LEVEL_COL, MAX_LEVEL_ROW); //hier muss halt schon fm.draw() hin aber da muss irgendwie noch davor passieren das die passende karte geladen wird
+
+        player.draw(canvas.getGraphicsContext2D(), gp.tileSize);
 
         centerBox.getChildren().addAll(canvas);
         setCenter(centerBox);

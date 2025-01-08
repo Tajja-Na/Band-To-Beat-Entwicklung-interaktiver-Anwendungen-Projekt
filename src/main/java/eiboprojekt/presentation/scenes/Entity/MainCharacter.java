@@ -33,7 +33,7 @@ public class MainCharacter extends Entity {
         this.keyHandler = keyHandler;
         this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // screenX und y is da wo der mc auf dem screen spawnt
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         this.solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom

@@ -42,7 +42,7 @@ public class FeldManager {
         alleFelder[0].image = new Image("file:assets/Background/himmel 1 tile.png");
 
         alleFelder[1] = new Feld();
-        alleFelder[1].image = new Image("file:assets/Background/gras 1 tile.png");
+        alleFelder[1].image = new Image("file:assets/Background/gras 1 tile neu.png");
 
         // In der Welt Ansicht
         alleFelder[2] = new Feld();
@@ -250,25 +250,8 @@ public class FeldManager {
 
             int weltX = weltCol * gp.tileSize;
             int weltY = weltRow * gp.tileSize;
-            int screenX = weltX - gp.player.levelX + gp.player.screenX;
-            // hier geht es darum wo die tiles gezeichnet werden, die karten koordinaten
-            // sind anders als die vom player, der sich auf dem screen bewegt, die karten
-            // koordinate 0 0 mag bei der karte zwar 0 0 sein aber sie ist zum beispiel vom
-            // player 500 500 entfernt, da er sich in der mitt bewegt
-            int screenY = weltY - gp.player.levelY + gp.player.screenY;
 
-            if (weltX + gp.tileSize * 2 > gp.player.levelX - gp.player.screenX &&
-                    weltX - gp.tileSize * 2 < gp.player.levelX + gp.player.screenX &&
-                    weltY + gp.tileSize * 2 > gp.player.levelY - gp.player.screenY &&
-                    weltY - gp.tileSize * 2 < gp.player.levelY + gp.player.screenY) { // hier wird überprüft welche
-                                                                                     // koordinate der karte sich auf
-                                                                                     // dem screen befindet und nur
-                                                                                     // diese werden dann gezeichnet,
-                                                                                     // damit die performance geschont
-                                                                                     // wird
-
-                gc.drawImage(alleFelder[feldNr].image, screenX, screenY, gp.tileSize, gp.tileSize);
-            }
+            gc.drawImage(alleFelder[feldNr].image, weltX, weltY, gp.tileSize, gp.tileSize);
 
             weltCol++;
 
