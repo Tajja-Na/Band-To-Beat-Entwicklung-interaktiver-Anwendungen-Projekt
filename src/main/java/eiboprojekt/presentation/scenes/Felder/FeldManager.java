@@ -19,7 +19,7 @@ public class FeldManager {
     public Feld[] alleFelder;
     public int[][] karteFeldNr;
 
-    private String zuladeneKarte = "assets/Karte/bb.txt"; // vorerst erste levelkarte hardcoded drinne,
+    // vorerst erste levelkarte hardcoded drinne,
                                                           // danach dynamisch mit den npc interaktion zu
                                                           // erkennen
                                                           // maybe dann einfach das man beim levelstart den
@@ -33,8 +33,7 @@ public class FeldManager {
         karteFeldNr = new int[gp.MAX_WELT_COL][gp.MAX_WELT_ROW];
 
         getFeldImage();
-        ladeKarte(zuladeneKarte);
-
+        
     }
 
     public void getFeldImage() {
@@ -151,6 +150,41 @@ public class FeldManager {
                 String temp = br.readLine();
 
                 while (col < gp.MAX_WELT_COL) {
+                    String[] nummern = temp.split(" ");
+
+                    int nr = Integer.parseInt(nummern[col]);
+
+                    karteFeldNr[col][row] = nr;
+                    col++;
+                }
+
+                col = 0;
+                row++;
+            }
+            br.close();
+
+            System.out.println("hab die karte geladen!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void ladeKarte(String zuladeneKarte, int levelCol, int levelRow) {
+
+        // System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        // "assets/Karte/levelbase1.txt"
+        try {
+            String path = zuladeneKarte;
+            BufferedReader br = new BufferedReader(new FileReader(path));
+
+            int col = 0;
+            int row = 0;
+
+            while (col < levelCol && row < levelRow) {
+
+                String temp = br.readLine();
+
+                while (col < levelCol) {
                     String[] nummern = temp.split(" ");
 
                     int nr = Integer.parseInt(nummern[col]);

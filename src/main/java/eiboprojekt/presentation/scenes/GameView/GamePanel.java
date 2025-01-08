@@ -172,7 +172,7 @@ public class GamePanel extends BorderPane {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
+        feldM.ladeKarte("assets/Karte/bb.txt");
         feldM.draw(gc);
 
         // Erstelle ein Array aller zu zeichnenden Entities
