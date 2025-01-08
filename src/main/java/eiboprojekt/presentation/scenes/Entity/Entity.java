@@ -17,6 +17,9 @@ public abstract class Entity {
 
     public int sprintCountr = 0;
     public int sprintNum;
+    
+    //Für Object Collision
+    public int solidAreaDefaultX, solidAreaDefaultY;
 
     // Für die collision -> hier erstellen wie eine klasse die ein rechteck auf der
     // figur

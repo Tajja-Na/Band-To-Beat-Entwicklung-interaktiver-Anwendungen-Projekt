@@ -14,6 +14,11 @@ import eiboprojekt.presentation.scenes.Entity.Member;
 import eiboprojekt.presentation.scenes.Entity.TextBubble;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
+import eiboprojekt.presentation.scenes.Object.Gitarre;
+import eiboprojekt.presentation.scenes.Object.Keyboard;
+import eiboprojekt.presentation.scenes.Object.Mikrofon;
+import eiboprojekt.presentation.scenes.Object.Object;
+import eiboprojekt.presentation.scenes.Object.Schlagzeug;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -55,6 +60,10 @@ public class GamePanel extends BorderPane {
     // Player
     public final MainCharacter player;
 
+    //Objects
+    public Object obj[] = new Object[10];
+    public AssetSetter aSetter = new AssetSetter(this);
+
     // weil wir brauchen mehrere members
     public Entity members[] = new Entity[3];
 
@@ -65,6 +74,7 @@ public class GamePanel extends BorderPane {
 
     // Checker für die Collusion
     public CollisionCheck cChecker;
+    public CollisionCheck oChecker;
 
     // Sound
     Sound sound = new Sound();
@@ -111,6 +121,19 @@ public class GamePanel extends BorderPane {
         members[2] = new Member(this, "assets/Character/Charakter4/");
         members[2].setPosition(tileSize * 33, tileSize * 41);
 
+        //Objekte platzieren:
+        obj[0] = new Schlagzeug();
+        obj[0].setPosition(4 * tileSize, 4 * tileSize);
+
+        obj[1] = new Keyboard();
+        obj[1].setPosition(61 * tileSize, 11 * tileSize);
+
+        obj[2] = new Mikrofon();
+        obj[2].setPosition(13 * tileSize, 28 * tileSize);
+
+        obj[3] = new Gitarre();
+        obj[3].setPosition(21 * tileSize, 12 * tileSize);
+
         // Hintergrundfarbe für das Panel
         // this.setStyle("-fx-background-color: black;");
 
@@ -118,6 +141,7 @@ public class GamePanel extends BorderPane {
 
         // Collusion
         cChecker = new CollisionCheck(this);
+        oChecker = new CollisionCheck(this);
 
         // Starte Musik
         playMusic(0);
@@ -203,6 +227,16 @@ public class GamePanel extends BorderPane {
                 entity.draw(gc, tileSize);
             }
         }
+
+        //Objekte zeichnen
+        //obj[0].draw(gc,tileSize, this);
+
+        for (int i = 0; i < obj.length; i++) {
+            if (obj[i] != null) {
+                obj[i].draw(gc,tileSize, this);
+            }
+        }
+
         // Zeichne die Text-Bubble (falls sichtbar)
         warnung.draw(gc, 180, 100);
     }

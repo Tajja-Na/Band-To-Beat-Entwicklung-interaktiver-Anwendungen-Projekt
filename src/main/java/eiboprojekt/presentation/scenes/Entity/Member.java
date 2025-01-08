@@ -74,7 +74,7 @@ public class Member extends Entity {
             }
         } else {
             // Fehlerbehandlung, falls das Bild nicht geladen wurde
-            System.err.println("Failed to draw Member: Image is null");
+            //System.err.println("Failed to draw Member: Image is null");
         }
     }
 

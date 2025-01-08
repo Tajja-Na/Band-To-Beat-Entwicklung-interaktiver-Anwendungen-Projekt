@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
+import eiboprojekt.presentation.scenes.Object.Gitarre;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -17,6 +18,13 @@ public class MainCharacter extends Entity {
 
     public final int screenX;
     public final int screenY;
+
+
+    //Objekte
+    boolean hasMicro = false;
+    boolean hasKeyboard = false;
+    boolean hasGitarre = false;
+    boolean hasDrums = false;
 
     public MainCharacter(GamePanel gamePanel, KeyHandlern keyHandler) {
         super(gamePanel); // damit es den gp vom Entity bekommz
@@ -74,7 +82,7 @@ public class MainCharacter extends Entity {
     }
 
     public void update() {
-        System.out.println("Player position: x=" + weltX + ", y=" + weltY);
+        //System.out.println("Player position: x=" + weltX + ", y=" + weltY);
         // Update der Spielerposition je nach gedrückter Taste
         // Eine einzige if-Bedingung für alle Tasteneingaben
         if (keyHandler.isUp() == true || keyHandler.isDown() == true || keyHandler.isLeft() == true
@@ -92,9 +100,15 @@ public class MainCharacter extends Entity {
             if (keyHandler.isRight() == true) { // explizit true verwenden
                 direction = "right";
             }
+
             // checkt feld collision -> wenn false kann nicht laufen -> wenn true laufen
             collisionON = false;
             gp.cChecker.checkFeld(this);
+
+            //CHECK OBJECT COLLISION
+            int objIndex = gp.oChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
             if (collisionON == false) {
                 switch (direction) {
                     case "up":
@@ -148,12 +162,45 @@ public class MainCharacter extends Entity {
         }
         if (image != null) {
             gc.drawImage(image, screenX, screenY, tileSize, tileSize);
-            System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
+            //System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
         } else {
             System.err.println("Failed to draw player: Image is null");
             // Zeichne ein Ersatz-Rechteck
             gc.setFill(Color.RED);
             gc.fillRect(screenX, screenY, tileSize, tileSize);
+        }
+    }
+
+    public void pickUpObject(int i) {
+        if(i != 999) {
+            String objectName = gp.obj[i].name;
+            
+            switch(objectName) {
+                case "Schlagzeug":
+                hasDrums = true;
+                gp.obj[i] = null;
+                gp.playSE(2);
+                System.out.println("You've got drums!");
+                break;
+                case "Gitarre":
+                hasGitarre = true;
+                gp.obj[i] = null;
+                gp.playSE(2);
+                System.out.println("You've got a gitarre!");
+                break;
+                case "Mikrofon":
+                hasMicro = true;
+                gp.obj[i] = null;
+                gp.playSE(2);
+                System.out.println("You've got a microphone! Let's find some bandmembers!");
+                break;
+                case "Keyboard":
+                hasKeyboard = true;
+                gp.obj[i] = null;
+                gp.playSE(2);
+                System.out.println("You've got a keyboard!");
+                break;
+            }
         }
     }
 

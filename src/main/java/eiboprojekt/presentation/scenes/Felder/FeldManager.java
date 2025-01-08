@@ -163,7 +163,7 @@ public class FeldManager {
             }
             br.close();
 
-            System.out.println("hab die karte geladen!");
+            //System.out.println("hab die karte geladen!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -202,7 +202,7 @@ public class FeldManager {
     }
 
     public void draw(GraphicsContext gc) {
-        System.out.println("hi ich bin in draw vom fm drinne");
+        //System.out.println("hi ich bin in draw vom fm drinne");
         int weltCol = 0;
         int weltRow = 0;
 
