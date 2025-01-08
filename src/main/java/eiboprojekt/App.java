@@ -22,7 +22,7 @@ public class App extends Application {
     private GamePanel gamePanel;
     private GameLevel gameLevel; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt, danach
                                  // wird mit einem LevelManager gearbeitet
-    private LevelManager levelManager; // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
+     // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
                                        // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
 
     private Scene scene;
@@ -51,8 +51,6 @@ public class App extends Application {
         introductionView = new Introduction(gamePanel.screenWidth, gamePanel.screenHeight);
 
         gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
-
-        levelManager = new LevelManager(gamePanel.screenWidth, gamePanel.screenHeight, this);
 
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);

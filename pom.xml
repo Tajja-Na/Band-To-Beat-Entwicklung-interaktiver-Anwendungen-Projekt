@@ -3,13 +3,64 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eiboprojekt</groupId>
     <artifactId>eiboprojekt</artifactId>
-    <version>y</version>
+    <version>21</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
+    <!-- minim dependencies -->
+            <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>simpleminim</artifactId>
+            <version>2.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/eia_simpleminim_v2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>jl</artifactId>
+            <version>1.0.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/jl1.0.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>jsminim</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/jsminim.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>minim</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/minim.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>mp3spi</artifactId>
+            <version>1.9.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/mp3spi1.9.5.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>tritonus_aos</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/tritonus_aos.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>eiboprojekt</groupId>
+            <artifactId>tritonus_share</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/tritonus_share.jar</systemPath>
+        </dependency>
+        <!-- minim dependencies ende-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -28,7 +79,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
             <plugin>

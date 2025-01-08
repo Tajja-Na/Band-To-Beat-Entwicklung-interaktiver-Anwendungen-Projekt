@@ -13,10 +13,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class GameLevel extends BorderPane {
+    private int MAX_LEVEL_COL = 32; //16*2
+    private int MAX_LEVEL_ROW = 12; //12*1
     private App app;
     private FeldManager fm;
     private GamePanel gp;
     private KeyHandlern keyHandler;
+    private Canvas canvas;
     //private final MainCharacter player;  < das mit dem player und das er ins level gezeichnet wird kommt noch
 
     public GameLevel(int width, int height, App app, GamePanel gp) {
@@ -27,16 +30,18 @@ public class GameLevel extends BorderPane {
         this.fm = gp.getFM();
         this.gp = gp;
         this.keyHandler = gp.keyHandler;
+        this.canvas = new Canvas(gp.tileSize * MAX_LEVEL_COL, gp.tileSize * MAX_LEVEL_ROW);
         drawLevel();
     }
 
-    private void drawLevel() {
+    private void drawLevel(){
         VBox centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
-        //System.out.println("hi ich bin im gamelevel drawlevel die karte");
-        //fm.draw(); //hier muss halt schon fm.draw() hin aber da muss irgendwie noch davor passieren das die passende karte geladen wird
+        System.out.println("hi ich bin im gamelevel drawlevel die karte");
+        fm.ladeKarte("assets/Karte/levelbase1.txt", MAX_LEVEL_COL, MAX_LEVEL_ROW);
+        fm.draw(canvas.getGraphicsContext2D()); //hier muss halt schon fm.draw() hin aber da muss irgendwie noch davor passieren das die passende karte geladen wird
 
-        //centerBox.getChildren().addAll(fm.canvas);
+        centerBox.getChildren().addAll(canvas);
         setCenter(centerBox);
     }
 }
