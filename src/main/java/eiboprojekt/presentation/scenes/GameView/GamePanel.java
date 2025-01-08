@@ -94,7 +94,6 @@ public class GamePanel extends BorderPane {
         this.requestFocus(); // Fokus setzen
 
         feldM = new FeldManager(this);
-
         // Beispiel aus GamePanel oder einer anderen Rendering-Schleife:
         player = new MainCharacter(this, keyHandler);
 
@@ -247,5 +246,4 @@ public class GamePanel extends BorderPane {
         System.out.println("Key Released: " + event.getCode()); // Testausgabe
         keyHandler.keyReleased(event);
     }
-
 }
