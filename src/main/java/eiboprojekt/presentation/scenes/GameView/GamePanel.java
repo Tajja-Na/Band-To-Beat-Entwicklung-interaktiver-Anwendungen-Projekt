@@ -5,12 +5,14 @@ import java.io.InterruptedIOException;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
 import eiboprojekt.presentation.scenes.Entity.Entity;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.Member;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
+import eiboprojekt.presentation.scenes.Sounds.Sound;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,6 +62,9 @@ public class GamePanel extends BorderPane {
 
     // Checker für die Collusion
     public CollisionCheck cChecker;
+
+    //Sound
+    Sound sound = new Sound();
 
     // AnimationTimer für die Spielschleife
     AnimationTimer gameLoop;
@@ -111,6 +116,9 @@ public class GamePanel extends BorderPane {
 
         // Collusion
         cChecker = new CollisionCheck(this);
+
+        //Starte Musik
+        playMusic(0);
     }
 
     public FeldManager getFM() {
@@ -193,6 +201,25 @@ public class GamePanel extends BorderPane {
                 entity.draw(gc, tileSize);
             }
         }
+    }
+
+    //Musik Methoden
+    public void playMusic(int i) {
+
+        sound.loadTrack(i);
+        sound.play();
+        sound.loop();
+        sound.setVolume(1); //nicht so laut
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSE(int i) { //SE = Sound Effect! YEY!
+
+        sound.loadTrack(i);
+        sound.play();
     }
 
     // diese methode ist da für die keyanwendungen also wenn man was drücken sollte
