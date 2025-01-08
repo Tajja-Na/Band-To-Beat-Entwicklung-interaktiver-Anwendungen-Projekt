@@ -11,6 +11,7 @@ import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
 import eiboprojekt.presentation.scenes.Entity.Entity;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.Member;
+import eiboprojekt.presentation.scenes.Entity.TextBubble;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
 import javafx.animation.AnimationTimer;
@@ -60,10 +61,12 @@ public class GamePanel extends BorderPane {
     // Dialog
     private DialogPage dialogPage; // Referenz für DialogPage
 
+    private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
+
     // Checker für die Collusion
     public CollisionCheck cChecker;
 
-    //Sound
+    // Sound
     Sound sound = new Sound();
 
     // AnimationTimer für die Spielschleife
@@ -116,7 +119,7 @@ public class GamePanel extends BorderPane {
         // Collusion
         cChecker = new CollisionCheck(this);
 
-        //Starte Musik
+        // Starte Musik
         playMusic(0);
     }
 
@@ -180,7 +183,7 @@ public class GamePanel extends BorderPane {
         // member.draw(gc, tileSize);
         // }
         // }
-        
+
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         feldM.ladeKarte("assets/Karte/bb.txt");
@@ -200,22 +203,24 @@ public class GamePanel extends BorderPane {
                 entity.draw(gc, tileSize);
             }
         }
+        // Zeichne die Text-Bubble (falls sichtbar)
+        warnung.draw(gc, 180, 100);
     }
 
-    //Musik Methoden
+    // Musik Methoden
     public void playMusic(int i) {
 
         sound.loadTrack(i);
         sound.play();
         sound.loop();
-        sound.setVolume(1); //nicht so laut
+        sound.setVolume(1); // nicht so laut
     }
 
     public void stopMusic() {
         sound.stop();
     }
 
-    public void playSE(int i) { //SE = Sound Effect! YEY!
+    public void playSE(int i) { // SE = Sound Effect! YEY!
 
         sound.loadTrack(i);
         sound.play();

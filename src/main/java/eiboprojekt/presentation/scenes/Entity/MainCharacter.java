@@ -39,8 +39,8 @@ public class MainCharacter extends Entity {
         weltX = gp.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
         weltY = (gp.tileSize * 27) + (gp.tileSize / 2); // Zeile 27
 
-        levelX = gp.tileSize *2;
-        levelY = gp.tileSize *11;
+        levelX = gp.tileSize * 2;
+        levelY = gp.tileSize * 11;
 
         speed = 5;
 
@@ -157,16 +157,19 @@ public class MainCharacter extends Entity {
         }
     }
 
-    // für die interaktion
-    public boolean isNear(Entity member) {
-        int distanceX = Math.abs(this.weltX - member.weltX); // Weltkoordinaten vergleichen
-        int distanceY = Math.abs(this.weltY - member.weltY);
-
-        // Definiere eine maximale Distanz, z. B. 64 Pixel
-        int maxDistance = 64;
-
-        return distanceX < maxDistance && distanceY < maxDistance;
-    }
+    /*
+     * für die interaktion
+     * public boolean isNear(Entity member) {
+     * int distanceX = Math.abs(this.weltX - member.weltX); // Weltkoordinaten
+     * vergleichen
+     * int distanceY = Math.abs(this.weltY - member.weltY);
+     * 
+     * // Definiere eine maximale Distanz, z. B. 64 Pixel
+     * int maxDistance = 64;
+     * 
+     * return distanceX < maxDistance && distanceY < maxDistance;
+     * }
+     */
 
     public void interact() {
         // Hier kannst du die Interaktion starten (z.B. Dialog anzeigen)

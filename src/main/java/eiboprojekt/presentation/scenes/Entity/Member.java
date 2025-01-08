@@ -9,6 +9,7 @@ import eiboprojekt.presentation.scenes.GameView.GamePanel;
 
 public class Member extends Entity {
     private String basePath;
+    private TextBubble textBubble = new TextBubble("Press E", 60, 40);
 
     public Member(GamePanel gp, String basePath) {
         super(gp);
@@ -67,7 +68,10 @@ public class Member extends Entity {
                     break;
             }
             gc.drawImage(imageToDraw, screenX, screenY, tileSize, tileSize);
-
+            // Prüfe, ob der Spieler nah genug ist
+            if (isNear(gp.player, gp.tileSize)) {
+                textBubble.draw(gc, screenX, screenY - gp.tileSize / 2);
+            }
         } else {
             // Fehlerbehandlung, falls das Bild nicht geladen wurde
             System.err.println("Failed to draw Member: Image is null");
