@@ -247,7 +247,7 @@ public class GamePanel extends BorderPane {
         sound.loadTrack(i);
         sound.play();
         sound.loop();
-        sound.setVolume(1); // nicht so laut
+        sound.setVolume(0.2); // nicht so laut
     }
 
     public void stopMusic() {

@@ -57,9 +57,10 @@ public class Sound {
         audioPlayer.pause();
     }
 
-    public void setVolume(float value) {
-        float volume = (float) (10*Math.log(value));
-        audioPlayer.setGain(volume); 
+    public void setVolume(double value) {
+        float volume = 20 * (float) Math.log10(value); // Umrechnung in Dezibel
+        audioPlayer.setGain(volume);
     }
+    
     
 }
