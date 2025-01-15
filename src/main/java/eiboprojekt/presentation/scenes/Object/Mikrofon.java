@@ -4,7 +4,7 @@ import java.io.File;
 
 import javafx.scene.image.Image;
 
-public class Mikrofon extends Object {
+public class Mikrofon extends Objekt {
 
     public Mikrofon() {
 

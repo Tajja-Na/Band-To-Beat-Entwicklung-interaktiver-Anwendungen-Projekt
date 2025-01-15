@@ -4,7 +4,7 @@ import java.io.File;
 
 import javafx.scene.image.Image;
 
-public class Schlagzeug extends Object {
+public class Schlagzeug extends Objekt {
 
         public Schlagzeug() {
 

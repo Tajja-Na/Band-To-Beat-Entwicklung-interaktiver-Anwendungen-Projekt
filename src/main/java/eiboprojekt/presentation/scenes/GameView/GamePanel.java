@@ -17,7 +17,7 @@ import eiboprojekt.presentation.scenes.Sounds.Sound;
 import eiboprojekt.presentation.scenes.Object.Gitarre;
 import eiboprojekt.presentation.scenes.Object.Keyboard;
 import eiboprojekt.presentation.scenes.Object.Mikrofon;
-import eiboprojekt.presentation.scenes.Object.Object;
+import eiboprojekt.presentation.scenes.Object.Objekt;
 import eiboprojekt.presentation.scenes.Object.Schlagzeug;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -61,7 +61,7 @@ public class GamePanel extends BorderPane {
     public final MainCharacter player;
 
     //Objects
-    public Object obj[] = new Object[10];
+    public Objekt obj[] = new Objekt[10];
     public AssetSetter aSetter = new AssetSetter(this);
 
     // weil wir brauchen mehrere members

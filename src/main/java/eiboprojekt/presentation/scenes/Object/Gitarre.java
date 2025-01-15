@@ -4,7 +4,7 @@ import java.io.File;
 
 import javafx.scene.image.Image;
 
-public class Gitarre extends Object {
+public class Gitarre extends Objekt {
 
     public Gitarre() {
 

@@ -41,7 +41,6 @@ public class App extends Application {
     public void start(Stage primaryStage) {
 
         // Null-Prüfung und Initialisierung
-
         gamePanel = new GamePanel(this);
         System.out.println("GamePanel wurde initialisiert");
 
@@ -49,8 +48,6 @@ public class App extends Application {
         System.out.println("WelcomeView wurde initialisiert");
 
         introductionView = new Introduction(gamePanel.screenWidth, gamePanel.screenHeight);
-
-        gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
@@ -98,9 +95,10 @@ public class App extends Application {
                 setImLevel(false);
                 break;
             case "GAMELevel1":
+                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
                 rootPane.getChildren().add(gameLevel);
-                gamePanel.requestFocus();
-                gamePanel.startGameThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread
+                gameLevel.requestFocus();
+                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
                 setImLevel(true);
                 break;
             default:
