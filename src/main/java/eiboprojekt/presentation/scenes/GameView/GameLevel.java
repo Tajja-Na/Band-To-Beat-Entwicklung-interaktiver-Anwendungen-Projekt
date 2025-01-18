@@ -22,8 +22,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class GameLevel extends BorderPane {
@@ -34,6 +36,8 @@ public class GameLevel extends BorderPane {
     private KeyHandlern keyHandler;
     private Canvas canvas;
     private Sound sound;
+    private boolean running;
+    private boolean youWon;
 
     // Screen settings
     final int originalTileSize = 64; // 64x64 tile
@@ -89,6 +93,8 @@ public class GameLevel extends BorderPane {
 
         //Player
         player = new MainCharacterLevel(gp, keyHandler, this);
+        running = true;
+        youWon = false;
 
         //Objekte
         obstacles = new ArrayList<>();
@@ -98,9 +104,11 @@ public class GameLevel extends BorderPane {
 
         //Sound
         sound = new Sound();
-
         //Hier dann der Index vom Lied des Levels, einfügen des Liedes in der Sound-Klasse
         playMusic(0);
+
+        //Style für die Buttons später:
+        getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
     }
 
     public void startLevelThread(GraphicsContext gc) {
@@ -113,7 +121,7 @@ public class GameLevel extends BorderPane {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (app.isImLevel()) {
+                if (running) {
                     update();
                     draw(gc);
                 } else {
@@ -125,6 +133,7 @@ public class GameLevel extends BorderPane {
     }
 
     public void stopLevelThread() {
+        stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             levelThreadRunning = false;
@@ -172,6 +181,48 @@ public class GameLevel extends BorderPane {
         gc.setFill(Color.PURPLE);
         gc.fillText("Kollisionen: " + collisionCount, 10, 20);
 
+        //Bei Game Over
+        if (!running) {
+        //GraphicsContext gc = canvas.getGraphicsContext2D();
+        //Image backgroundImage = new Image(new File("assets/background/background test.jpg").toURI().toString());
+
+        VBox gameOverScreen = new VBox(40);
+        gameOverScreen.setAlignment(Pos.CENTER);
+        gameOverScreen.setPrefSize(screenWidth, screenHeight);
+
+        gameOverScreen.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+
+        Text gameOverText = new Text("Oh no, Game Over!");
+        gameOverText.setFont(new Font(80));
+        gameOverText.setFill(Color.RED);
+
+        Button retryButton = new Button("Versuch's nochmal");
+        retryButton.getStyleClass().add("button");
+        Button backToMapButton = new Button("Zurück zur Map");
+        backToMapButton.getStyleClass().add("button");
+
+        retryButton.setOnAction(e -> {
+            stopLevelThread();
+            restartGame();
+        });
+        backToMapButton.setOnAction(e -> {
+            stopLevelThread();
+            goToMap();
+        });
+
+        HBox buttons = new HBox(16);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().addAll(retryButton, backToMapButton);
+
+        gameOverScreen.getChildren().addAll(gameOverText, buttons);
+
+        this.setCenter(gameOverScreen);
+        }
+
+        if (youWon) {
+            // Hier dann Dialog mit Character, der sich der Band anschließt! Yey!
+        }
+
     }
 
     private void checkCollisions() {
@@ -181,17 +232,48 @@ public class GameLevel extends BorderPane {
                 collisionCount++;
                 iterator.remove();
                 if (collisionCount >= maxCollisions) {
-                    gameOver();
+                    running = false;
+                    //gameOver();
                 }
             }
         }
     }
     
     private void gameOver() {
-        stopLevelThread();
+        // Zeichne den Game-Over-Screen ohne den Level-Thread sofort zu stoppen
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.RED);
-        gc.fillText("Game Over", screenWidth / 2, screenHeight / 2);
+
+        VBox gameOverScreen = new VBox(20);
+        gameOverScreen.setAlignment(Pos.CENTER);
+        gameOverScreen.setPrefSize(screenWidth, screenHeight);
+
+        Text gameOverText = new Text("Game Over");
+        gameOverText.setFont(new Font(50));
+        gameOverText.setFill(Color.RED);
+
+        Button retryButton = new Button("Versuch's nochmal");
+        Button backToMapButton = new Button("Zurück zur Map");
+
+        retryButton.setOnAction(e -> {
+            stopLevelThread();
+            restartGame();
+        });
+        backToMapButton.setOnAction(e -> {
+            stopLevelThread();
+            goToMap();
+        });
+
+        gameOverScreen.getChildren().addAll(gameOverText, retryButton, backToMapButton);
+
+        this.setCenter(gameOverScreen);
+    }
+
+    private void restartGame() {
+        app.switchView("GAMELevel1");
+    }
+
+    private void goToMap() {
+        app.switchView("GAMEPANEL");
     }
 
     private void drawLevel(){
@@ -212,6 +294,10 @@ public class GameLevel extends BorderPane {
         sound.loadTrack(i);
         sound.play();
         sound.setVolume(0.2); // nicht so laut
+    }
+
+    public void stopMusic() {
+        sound.stop();
     }
 
     public void handleKeyPressed(KeyEvent event) {
