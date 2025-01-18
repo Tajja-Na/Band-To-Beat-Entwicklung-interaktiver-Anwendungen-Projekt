@@ -111,7 +111,7 @@ public class GamePanel extends BorderPane {
         player = new MainCharacter(this, keyHandler);
 
         // DialogPage initialisieren und hinzufügen
-        dialogPage = new DialogPage(700, 250, this, " ", " ");
+        dialogPage = new DialogPage(700, 250, this, "default", "default");
         dialogPage.setVisible(false); // Dialog standardmäßig unsichtbar
         this.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
 

@@ -52,7 +52,8 @@ public class App extends Application {
 
         gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
-        dialogPage = new DialogPage(500, 250, gamePanel, " ", " ");
+        dialogPage = new DialogPage(500, 250, gamePanel, "default", "default");
+
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
 
@@ -62,6 +63,7 @@ public class App extends Application {
         // Konfigurieren Sie den Switch-Button in der Welcome-Ansicht
         welcomeView.getSwitchButton().setOnAction(e -> switchView("INTRODUCTION"));
         introductionView.getSwitchButton().setOnAction(e -> switchView("GAMEPANEL"));
+
         dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
         // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
         // dialogPage = new DialogPage("Dies ist ein Testdialog."); vllt man es sinnn

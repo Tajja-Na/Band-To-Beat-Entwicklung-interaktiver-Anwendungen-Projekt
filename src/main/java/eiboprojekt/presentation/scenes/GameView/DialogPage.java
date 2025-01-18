@@ -90,7 +90,6 @@ public class DialogPage extends StackPane {
         // Der Start-Button (wird zunächst verborgen)
         startButton = new Button("Start");
         startButton.setVisible(false); // Anfangs unsichtbar
-        startButton = new Button("Start Game");
 
         // VBox für alle Dialog-Elemente
         VBox dialogContent = new VBox(20);
