@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import eiboprojekt.App;
+
 public class DialogPage extends StackPane {
     // Konstanten für den Pfad zu den Ressourcen
     private static final String ASSETS_PATH = "assets/";
@@ -29,6 +31,7 @@ public class DialogPage extends StackPane {
     private static final String CHARACTER_PATH = ASSETS_PATH + "Character/";
 
     private GamePanel gp;
+    private App app;
     private Rectangle background;
     private Button closeButton, nextButton, backButton, startButton;
     private TextFlow textFlow;
@@ -41,7 +44,8 @@ public class DialogPage extends StackPane {
     private String currentPartner; // Aktueller Dialogpartner
 
     // Konstruktor, der die Dialogseite mit der Partnerbezeichnung initialisiert
-    public DialogPage(int width, int height, GamePanel gp, String partnerName) {
+    public DialogPage(int width, int height, GamePanel gp, String partnerName, App app) {
+        this.app = app;
         this.gp = gp;
         this.currentPartner = partnerName; // Setzt den Dialogpartner
         initializeUI(width, height); // UI-Elemente initialisieren
@@ -86,9 +90,23 @@ public class DialogPage extends StackPane {
         HBox buttonBox = createButtonBox();
 
         // Der Start-Button (wird zunächst verborgen)
-        startButton = new Button("Start");
-        startButton.setVisible(false); // Anfangs unsichtbar
         startButton = new Button("Start Game");
+        startButton.setVisible(false); // Anfangs unsichtbar
+
+        //Je nach Partner anderes Level auswählen!
+        switch (currentPartner) {
+            case "Gigi":
+                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+                break;
+            case "Ryu":
+                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+                break;
+            case "Tyler":
+                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+                break;
+        }
+
+        startButton.setOnAction(e -> app.switchView("GAMELevel1"));
 
         // VBox für alle Dialog-Elemente
         VBox dialogContent = new VBox(20);

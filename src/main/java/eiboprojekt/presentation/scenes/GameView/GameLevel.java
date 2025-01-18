@@ -238,35 +238,6 @@ public class GameLevel extends BorderPane {
             }
         }
     }
-    
-    private void gameOver() {
-        // Zeichne den Game-Over-Screen ohne den Level-Thread sofort zu stoppen
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        VBox gameOverScreen = new VBox(20);
-        gameOverScreen.setAlignment(Pos.CENTER);
-        gameOverScreen.setPrefSize(screenWidth, screenHeight);
-
-        Text gameOverText = new Text("Game Over");
-        gameOverText.setFont(new Font(50));
-        gameOverText.setFill(Color.RED);
-
-        Button retryButton = new Button("Versuch's nochmal");
-        Button backToMapButton = new Button("Zurück zur Map");
-
-        retryButton.setOnAction(e -> {
-            stopLevelThread();
-            restartGame();
-        });
-        backToMapButton.setOnAction(e -> {
-            stopLevelThread();
-            goToMap();
-        });
-
-        gameOverScreen.getChildren().addAll(gameOverText, retryButton, backToMapButton);
-
-        this.setCenter(gameOverScreen);
-    }
 
     private void restartGame() {
         app.switchView("GAMELevel1");

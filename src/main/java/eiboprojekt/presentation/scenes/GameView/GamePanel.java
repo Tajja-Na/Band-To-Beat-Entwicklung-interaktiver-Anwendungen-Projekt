@@ -108,7 +108,7 @@ public class GamePanel extends BorderPane {
         player = new MainCharacter(this, keyHandler);
 
         // DialogPage initialisieren und hinzufügen
-        dialogPage = new DialogPage(700, 250, this, " ");
+        dialogPage = new DialogPage(700, 250, this, " ", app);
         dialogPage.setVisible(false); // Dialog standardmäßig unsichtbar
         this.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
 
@@ -251,7 +251,6 @@ public class GamePanel extends BorderPane {
     }
 
     public void stopMusic() {
-        System.out.println("Bin im Stop!");
         sound.stop();
     }
 
