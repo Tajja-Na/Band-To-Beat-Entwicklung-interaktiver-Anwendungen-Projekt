@@ -60,3 +60,16 @@
     -fx-background-color: #ea4c02; 
 }
 
+/* Dialog */
+.closeButton{
+    -fx-background-image: url("file:assets/x.png");
+
+}
+
+.small-container-box {
+    /* -fx-background-color: #333139c2;*/
+    -fx-background-color: #f4f4f4;
+     -fx-background-radius: 15px;
+     -fx-max-width: 600px;
+     -fx-max-height: 600px;
+ }

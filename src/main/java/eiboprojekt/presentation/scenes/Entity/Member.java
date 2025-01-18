@@ -9,11 +9,13 @@ import eiboprojekt.presentation.scenes.GameView.GamePanel;
 
 public class Member extends Entity {
     private String basePath;
+    private String name;
     private TextBubble textBubble = new TextBubble("Press E", 60, 40);
 
-    public Member(GamePanel gp, String basePath) {
+    public Member(GamePanel gp, String basePath, String name) {
         super(gp);
         this.basePath = basePath;
+        this.name = name;
         direction = "default";
         this.solideArea = new SolideRec(25, gp.tileSize, 6, gp.tileSize); // x, y, width, height
 
@@ -74,7 +76,7 @@ public class Member extends Entity {
             }
         } else {
             // Fehlerbehandlung, falls das Bild nicht geladen wurde
-            //System.err.println("Failed to draw Member: Image is null");
+            // System.err.println("Failed to draw Member: Image is null");
         }
     }
 
@@ -106,14 +108,14 @@ public class Member extends Entity {
         int deltaY = Math.abs(player.getY() - this.weltY);
 
         if (deltaX < distanceThreshold && deltaY < distanceThreshold) {
-            System.out.println("Super, Spieler in der Nähe!");
-            System.out.println(" ");
+            // System.out.println("Super, Spieler in der Nähe!");
+            // System.out.println(" ");
 
             // Spieler ist in der Nähe
             return true;
         } else {
-            System.out.println("Schade, Spieler NICHR in der Nähe!");
-            System.out.println(" ");
+            // System.out.println("Schade, Spieler NICHR in der Nähe!");
+            // System.out.println(" ");
             // Spieler ist nicht in der Nähe
             return false;
 
@@ -127,6 +129,10 @@ public class Member extends Entity {
 
     public int getY() {
         return this.weltY;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
 }

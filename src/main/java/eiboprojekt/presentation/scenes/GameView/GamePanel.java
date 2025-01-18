@@ -22,6 +22,7 @@ import eiboprojekt.presentation.scenes.Object.Schlagzeug;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -60,7 +61,7 @@ public class GamePanel extends BorderPane {
     // Player
     public final MainCharacter player;
 
-    //Objects
+    // Objects
     public Object obj[] = new Object[10];
     public AssetSetter aSetter = new AssetSetter(this);
 
@@ -86,6 +87,7 @@ public class GamePanel extends BorderPane {
     // Thread oder sleep einbauensss
     // Spielerposition und Geschwindigkeit
 
+    // Im Konstruktor der GamePanel-Klasse
     public GamePanel(App app) {
         this.app = app;
 
@@ -95,33 +97,32 @@ public class GamePanel extends BorderPane {
 
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
-        // Setze die Tasteneingaben (auf Tastendruck und Tastenauslösung hören)
         setOnKeyPressed(this::handleKeyPressed);
         setOnKeyReleased(this::handleKeyReleased);
 
-        // MouseEvent handler
-        // canvas.setOnMouseClicked(this::handleMouseClick);
-
         // Setze den Fokus für Tasteneingaben
         this.setFocusTraversable(true);
-        this.requestFocus(); // Fokus setzen
+        this.requestFocus();
 
         feldM = new FeldManager(this);
-        // Beispiel aus GamePanel oder einer anderen Rendering-Schleife:
         player = new MainCharacter(this, keyHandler);
 
+        // DialogPage initialisieren und hinzufügen
+        dialogPage = new DialogPage(500, 250, this, " ");
+        dialogPage.setVisible(false); // Dialog standardmäßig unsichtbar
+        this.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
+
         // Member erstellen und in der Welt platzieren
-        /// Member erstellen und in der Welt platzieren
-        members[0] = new Member(this, "assets/Character/Charakter2/");
+        members[0] = new Member(this, "assets/Character/Gigi/", "Gigi");
         members[0].setPosition(tileSize * 30, tileSize * 27);
 
-        members[1] = new Member(this, "assets/Character/Charakter3/");
+        members[1] = new Member(this, "assets/Character/Ryu/", "Ryu");
         members[1].setPosition(tileSize * 45, tileSize * 4);
 
-        members[2] = new Member(this, "assets/Character/Charakter4/");
+        members[2] = new Member(this, "assets/Character/Tyler/", "Tyler");
         members[2].setPosition(tileSize * 33, tileSize * 41);
 
-        //Objekte platzieren:
+        // Objekte platzieren
         obj[0] = new Schlagzeug();
         obj[0].setPosition(4 * tileSize, 4 * tileSize);
 
@@ -134,17 +135,13 @@ public class GamePanel extends BorderPane {
         obj[3] = new Gitarre();
         obj[3].setPosition(21 * tileSize, 12 * tileSize);
 
-        // Hintergrundfarbe für das Panel
-        // this.setStyle("-fx-background-color: black;");
-
-        // canvas.setOnMouseClicked(event -> handleMouseClick(event));
-
         // Collusion
         cChecker = new CollisionCheck(this);
         oChecker = new CollisionCheck(this);
 
-        // Starte Musik
+        // Musik starten
         playMusic(0);
+
     }
 
     public FeldManager getFM() {
@@ -228,12 +225,12 @@ public class GamePanel extends BorderPane {
             }
         }
 
-        //Objekte zeichnen
-        //obj[0].draw(gc,tileSize, this);
+        // Objekte zeichnen
+        // obj[0].draw(gc,tileSize, this);
 
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
-                obj[i].draw(gc,tileSize, this);
+                obj[i].draw(gc, tileSize, this);
             }
         }
 
@@ -247,7 +244,7 @@ public class GamePanel extends BorderPane {
         sound.loadTrack(i);
         sound.play();
         sound.loop();
-        sound.setVolume(0.2); // nicht so laut
+        sound.setVolume(0.1); // nicht so laut
     }
 
     public void stopMusic() {
@@ -260,21 +257,23 @@ public class GamePanel extends BorderPane {
         sound.play();
     }
 
-    // diese methode ist da für die keyanwendungen also wenn man was drücken sollte
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);
 
-        // Wenn "E" gedrückt wird, prüfe die Nähe zu einem Member
-        if (event.getCode().toString().equals("E")) {
+        if (event.getCode() == KeyCode.E) {
             for (Entity member : members) {
                 if (member instanceof Member) {
                     Member m = (Member) member;
 
-                    // Verwende die isNear-Methode des Members
-                    if (m.isNear(player, tileSize)) { // Der Schwellenwert kann angepasst werden
-                        m.facePlayer(player); // Member dreht sich zum Spieler
-                        app.switchView("DIALOG"); // Wechsel zur Dialog-Seite
-                        break; // Nur ein Dialog zur Zeit
+                    // Check if the player is near the member
+                    if (m.isNear(player, tileSize)) {
+                        m.facePlayer(player); // Member turns to face player
+
+                        // Set current partner and show dialog
+                        dialogPage.setCurrentPartner(m.getName()); // Pass the correct member name
+                        dialogPage.show(); // Show the dialog
+
+                        break; // Only one dialog at a time
                     }
                 }
             }

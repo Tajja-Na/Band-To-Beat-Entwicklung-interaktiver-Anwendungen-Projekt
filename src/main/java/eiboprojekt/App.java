@@ -22,8 +22,8 @@ public class App extends Application {
     private GamePanel gamePanel;
     private GameLevel gameLevel; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt, danach
                                  // wird mit einem LevelManager gearbeitet
-     // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
-                                       // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
+    // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
+    // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
 
     private Scene scene;
 
@@ -52,6 +52,7 @@ public class App extends Application {
 
         gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
+        dialogPage = new DialogPage(500, 250, gamePanel, STYLESHEET_CASPIAN);
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
 
@@ -61,12 +62,12 @@ public class App extends Application {
         // Konfigurieren Sie den Switch-Button in der Welcome-Ansicht
         welcomeView.getSwitchButton().setOnAction(e -> switchView("INTRODUCTION"));
         introductionView.getSwitchButton().setOnAction(e -> switchView("GAMEPANEL"));
-
+        dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
         // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
         // dialogPage = new DialogPage("Dies ist ein Testdialog."); vllt man es sinnn
         // für die verschiedenen sdialoge?
-        dialogPage = new DialogPage(this); // Pass 'this' as the App instance
-        dialogPage.getNextButton().setOnAction(e -> switchView("GAMELevel1"));
+        // dialogPage = new DialogPage(this); // Pass 'this' as the App instance
+        // dialogPage.getNextButton().setOnAction(e -> switchView("GAMELevel1"));
 
         // hier vllt auch so ein action ding für gamePanel
 
@@ -92,11 +93,13 @@ public class App extends Application {
                 gamePanel.startGameThread(gamePanel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
                 setImLevel(false);
                 break;
-            case "DIALOG":
-                gamePanel.stopGameThread(); // Beende den Game-Thread
-                rootPane.getChildren().add(dialogPage);
-                setImLevel(false);
-                break;
+            /*
+             * case "DIALOG":
+             * gamePanel.stopGameThread(); // Beende den Game-Thread
+             * rootPane.getChildren().add(dialogPage);
+             * setImLevel(false);
+             * break;
+             */
             case "GAMELevel1":
                 rootPane.getChildren().add(gameLevel);
                 gamePanel.requestFocus();

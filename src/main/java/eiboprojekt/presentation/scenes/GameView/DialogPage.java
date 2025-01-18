@@ -1,137 +1,303 @@
 package eiboprojekt.presentation.scenes.GameView;
 
-import java.util.Arrays;
-import java.util.List;
-
-import eiboprojekt.App;
-import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
-//dialoge aber weiß nicht wie wir hier mehrere dialoge drauß machen 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DialogPage extends BorderPane {
+public class DialogPage extends StackPane {
+    // Konstanten für den Pfad zu den Ressourcen
+    private static final String ASSETS_PATH = "assets/";
+    private static final String DIALOG_PATH = ASSETS_PATH + "Dialog/";
+    private static final String CHARACTER_PATH = ASSETS_PATH + "Character/";
 
-    private Button nextButton;
-    private Button zurueckButton;
-    private Button gameStartButton;
+    private GamePanel gp;
+    private Rectangle background;
+    private Button closeButton, nextButton, backButton, startButton;
+    private TextFlow textFlow;
     private Text pageText;
-    private List<String> introTexts;
-    private int currentPage = 0;
-    private Button zurueckMap;
-    private Thread dialogThread;
+    private List<String> dialogs;
+    private int currentDialogIndex = 0;
 
-    App app;
+    private ImageView leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking;
 
-    public DialogPage(App app) {
-        this.app = app;
-        initializeUI();
+    private String currentPartner; // Aktueller Dialogpartner
+
+    // Konstruktor, der die Dialogseite mit der Partnerbezeichnung initialisiert
+    public DialogPage(int width, int height, GamePanel gp, String partnerName) {
+        this.gp = gp;
+        this.currentPartner = partnerName; // Setzt den Dialogpartner
+        initializeUI(width, height); // UI-Elemente initialisieren
+        centerDialog(width, height); // Positioniert das Dialogfenster
+        loadDialogs(partnerName + "_dialog.txt"); // Lädt den Dialog des Partners
+        updateDialogText(); // Aktualisiert den Text mit dem ersten Dialog
     }
 
-    private void initializeUI() {
-        // Create a vertical box to center content
-        VBox centerBox = new VBox(20);
-        centerBox.setAlignment(Pos.CENTER);
+    // Initialisiert alle UI-Komponenten
+    public void initializeUI(int width, int height) {
+        // Hintergrundrechteck erstellen
+        background = new Rectangle(width, height);
+        background.setFill(Color.rgb(0, 0, 0, 0.8)); // Halbtransparenter Hintergrund
+        background.setArcWidth(15); // Abgerundete Ecken
+        background.setArcHeight(15);
 
-        // Initialize dialog text and navigation buttons
-        pageText = new Text();
-        nextButton = new Button("Weiter");
-        zurueckButton = new Button("Zurück");
-        zurueckMap = new Button("Zurück zur Map");
-        gameStartButton = new Button("Spiel starten");
+        // StackPane für die Bilder der Charaktere
+        StackPane imageContainer = new StackPane();
+        imageContainer.setAlignment(Pos.CENTER);
 
-        // Set styles
-        setStyle("-fx-background-color: #282c34;");
-        pageText.setStyle("-fx-fill: white; -fx-font-size: 18px;");
-        nextButton.setStyle("-fx-font-size: 16px; -fx-background-color: #61dafb; -fx-text-fill: black;");
-        zurueckButton.setStyle("-fx-font-size: 16px; -fx-background-color: #61dafb; -fx-text-fill: black;");
-        gameStartButton.setStyle("-fx-font-size: 16px; -fx-background-color: #61dafb; -fx-text-fill: black;");
-        zurueckMap.setStyle("-fx-font-size: 16px; -fx-background-color: #61dafb; -fx-text-fill: black;");
+        // Initialisieren der ImageViews für die Charaktere
+        leftImageIdle = new ImageView();
+        leftImageTalking = new ImageView();
+        rightImageIdle = new ImageView();
+        rightImageTalking = new ImageView();
 
-        // Initialize intro texts
-        introTexts = Arrays.asList(
-                "bkbkbkbk",
-                "uhh",
-                "help",
-                "i");
+        configureImageViews(); // Bild-Views konfigurieren
 
-        // Initialize page content
-        updatePage();
+        // Die Bilder in den Container einfügen
+        imageContainer.getChildren().addAll(leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking);
+        imageContainer.setTranslateY(-height / 2 - 75); // Position der Bilder anpassen
 
-        // Create navigation box
-        HBox navigationBox = new HBox(10);
-        navigationBox.setAlignment(Pos.CENTER);
-        navigationBox.getChildren().addAll(zurueckButton, nextButton);
+        // Textbox für den Dialog erstellen
+        HBox textBox = createTextBox();
 
-        // Add all elements to the center box
-        centerBox.getChildren().addAll(pageText, navigationBox, gameStartButton, zurueckMap);
+        // Button-Box für Navigation
+        HBox buttonBox = createButtonBox();
 
-        // Add center box to the center of the BorderPane
-        setCenter(centerBox);
+        // Der Start-Button (wird zunächst verborgen)
+        startButton = new Button("Start");
+        startButton.setVisible(false); // Anfangs unsichtbar
 
-        // Button actions
-        nextButton.setOnAction(e -> nextPage());
-        zurueckButton.setOnAction(e -> previousPage());
-        zurueckMap.setOnAction(e -> app.switchView("GAMEPANEL"));
+        // VBox für alle Dialog-Elemente
+        VBox dialogContent = new VBox(20);
+        dialogContent.setAlignment(Pos.CENTER);
+        dialogContent.getChildren().addAll(textBox, buttonBox, startButton);
+        dialogContent.getStyleClass().add("main-box");
 
-        // Start a background task in a new Thread
-        dialogThread = new Thread(() -> {
-            try {
-                // Simulate some background work
-                Thread.sleep(2000); // Simulating a delay of 2 seconds
+        // Alle Komponenten zum Dialog hinzufügen
+        getChildren().addAll(background, dialogContent, imageContainer);
+    }
 
-                // After background work, update UI on JavaFX Application Thread
-                Platform.runLater(() -> {
-                    System.out.println("Dialog thread work done. Proceeding...");
-                    // You can update UI elements here if needed
-                });
+    // Konfiguriert die Bild-Views (z.B. Größe, Sichtbarkeit)
+    private void configureImageViews() {
+        // Alle Bild-Views konfigurieren
+        for (ImageView iv : new ImageView[] { leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking }) {
+            iv.setFitWidth(150);
+            iv.setFitHeight(150);
+            iv.setPreserveRatio(true); // Erhält das Seitenverhältnis
+            iv.setVisible(false); // Zu Beginn unsichtbar
+        }
 
-            } catch (InterruptedException e) {
-                // Handle interruption gracefully
-                System.out.println("Dialog thread interrupted.");
+        // Position der Bilder anpassen
+        leftImageIdle.setTranslateX(-100);
+        leftImageTalking.setTranslateX(-100);
+        rightImageIdle.setTranslateX(100);
+        rightImageTalking.setTranslateX(100);
+    }
+
+    // Erstellt die Textbox, in der der Dialog angezeigt wird
+    private HBox createTextBox() {
+        HBox textBox = new HBox(10);
+        textBox.setAlignment(Pos.CENTER);
+        textBox.setPadding(new Insets(0, 20, 0, 20));
+        textBox.setMaxWidth(800);
+
+        pageText = new Text("");
+        pageText.setStyle("-fx-fill: white; -fx-font-size: 16px;"); // Stil des Textes
+
+        textFlow = new TextFlow(pageText);
+        textFlow.setPrefWidth(400); // Breite der Textbox anpassen
+        textFlow.setPrefHeight(200);
+
+        textBox.getChildren().add(textFlow);
+
+        return textBox;
+    }
+
+    // Erstellt die Schaltflächen für die Navigation im Dialog
+    private HBox createButtonBox() {
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        closeButton = new Button("X");
+        nextButton = new Button(">");
+        backButton = new Button("<");
+
+        backButton.setDisable(true); // Der "Zurück"-Button ist am Anfang deaktiviert
+
+        // Event-Handler für die Schaltflächen
+        closeButton.setOnAction(e -> hide());
+        nextButton.setOnAction(e -> nextDialog());
+        backButton.setOnAction(e -> previousDialog());
+
+        buttonBox.getChildren().addAll(backButton, closeButton, nextButton);
+
+        return buttonBox;
+    }
+
+    // Zentriert das Dialogfenster auf dem Bildschirm
+    public void centerDialog(int width, int height) {
+        setLayoutX((gp.screenWidth - width) / 2 + 250); // Horizontal zentrieren
+        setLayoutY((gp.screenHeight - height) / 2 + 300); // Vertikal zentrieren
+    }
+
+    // Lädt den Dialog aus einer Datei
+    public void loadDialogs(String filePath) {
+        dialogs = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(DIALOG_PATH + filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                dialogs.add(line.trim()); // Entfernt Leerzeichen und fügt den Dialog hinzu
             }
-        });
-    }
+            if (dialogs.isEmpty()) {
+                dialogs.add("No dialogs found."); // Falls keine Dialoge gefunden werden
+            }
 
-    private void nextPage() {
-        if (currentPage < introTexts.size() - 1) {
-            currentPage++;
-            updatePage();
+            System.out.println("Dialogs loaded: " + dialogs.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            dialogs.add("Error loading dialogs.");
+            System.err.println("Error reading file: " + filePath + " - " + e.getMessage());
         }
     }
 
-    private void previousPage() {
-        if (currentPage > 0) {
-            currentPage--;
-            updatePage();
+    // Aktualisiert den Dialogtext
+    public void updateDialogText() {
+        if (!dialogs.isEmpty() && currentDialogIndex < dialogs.size()) {
+            String line = dialogs.get(currentDialogIndex);
+            String[] parts = line.split(":", 2);
+
+            if (parts.length == 2) {
+                String speaker = parts[0].trim(); // Sprecher extrahieren
+                String dialog = parts[1].trim(); // Dialog extrahieren
+
+                pageText.setText(speaker + ": " + dialog); // Text anzeigen
+                pageText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: white;");
+
+                updateImages(speaker); // Bild des Sprechers aktualisieren
+            } else {
+                pageText.setText(line); // Einzeilige Dialoge ohne Sprecher
+            }
+
+            backButton.setDisable(currentDialogIndex == 0); // "Zurück"-Button deaktivieren, wenn es der erste Dialog
+                                                            // ist
+            nextButton.setDisable(currentDialogIndex == dialogs.size() - 1); // "Weiter"-Button deaktivieren, wenn es
+                                                                             // der letzte Dialog ist
+
+            // Start-Button anzeigen, wenn der letzte Dialog erreicht ist
+            startButton.setVisible(currentDialogIndex == dialogs.size() - 1);
+
+            System.out.println("Current Dialog Index: " + currentDialogIndex); // Debugging-Information
+            System.out.println("Current Dialog: " + line); // Debugging-Information
         }
     }
 
-    private void updatePage() {
-        // Update the page text
-        pageText.setText(introTexts.get(currentPage));
-        zurueckButton.setDisable(currentPage == 0);
-        nextButton.setDisable(currentPage == introTexts.size() - 1);
-        gameStartButton.setVisible(currentPage == introTexts.size() - 1);
+    // Aktualisiert die Bilder des Sprechers
+    public void updateImages(String speaker) {
+        try {
+            loadCharacterImages(); // Lädt die Charakterbilder
+
+            ColorAdjust darkerEffect = new ColorAdjust(0, 0, -0.5, 0); // Dunklerer Effekt für inaktive Charaktere
+
+            if (speaker.equalsIgnoreCase("Timmy")) {
+                setImagesVisibility(true, false); // Timmy spricht
+                rightImageIdle.setEffect(darkerEffect); // Partnerbild dunkeln
+            } else if (speaker.equalsIgnoreCase(currentPartner)) {
+                setImagesVisibility(false, true); // Partner spricht
+                leftImageIdle.setEffect(darkerEffect); // Timmy-Bild dunkeln
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading images: " + e.getMessage());
+            setImagesVisibility(false, false); // Alle Bilder ausblenden bei einem Fehler
+        }
     }
 
-    // Start the dialog thread
-    public void startDialog() {
-        dialogThread.start();
+    // Lädt die Bilder für Timmy und den Partner
+    private void loadCharacterImages() throws Exception {
+        Image timmyIdle = loadImage(CHARACTER_PATH + "Charakter1/timmy1.png");
+        Image timmyTalking = loadImage(CHARACTER_PATH + "Charakter1/timmy2.png");
+        Image partnerIdle = loadImage(CHARACTER_PATH + currentPartner + "/idle.png");
+        Image partnerTalking = loadImage(CHARACTER_PATH + currentPartner + "/talking.png");
+
+        // Setzt die Bilder in die entsprechenden ImageViews
+        leftImageIdle.setImage(timmyIdle);
+        leftImageTalking.setImage(timmyTalking);
+        rightImageIdle.setImage(partnerIdle);
+        rightImageTalking.setImage(partnerTalking);
+
+        System.out.println("Current Partner: " + currentPartner); // Debugging-Information
     }
 
-    // Stop the dialog thread
-    public void stopDialog() {
-        dialogThread.interrupt();
+    // Hilfsmethode zum Laden eines Bildes
+    private Image loadImage(String path) throws Exception {
+        File file = new File(path);
+        if (!file.exists())
+            throw new IOException("File not found: " + path);
+        return new Image(file.toURI().toString());
     }
 
-    // Get the next button for external use (e.g., in App)
-    public Button getNextButton() {
-        return gameStartButton;
+    // Setzt die Sichtbarkeit der Bilder
+    private void setImagesVisibility(boolean timmyTalkingVisible, boolean partnerTalkingVisible) {
+        leftImageIdle.setVisible(!timmyTalkingVisible);
+        leftImageTalking.setVisible(timmyTalkingVisible);
+
+        rightImageIdle.setVisible(!partnerTalkingVisible);
+        rightImageTalking.setVisible(partnerTalkingVisible);
+    }
+
+    // Nächsten Dialog anzeigen
+    public void nextDialog() {
+        if (currentDialogIndex < dialogs.size() - 1) {
+            currentDialogIndex++;
+            updateDialogText();
+        }
+    }
+
+    // Vorherigen Dialog anzeigen
+    public void previousDialog() {
+        if (currentDialogIndex > 0) {
+            currentDialogIndex--;
+            updateDialogText();
+        }
+    }
+
+    // Setzt den aktuellen Partner und lädt dessen Dialoge
+    public void setCurrentPartner(String partnerName) {
+        this.currentPartner = partnerName; // Partnername aktualisieren
+        loadDialogs(partnerName + "_dialog.txt"); // Dialoge für den neuen Partner laden
+        updateDialogText(); // Text sofort aktualisieren
+    }
+
+    // Zeigt das Dialogfenster an
+    public void show() {
+        setVisible(true);
+    }
+
+    // Versteckt das Dialogfenster
+    public void hide() {
+        setVisible(false);
+    }
+
+    // Gibt den Start-Button zurück
+    public Button getSwitchButton() {
+        return startButton;
     }
 }
