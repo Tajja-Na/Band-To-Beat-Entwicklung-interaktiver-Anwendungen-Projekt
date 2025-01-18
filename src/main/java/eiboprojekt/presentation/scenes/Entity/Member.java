@@ -10,12 +10,14 @@ import eiboprojekt.presentation.scenes.GameView.GamePanel;
 public class Member extends Entity {
     private String basePath;
     private String name;
+    private String instrumente;
     private TextBubble textBubble = new TextBubble("Press E", 60, 40);
 
-    public Member(GamePanel gp, String basePath, String name) {
+    public Member(GamePanel gp, String basePath, String name, String instrumente) {
         super(gp);
         this.basePath = basePath;
         this.name = name;
+        this.instrumente = instrumente;
         direction = "default";
         this.solideArea = new SolideRec(25, gp.tileSize, 6, gp.tileSize); // x, y, width, height
 
@@ -133,6 +135,10 @@ public class Member extends Entity {
 
     public String getName() {
         return this.name;
+    }
+
+    public String getInstrument() {
+        return this.instrumente; // Instrument-Variable in der Member-Klasse
     }
 
 }

@@ -52,7 +52,7 @@ public class App extends Application {
 
         gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
-        dialogPage = new DialogPage(500, 250, gamePanel, " ");
+        dialogPage = new DialogPage(500, 250, gamePanel, " ", " ");
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
 
