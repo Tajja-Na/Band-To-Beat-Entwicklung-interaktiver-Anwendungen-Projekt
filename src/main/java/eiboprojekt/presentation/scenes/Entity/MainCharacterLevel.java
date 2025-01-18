@@ -108,7 +108,7 @@ public class MainCharacterLevel extends Entity{
         
         if (image != null) {
             gc.drawImage(image, screenX, screenY, tileSize*scale, tileSize*scale);
-            System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
+            //System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
         } else {
             System.err.println("Failed to draw player: Image is null");
             // Zeichne ein Ersatz-Rechteck

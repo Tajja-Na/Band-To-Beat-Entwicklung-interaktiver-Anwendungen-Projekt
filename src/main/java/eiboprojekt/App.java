@@ -83,18 +83,19 @@ public class App extends Application {
                 rootPane.getChildren().add(introductionView);
                 break;
             case "GAMEPANEL":
-                gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest
+                //gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest hier muss dann stop Level Thread später hin!
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
                 gamePanel.startGameThread(gamePanel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
                 setImLevel(false);
                 break;
             case "DIALOG":
-                gamePanel.stopGameThread(); // Beende den Game-Thread
+                //gamePanel.stopGameThread(); // Beende den Game-Thread das passiert dann im Level, sonst geht die Musik nicht weiter
                 rootPane.getChildren().add(dialogPage);
                 setImLevel(false);
                 break;
             case "GAMELevel1":
+                gamePanel.stopGameThread();
                 gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
                 rootPane.getChildren().add(gameLevel);
                 gameLevel.requestFocus();

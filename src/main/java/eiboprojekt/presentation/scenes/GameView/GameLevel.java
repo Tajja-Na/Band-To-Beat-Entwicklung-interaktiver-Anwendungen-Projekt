@@ -59,7 +59,7 @@ public class GameLevel extends BorderPane {
     //Game Loop bzw Level Loop 
     AnimationTimer gameLoop;
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
-    private boolean gameThreadRunning = false;
+    private boolean levelThreadRunning = false;
 
     private final MainCharacterLevel player;  
 
@@ -104,18 +104,16 @@ public class GameLevel extends BorderPane {
 
 
     public void startLevelThread(GraphicsContext gc) {
-        if (gameThreadRunning) {
+        if (levelThreadRunning) {
             return; // Verhindere, dass der Game-Thread mehrfach gestartet wird
         }
-        gameThreadRunning = true;
-        System.out.println("Game Thread gestartet.");
+        levelThreadRunning = true;
+        System.out.println("Level Thread gestartet.");
 
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                System.out.println("Handle Methode.");
                 if (app.isImLevel()) {
-                    System.out.println("Handle Methode if ++++++.");
                     update();
                     draw(gc);
                 } else {
@@ -129,14 +127,12 @@ public class GameLevel extends BorderPane {
     public void stopLevelThread() {
         if (gameLoop != null) {
             gameLoop.stop();
-            gameThreadRunning = false;
+            levelThreadRunning = false;
         }
     }
 
     public void update() {
         player.update();
-
-        System.out.println("Updaten.");
         
         // Hindernisse bewegen
         for (Double[] obstacle : obstacles) {
@@ -194,7 +190,6 @@ public class GameLevel extends BorderPane {
     private void drawLevel(){
         VBox centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
-        System.out.println("hi ich bin im gamelevel drawlevel die karte");
         
         fm.ladeKarte("assets/Karte/levelbase1.txt", MAX_LEVEL_COL, MAX_LEVEL_ROW);
         fm.drawLevel(canvas.getGraphicsContext2D(), MAX_LEVEL_COL, MAX_LEVEL_ROW); //hier muss halt schon fm.draw() hin aber da muss irgendwie noch davor passieren das die passende karte geladen wird
@@ -207,6 +202,7 @@ public class GameLevel extends BorderPane {
 
     public void playMusic(int i) {
 
+        sound.stop();
         sound.loadTrack(i);
         sound.play();
         sound.setVolume(0.2); // nicht so laut

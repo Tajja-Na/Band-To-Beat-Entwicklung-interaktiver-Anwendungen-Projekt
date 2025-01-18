@@ -144,7 +144,10 @@ public class GamePanel extends BorderPane {
         oChecker = new CollisionCheck(this);
 
         // Starte Musik
-        playMusic(0);
+        if(!sound.isPlaying) {
+            playMusic(0);
+            sound.isPlaying = true;
+        }
     }
 
     public FeldManager getFM() {
@@ -175,6 +178,7 @@ public class GamePanel extends BorderPane {
     }
 
     public void stopGameThread() {
+        stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             gameThreadRunning = false;
@@ -251,6 +255,7 @@ public class GamePanel extends BorderPane {
     }
 
     public void stopMusic() {
+        System.out.println("Bin im Stop!");
         sound.stop();
     }
 
