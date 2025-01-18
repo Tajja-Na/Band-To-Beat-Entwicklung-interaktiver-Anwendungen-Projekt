@@ -48,6 +48,9 @@ public class DialogPage extends StackPane {
         centerDialog(width, height); // Positioniert das Dialogfenster
         loadDialogs(partnerName + "_dialog.txt"); // Lädt den Dialog des Partners
         updateDialogText(); // Aktualisiert den Text mit dem ersten Dialog
+        getStylesheets()
+                .add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
+
     }
 
     // Initialisiert alle UI-Komponenten
@@ -83,12 +86,15 @@ public class DialogPage extends StackPane {
         // Der Start-Button (wird zunächst verborgen)
         startButton = new Button("Start");
         startButton.setVisible(false); // Anfangs unsichtbar
+        startButton = new Button("Start Game");
 
         // VBox für alle Dialog-Elemente
         VBox dialogContent = new VBox(20);
         dialogContent.setAlignment(Pos.CENTER);
+        // dialogContent.minHeight(height);
+        // dialogContent.minWidth(width);
         dialogContent.getChildren().addAll(textBox, buttonBox, startButton);
-        dialogContent.getStyleClass().add("main-box");
+        // dialogContent.getStyleClass().add("main-box");
 
         // Alle Komponenten zum Dialog hinzufügen
         getChildren().addAll(background, dialogContent, imageContainer);
@@ -114,17 +120,18 @@ public class DialogPage extends StackPane {
     // Erstellt die Textbox, in der der Dialog angezeigt wird
     private HBox createTextBox() {
         HBox textBox = new HBox(10);
-        textBox.setAlignment(Pos.CENTER);
-        textBox.setPadding(new Insets(0, 20, 0, 20));
-        textBox.setMaxWidth(800);
+        textBox.setAlignment(Pos.BASELINE_CENTER);
+        textBox.setPadding(new Insets(30, 0, 30, 0));
+        textBox.setMinWidth(1000);
+        textBox.setMinHeight(100); // Feste Höhe für die Textbox
 
         pageText = new Text("");
-        pageText.setStyle("-fx-fill: white; -fx-font-size: 16px;"); // Stil des Textes
+        pageText.setStyle("-fx-fill: white; -fx-font-size: 16px;"); // Stil des
+        // Textes
 
         textFlow = new TextFlow(pageText);
-        textFlow.setPrefWidth(400); // Breite der Textbox anpassen
-        textFlow.setPrefHeight(200);
-
+        textFlow.setMaxSize(600, 250); // Maximal erlaubte Breite und Höhe
+        textFlow.setPrefSize(600, 250); // Feste Breite und Höhe
         textBox.getChildren().add(textFlow);
 
         return textBox;
@@ -132,12 +139,15 @@ public class DialogPage extends StackPane {
 
     // Erstellt die Schaltflächen für die Navigation im Dialog
     private HBox createButtonBox() {
-        HBox buttonBox = new HBox(20);
-        buttonBox.setAlignment(Pos.CENTER);
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
         closeButton = new Button("X");
         nextButton = new Button(">");
+        // nextButton.getStyleClass().add("button");
+
         backButton = new Button("<");
+        // (backButton.getStyleClass().add("button");
 
         backButton.setDisable(true); // Der "Zurück"-Button ist am Anfang deaktiviert
 
@@ -153,8 +163,10 @@ public class DialogPage extends StackPane {
 
     // Zentriert das Dialogfenster auf dem Bildschirm
     public void centerDialog(int width, int height) {
-        setLayoutX((gp.screenWidth - width) / 2 + 250); // Horizontal zentrieren
+        setLayoutX((gp.screenWidth - width) / 2 + 350); // Horizontal zentrieren
         setLayoutY((gp.screenHeight - height) / 2 + 300); // Vertikal zentrieren
+        setPrefSize(width, height); // Fixiere die Größe der gesamten DialogBox
+
     }
 
     // Lädt den Dialog aus einer Datei
@@ -190,7 +202,8 @@ public class DialogPage extends StackPane {
                 String dialog = parts[1].trim(); // Dialog extrahieren
 
                 pageText.setText(speaker + ": " + dialog); // Text anzeigen
-                pageText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: white;");
+                // pageText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill:
+                // white;");
 
                 updateImages(speaker); // Bild des Sprechers aktualisieren
             } else {
@@ -206,7 +219,7 @@ public class DialogPage extends StackPane {
             startButton.setVisible(currentDialogIndex == dialogs.size() - 1);
 
             System.out.println("Current Dialog Index: " + currentDialogIndex); // Debugging-Information
-            System.out.println("Current Dialog: " + line); // Debugging-Information
+            // System.out.println("Current Dialog: " + line); // Debugging-Information
         }
     }
 
