@@ -42,12 +42,14 @@ public class DialogPage extends StackPane {
     private ImageView leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking;
 
     private String currentPartner; // Aktueller Dialogpartner
+    private String instrumente;
 
     // Konstruktor, der die Dialogseite mit der Partnerbezeichnung initialisiert
-    public DialogPage(int width, int height, GamePanel gp, String partnerName, App app) {
+    public DialogPage(int width, int height, GamePanel gp, String partnerName, String instrumente, App app) {
         this.app = app;
         this.gp = gp;
         this.currentPartner = partnerName; // Setzt den Dialogpartner
+        this.instrumente = instrumente;
         initializeUI(width, height); // UI-Elemente initialisieren
         centerDialog(width, height); // Positioniert das Dialogfenster
         loadDialogs(partnerName + "_dialog.txt"); // Lädt den Dialog des Partners
@@ -81,7 +83,7 @@ public class DialogPage extends StackPane {
 
         // Die Bilder in den Container einfügen
         imageContainer.getChildren().addAll(leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking);
-        imageContainer.setTranslateY(-height / 2 - 75); // Position der Bilder anpassen
+        imageContainer.setTranslateY(-height / 2 - 85); // Position der Bilder anpassen
 
         // Textbox für den Dialog erstellen
         HBox textBox = createTextBox();
@@ -124,17 +126,17 @@ public class DialogPage extends StackPane {
     private void configureImageViews() {
         // Alle Bild-Views konfigurieren
         for (ImageView iv : new ImageView[] { leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking }) {
-            iv.setFitWidth(150);
-            iv.setFitHeight(150);
+            iv.setFitWidth(170);
+            iv.setFitHeight(170);
             iv.setPreserveRatio(true); // Erhält das Seitenverhältnis
             iv.setVisible(false); // Zu Beginn unsichtbar
         }
 
         // Position der Bilder anpassen
-        leftImageIdle.setTranslateX(-100);
-        leftImageTalking.setTranslateX(-100);
-        rightImageIdle.setTranslateX(100);
-        rightImageTalking.setTranslateX(100);
+        leftImageIdle.setTranslateX(-200);
+        leftImageTalking.setTranslateX(-200);
+        rightImageIdle.setTranslateX(200);
+        rightImageTalking.setTranslateX(200);
     }
 
     // Erstellt die Textbox, in der der Dialog angezeigt wird
@@ -316,7 +318,13 @@ public class DialogPage extends StackPane {
     public void setCurrentPartner(String partnerName) {
         this.currentPartner = partnerName; // Partnername aktualisieren
         loadDialogs(partnerName + "_dialog.txt"); // Dialoge für den neuen Partner laden
-        updateDialogText(); // Text sofort aktualisieren
+        resetDialog(); // Dialog zurücksetzen und den ersten Dialogtext anzeigen
+    }
+
+    // Setzt den Dialog auf den Anfang zurück
+    public void resetDialog() {
+        currentDialogIndex = 0; // Index zurücksetzen
+        updateDialogText(); // Text und Schaltflächen aktualisieren
     }
 
     // Zeigt das Dialogfenster an
