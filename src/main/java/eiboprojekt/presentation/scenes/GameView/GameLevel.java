@@ -3,6 +3,7 @@ package eiboprojekt.presentation.scenes.GameView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.io.File;
 
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
@@ -56,6 +57,8 @@ public class GameLevel extends BorderPane {
     private List<Double[]> obstacles = new ArrayList<>();
     private Double lastObstacleX = null;
 
+    private Image obstacleImage;
+
     //Game Loop bzw Level Loop 
     AnimationTimer gameLoop;
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
@@ -74,15 +77,9 @@ public class GameLevel extends BorderPane {
         this.fm = gp.getFM();
         canvas = new Canvas(screenWidth, screenHeight);
         this.getChildren().add(canvas);
-        /* 
-        setPrefSize(width, height);
-        setMinSize(width, height);
-        setMaxSize(width, height);
-        */
 
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
-        // Setze die Tasteneingaben (auf Tastendruck und Tastenauslösung hören)
         setOnKeyPressed(this::handleKeyPressed);
         setOnKeyReleased(this::handleKeyReleased);
 
@@ -96,12 +93,15 @@ public class GameLevel extends BorderPane {
         //Objekte
         obstacles = new ArrayList<>();
 
+        // Hindernisbild laden
+        obstacleImage = new Image(new File("src/main/java/eiboprojekt/presentation/scenes/Object/assets/gitarre.png").toURI().toString());
+
         //Sound
         sound = new Sound();
 
+        //Hier dann der Index vom Lied des Levels, einfügen des Liedes in der Sound-Klasse
         playMusic(0);
     }
-
 
     public void startLevelThread(GraphicsContext gc) {
         if (levelThreadRunning) {
@@ -139,16 +139,23 @@ public class GameLevel extends BorderPane {
             obstacle[0] -= 5; // Bewegung nach links
         }
 
-        //Objekte Spawnen
-        if (Math.random() < 0.02) { 
-            if (lastObstacleX == null || lastObstacleX - screenWidth >= 3 * tileSize) {
-                Double[] newObstacle = new Double[]{(double) screenWidth, (double) player.groundY};
-                obstacles.add(newObstacle);
-                lastObstacleX = newObstacle[0];
-            }
+        // Aktualisiere die Position des letzten Hindernisses
+        if (!obstacles.isEmpty()) {
+            lastObstacleX = obstacles.get(obstacles.size() - 1)[0];
+        } else {
+            lastObstacleX = null;
         }
 
+        // Kollisionserkennung
         checkCollisions();
+
+        // Neue Hindernisse hinzufügen
+        if (Math.random() < 0.02) { // Zufälliges Erzeugen
+            if (lastObstacleX == null || screenWidth - lastObstacleX >= 3 * tileSize) {
+                Double[] newObstacle = new Double[]{(double) screenWidth, (double) player.groundY};
+                obstacles.add(newObstacle);
+            }
+        }
     }
 
     public void draw(GraphicsContext gc) {
@@ -158,7 +165,7 @@ public class GameLevel extends BorderPane {
         player.draw(gc, tileSize);
 
         for (Double[] obstacle : obstacles) {
-            gc.fillRect(obstacle[0], obstacle[1], tileSize, tileSize);
+            gc.drawImage(obstacleImage, obstacle[0], obstacle[1], tileSize, tileSize);
         }
     
         // Kollisionszähler zeichnen
@@ -192,7 +199,7 @@ public class GameLevel extends BorderPane {
         centerBox.setAlignment(Pos.CENTER);
         
         fm.ladeKarte("assets/Karte/levelbase1.txt", MAX_LEVEL_COL, MAX_LEVEL_ROW);
-        fm.drawLevel(canvas.getGraphicsContext2D(), MAX_LEVEL_COL, MAX_LEVEL_ROW); //hier muss halt schon fm.draw() hin aber da muss irgendwie noch davor passieren das die passende karte geladen wird
+        fm.drawLevel(canvas.getGraphicsContext2D(), MAX_LEVEL_COL, MAX_LEVEL_ROW); 
 
         player.draw(canvas.getGraphicsContext2D(), gp.tileSize);
 
@@ -202,13 +209,11 @@ public class GameLevel extends BorderPane {
 
     public void playMusic(int i) {
 
-        sound.stop();
         sound.loadTrack(i);
         sound.play();
         sound.setVolume(0.2); // nicht so laut
     }
 
-    // Kann man eventuell durch ein lambda ausdruck im construktor ersetzen.
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);
 
