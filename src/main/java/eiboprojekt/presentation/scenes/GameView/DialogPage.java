@@ -57,9 +57,11 @@ public class DialogPage extends StackPane {
     public void initializeUI(int width, int height) {
         // Hintergrundrechteck erstellen
         background = new Rectangle(width, height);
-        background.setFill(Color.rgb(0, 0, 0, 0.8)); // Halbtransparenter Hintergrund
+        background.setFill(Color.web("#2b2828")); // Hintergrundfarbe auf #2b2828 setzen
         background.setArcWidth(15); // Abgerundete Ecken
         background.setArcHeight(15);
+        background.setStroke(Color.WHITE); // Setzt den Rahmen auf Weiß
+        background.setStrokeWidth(3); // Breite des Rahmens (z.B. 3 Pixel)
 
         // StackPane für die Bilder der Charaktere
         StackPane imageContainer = new StackPane();
@@ -126,7 +128,7 @@ public class DialogPage extends StackPane {
         textBox.setMinHeight(100); // Feste Höhe für die Textbox
 
         pageText = new Text("");
-        pageText.setStyle("-fx-fill: white; -fx-font-size: 16px;"); // Stil des
+        pageText.setStyle("-fx-fill: white; -fx-font-size: 20px;"); // Stil des
         // Textes
 
         textFlow = new TextFlow(pageText);
