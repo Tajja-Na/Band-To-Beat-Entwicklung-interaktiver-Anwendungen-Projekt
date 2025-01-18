@@ -4,7 +4,7 @@ import java.io.File;
 
 import javafx.scene.image.Image;
 
-public class Keyboard extends Object {
+public class Keyboard extends Objekt {
 
     public Keyboard() {
 

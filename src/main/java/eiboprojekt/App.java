@@ -41,7 +41,6 @@ public class App extends Application {
     public void start(Stage primaryStage) {
 
         // Null-Prüfung und Initialisierung
-
         gamePanel = new GamePanel(this);
         System.out.println("GamePanel wurde initialisiert");
 
@@ -50,7 +49,7 @@ public class App extends Application {
 
         introductionView = new Introduction(gamePanel.screenWidth, gamePanel.screenHeight);
 
-        gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
+        //gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
         dialogPage = new DialogPage(500, 250, gamePanel, " ");
         rootPane = new StackPane();
@@ -87,7 +86,7 @@ public class App extends Application {
                 rootPane.getChildren().add(introductionView);
                 break;
             case "GAMEPANEL":
-                gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest
+                //gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest hier muss dann stop Level Thread später hin!
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
                 gamePanel.startGameThread(gamePanel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
@@ -101,9 +100,11 @@ public class App extends Application {
              * break;
              */
             case "GAMELevel1":
+                gamePanel.stopGameThread();
+                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
                 rootPane.getChildren().add(gameLevel);
-                gamePanel.requestFocus();
-                gamePanel.startGameThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread
+                gameLevel.requestFocus();
+                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
                 setImLevel(true);
                 break;
             default:

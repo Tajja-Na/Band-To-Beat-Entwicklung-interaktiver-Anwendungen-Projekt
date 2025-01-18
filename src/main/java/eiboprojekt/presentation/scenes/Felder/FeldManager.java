@@ -195,7 +195,7 @@ public class FeldManager {
             }
             br.close();
 
-            System.out.println("hab die Levelkarte geladen!");
+            //System.out.println("hab die Levelkarte geladen!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -241,7 +241,7 @@ public class FeldManager {
     }
 
     public void drawLevel(GraphicsContext gc, int MaxLevelCol, int MaxLevelRow) {
-        System.out.println("hi ich bin in drawLevel vom fm drinne");
+        //System.out.println("hi ich bin in drawLevel vom fm drinne");
         int weltCol = 0;
         int weltRow = 0;
 

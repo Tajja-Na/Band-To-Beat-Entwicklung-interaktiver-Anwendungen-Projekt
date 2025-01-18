@@ -5,6 +5,7 @@ import java.io.File;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -15,10 +16,14 @@ public class MainCharacterLevel extends Entity{
 
     public int screenX;
     public int screenY;
+    public int groundY;
     private KeyHandlern keyHandler;
     private int tileSize;
 
     private GameLevel level;
+
+    public int velocityY;
+    private boolean isOnGround;
 
     public MainCharacterLevel(GamePanel gamePanel, KeyHandlern keyHandler, GameLevel level) {
         super(gamePanel); // damit es den gp vom Entity bekommz
@@ -30,6 +35,7 @@ public class MainCharacterLevel extends Entity{
         
         screenX =  gp.screenWidth - (15 * gp.tileSize); //spawnpunkt vom character
         screenY = gp.screenHeight - (3 * gp.tileSize);
+        groundY = gp.screenHeight - (3 * gp.tileSize);
         
         this.solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
         // rechteck
@@ -69,10 +75,19 @@ public class MainCharacterLevel extends Entity{
     }
 
     public void update() {
-        System.out.println("Player position: x=" + weltX + ", y=" + weltY);
-        if (keyHandler.isJump() == true) { // explizit true verwenden
-            jump();
-        }
+
+    velocityY += 1; // Geschwindigkeit, mit der er wieder auf den Boden kommt
+    screenY += velocityY;
+
+    // Bodenprüfung
+    if (screenY > groundY) {
+        screenY = groundY;
+        velocityY = 0;
+    }
+
+    if (keyHandler.isJump()) {
+        jump();
+    }
             sprintCountr++;
             if (sprintCountr > 12) {
                 sprintNum = sprintNum == 1 ? 2 : 1;
@@ -80,8 +95,10 @@ public class MainCharacterLevel extends Entity{
             } 
     }
 
-    public void jump(){
-        
+    public void jump() {
+        if (isOnGround()) { // Prüfe, ob der Charakter auf dem Boden ist
+            velocityY = -24; // Höhe des Sprungs
+        }
     }
     
 
@@ -91,13 +108,17 @@ public class MainCharacterLevel extends Entity{
         
         if (image != null) {
             gc.drawImage(image, screenX, screenY, tileSize*scale, tileSize*scale);
-            System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
+            //System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
         } else {
             System.err.println("Failed to draw player: Image is null");
             // Zeichne ein Ersatz-Rechteck
             gc.setFill(Color.RED);
             gc.fillRect(screenX, screenY, tileSize, tileSize);
         }
+    }
+
+    public boolean isOnGround() {
+        return screenY >= groundY; // Überprüfe, ob der Charakter auf Bodenhöhe ist
     }
 
     public int getX() {
@@ -108,6 +129,9 @@ public class MainCharacterLevel extends Entity{
         return this.weltY;
     }
 
+    public Rectangle2D getBounds() {
+        return new javafx.geometry.Rectangle2D(screenX, screenY, tileSize * scale, tileSize * scale);
+    }
     @Override
     public void setPosition(int x, int y) {
         this.weltX = x;

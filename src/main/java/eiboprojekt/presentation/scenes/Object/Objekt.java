@@ -4,9 +4,10 @@ import eiboprojekt.presentation.scenes.Entity.SolideRec;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 
-public class Object {
+public class Objekt {
 
     public Image image;
     public String name;

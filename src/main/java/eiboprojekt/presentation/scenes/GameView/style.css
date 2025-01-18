@@ -60,6 +60,12 @@
     -fx-background-color: #ea4c02; 
 }
 
+/*.background {
+    -fx-background-image: url("file:assets/bg04_sky_smol.jpg");
+    -fx-background-position: top center; 
+}
+*/
+
 /* Dialog */
 .closeButton{
     -fx-background-image: url("file:assets/x.png");

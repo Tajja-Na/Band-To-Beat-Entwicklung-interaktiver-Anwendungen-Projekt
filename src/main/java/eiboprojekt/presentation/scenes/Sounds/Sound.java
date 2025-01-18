@@ -8,6 +8,7 @@ public class Sound {
     Track tracks[] = new Track[15];
         public SimpleAudioPlayer audioPlayer;
         public SimpleMinim minim;
+        public boolean isPlaying = false;
 
     public class Track {
         String filepath;
@@ -47,14 +48,20 @@ public class Sound {
 
     public void play() {
         audioPlayer.play();
+        isPlaying = true;
     }
 
     public void loop() {
         audioPlayer.loop();
+        System.out.println("Bin in loop");
     }
 
     public void stop() {
-        audioPlayer.pause();
+        if (audioPlayer != null) {
+            audioPlayer.pause();
+            isPlaying = false;
+        }
+        
     }
 
     public void setVolume(double value) {
