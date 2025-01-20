@@ -6,7 +6,6 @@ import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.Introduction;
 import eiboprojekt.presentation.scenes.GameView.Welcome;
-import eiboprojekt.presentation.scenes.Level.LevelManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
