@@ -31,9 +31,10 @@ public class MainCharacterLevel extends Entity{
         this.app = app;
         this.level = level;
         this.keyHandler = keyHandler;
+        this.tileSize = app.tileSize;
         
         screenX = app.screenWidth - (15 * app.tileSize); //spawnpunkt vom character
-        screenY = app.screenHeight - (3 * app.tileSize);
+        screenY = app.screenHeight - (3 * app.tileSize); 
         groundY = app.screenHeight - (3 * app.tileSize);
         
         this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // x,y, width und height vom
@@ -131,6 +132,7 @@ public class MainCharacterLevel extends Entity{
     public Rectangle2D getBounds() {
         return new javafx.geometry.Rectangle2D(screenX, screenY, tileSize * scale, tileSize * scale);
     }
+    
     @Override
     public void setPosition(int x, int y) {
         this.weltX = x;

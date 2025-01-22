@@ -16,6 +16,7 @@ import eiboprojekt.presentation.scenes.Object.Objekt;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -36,7 +37,7 @@ public class GameLevelController{
     private KeyHandlern keyHandler;
 
     private Sound sound;
-    private boolean running;
+
     private boolean youWon;
 
     //Objekte und Kollision
@@ -73,7 +74,7 @@ public class GameLevelController{
 
         //Player
         player = new MainCharacterLevel(app, keyHandler, gl);
-        running = true;
+        gl.running = true;
         youWon = false;
 
         //Objekte
@@ -98,7 +99,7 @@ public class GameLevelController{
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (running) {
+                if (gl.running) {
                     update();
                     draw(gc);
                 } else {
@@ -137,7 +138,7 @@ public class GameLevelController{
 
         // Neue Hindernisse hinzufügen
         if (Math.random() < 0.02) { // Zufälliges Erzeugen
-            if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 3 * app.tileSize) {
+            if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
                 Double[] newObstacle = new Double[]{(double) app.screenWidth, (double) player.groundY};
                 obstacles.add(newObstacle);
             }
@@ -159,7 +160,8 @@ public class GameLevelController{
         gc.fillText("Kollisionen: " + collisionCount, 10, 20);
 
         //Bei Game Over
-        if (!running) {
+        if (!gl.running) {
+            gl.setzeCanvas();
             gl.retryButton.setOnAction(e -> {
                 stopLevelThread();
                 restartGame();
@@ -184,7 +186,7 @@ public class GameLevelController{
                 collisionCount++;
                 iterator.remove();
                 if (collisionCount >= maxCollisions) {
-                    running = false;
+                    gl.running = false;
                     //gameOver();
                 }
             }

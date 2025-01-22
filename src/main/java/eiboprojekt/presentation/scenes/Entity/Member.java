@@ -89,23 +89,6 @@ public class Member extends Entity {
         this.weltY = y;
     }
 
-    // Member reagiert auf den player und dreht sich zu ihm
-    public void facePlayer(MainCharacter player) {
-        if (player.getX() < this.weltX) {
-            this.direction = "left";
-            System.out.println("Member schaut nach links.");
-        } else if (player.getX() > this.weltX) {
-            this.direction = "right";
-            System.out.println("Member schaut nach rechts.");
-        } else if (player.getY() < this.weltY) {
-            this.direction = "up";
-            System.out.println("Member schaut nach oben.");
-        } else if (player.getY() > this.weltY) {
-            this.direction = "down";
-            System.out.println("Member schaut nach unten.");
-        }
-    }
-
     // Methode, um zu prüfen, ob der Spieler in der Nähe ist
     public boolean isNear(MainCharacter player, int distanceThreshold) {
         int deltaX = Math.abs(player.getX() - this.weltX);

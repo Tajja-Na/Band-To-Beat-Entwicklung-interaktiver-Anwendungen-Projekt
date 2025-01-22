@@ -209,8 +209,6 @@ public class GamePanelController {
 
                     // Überprüft, ob der Spieler in der Nähe des Members ist
                     if (m.isNear(player, app.tileSize)) {
-                        // Member schaut den Spieler an
-                        m.facePlayer(player);
 
                         // Prüft, ob der Spieler das benötigte Instrument besitzt
                         boolean canInteract = false; // Standardmäßig kann keine Interaktion erfolgen

@@ -35,6 +35,8 @@ public class GameLevel extends BorderPane {
     HBox buttons;
     VBox centerBox;
 
+    public boolean running;
+
     public GameLevel() {
         canvas = new Canvas(screenWidth, screenHeight);
         this.getChildren().add(canvas);
@@ -63,12 +65,14 @@ public class GameLevel extends BorderPane {
 
         gameOverScreen.getChildren().addAll(gameOverText, buttons);
 
-        this.setCenter(gameOverScreen);
-
         centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(getCanvas());
         setCenter(centerBox);
+    }
+
+    public void setzeCanvas(){
+        this.setCenter(gameOverScreen);
     }
 
     public Canvas getCanvas() {

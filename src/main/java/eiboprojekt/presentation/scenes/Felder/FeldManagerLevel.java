@@ -29,9 +29,13 @@ public class FeldManagerLevel {
         // Im Level
         alleFelder[0] = new Feld();
         alleFelder[0].image = new Image("file:assets/Background/himmel 1 tile.png");
-
+        
         alleFelder[1] = new Feld();
         alleFelder[1].image = new Image("file:assets/Background/gras 1 tile neu.png");
+        
+        // In der Welt Ansicht
+        alleFelder[2] = new Feld();
+        alleFelder[2].image = new Image("file:assets/Background/worldBackground/grass.png");
     }
 
     public void ladeKarte(String zuladeneKarte, int MaxlevelCol, int MaxlevelRow) {
