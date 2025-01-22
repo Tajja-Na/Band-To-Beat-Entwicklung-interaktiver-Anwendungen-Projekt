@@ -13,10 +13,10 @@ public class GamePanel extends BorderPane{
     private DialogPage dialogPage; // Referenz für DialogPage
 
     private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
-    private boolean showWarning = false;  // Zeigt an, ob eine Warnung sichtbar ist
+    private boolean showWarning = true;  // Zeigt an, ob eine Warnung sichtbar ist
     
-    private TextBubble instrumentWarnung = new TextBubble("", 275, 50);
-    private boolean showTextBubble = true; // TextBubble wird zu Beginn angezeigt
+    private TextBubble instrumentWarnung = new TextBubble("", 300, 50);
+    private boolean showTextBubble = false; // TextBubble wird zu Beginn angezeigt
 
     public GamePanel(App app){
         this.app = app;

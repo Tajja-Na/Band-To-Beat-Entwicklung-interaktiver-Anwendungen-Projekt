@@ -176,7 +176,8 @@ public class GamePanelController {
 
         // TextBubble anzeigen, wenn showTextBubble aktiv ist
         if (gp.isShowTextBubble()) {
-            gp.getWarnung().draw(gc, 200, 100); // TextBubble anzeigen
+            gp.setShowWarning(false);
+            gp.getInstrumentWarnung().draw(gc, 500, 100); // TextBubble anzeigen
         }
 
         if (gp.isShowWarning()) {
@@ -237,8 +238,8 @@ public class GamePanelController {
                             gp.setShowTextBubble(false);  // Blendet mögliche Warnungen aus
                         } else {
                             // Der Spieler besitzt das benötigte Instrument NICHT -> Warnung anzeigen
-                            gp.setShowWarning(true);
-                            gp.setInstrumentWarnung(new TextBubble("Du benötigst das Instrument " + m.getInstrument() + " für diese Person!", 275, 50));
+                            gp.setShowTextBubble(true);
+                            gp.setInstrumentWarnung(new TextBubble("Du benötigst das Instrument " + m.getInstrument() + " für diese Person!", 350, 50));
                         }
 
                         break; // Nur ein Dialog oder eine Warnung zur selben Zeit behandeln
