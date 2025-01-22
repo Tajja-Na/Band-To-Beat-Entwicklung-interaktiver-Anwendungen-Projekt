@@ -5,6 +5,7 @@ import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.GameView.DialogPage;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
+import eiboprojekt.presentation.scenes.GameView.GamePanelController;
 import eiboprojekt.presentation.scenes.GameView.Introduction;
 import eiboprojekt.presentation.scenes.GameView.Welcome;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
@@ -23,7 +24,7 @@ public class App extends Application {
     private Introduction introductionView;
     private DialogPage dialogPage; // DialogPage hinzufügen
 
-    private GamePanel gamePanel;
+    private GamePanelController gpController;
     private GameLevel gameLevel; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt, danach
                                  // wird mit einem LevelManager gearbeitet
     // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
@@ -53,18 +54,18 @@ public class App extends Application {
         soundController = new SoundController(sound);
 
         // Null-Prüfung und Initialisierung
-        gamePanel = new GamePanel(this);
+        gpController = new GamePanelController(this);
         System.out.println("GamePanel wurde initialisiert");
 
-        welcomeView = new Welcome(gamePanel.screenWidth, gamePanel.screenHeight);
+        welcomeView = new Welcome(gpController.getGp().screenWidth, gpController.getGp().screenHeight);
         System.out.println("WelcomeView wurde initialisiert");
 
-        introductionView = new Introduction(gamePanel.screenWidth, gamePanel.screenHeight);
+        introductionView = new Introduction(gpController.getGp().screenWidth, gpController.getGp().screenHeight);
 
         //gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
         rootPane = new StackPane();
-        scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
+        scene = new Scene(rootPane, gpController.getGp().screenWidth, gpController.getGp().screenHeight);
 
         // Fügen Sie zunächst die Welcome-Ansicht hinzu
         rootPane.getChildren().add(welcomeView);
@@ -101,9 +102,9 @@ public class App extends Application {
             case "GAMEPANEL":
                 Navigation.getCurrentView().set(viewName);
                 //gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest hier muss dann stop Level Thread später hin!
-                rootPane.getChildren().add(gamePanel);
-                gamePanel.requestFocus();
-                gamePanel.startGameThread(gamePanel.getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
+                rootPane.getChildren().add(gpController.getGp());
+                gpController.getGp().requestFocus();
+                gpController.startGameThread(gpController.getGp().getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
                 setImLevel(false);
                 break;
             /*
@@ -115,8 +116,8 @@ public class App extends Application {
              */
             case "GAMELevel1":
                 Navigation.getCurrentView().set(viewName);
-                gamePanel.stopGameThread();
-                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "gitarre.png");
+                gpController.stopGameThread();
+                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "gitarre.png");
                 rootPane.getChildren().add(gameLevel);
                 gameLevel.requestFocus();
                 gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
@@ -125,8 +126,8 @@ public class App extends Application {
 
             case "GAMELevel2":
                 Navigation.getCurrentView().set(viewName);
-                gamePanel.stopGameThread();
-                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "drum.png");
+                gpController.stopGameThread();
+                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "drum.png");
                 rootPane.getChildren().add(gameLevel);
                 gameLevel.requestFocus();
                 gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
@@ -135,8 +136,8 @@ public class App extends Application {
 
             case "GAMELevel3":
                 Navigation.getCurrentView().set(viewName);
-                gamePanel.stopGameThread();
-                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "keyboard.png");
+                gpController.stopGameThread();
+                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "keyboard.png");
                 rootPane.getChildren().add(gameLevel);
                 gameLevel.requestFocus();
                 gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread

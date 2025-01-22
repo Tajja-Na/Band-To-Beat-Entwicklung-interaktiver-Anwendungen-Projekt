@@ -77,9 +77,8 @@ public class GameLevel extends BorderPane {
     }
 
     public GameLevel(int width, int height, App app, GamePanel gp, String instrument) {
-
         this.app = app;
-        this.gp = gp;   //für was?
+        this.gp = gp;   
         this.instrument = instrument;
         this.fm = gp.getFM();
         canvas = new Canvas(screenWidth, screenHeight);

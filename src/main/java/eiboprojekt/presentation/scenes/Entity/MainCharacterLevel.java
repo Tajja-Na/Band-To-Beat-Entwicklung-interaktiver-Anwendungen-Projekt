@@ -33,7 +33,7 @@ public class MainCharacterLevel extends Entity{
         this.keyHandler = keyHandler;
         this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
         
-        screenX =  gp.screenWidth - (15 * gp.tileSize); //spawnpunkt vom character
+        screenX = gp.screenWidth - (15 * gp.tileSize); //spawnpunkt vom character
         screenY = gp.screenHeight - (3 * gp.tileSize);
         groundY = gp.screenHeight - (3 * gp.tileSize);
         
