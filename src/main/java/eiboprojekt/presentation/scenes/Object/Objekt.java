@@ -1,5 +1,7 @@
 package eiboprojekt.presentation.scenes.Object;
 
+import eiboprojekt.App;
+import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.SolideRec;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,17 +19,16 @@ public class Objekt {
     public int solidAreaDefaultX = 0;
     public int solidAreaDefaultY = 0;
 
-
-    public void draw(GraphicsContext gc, int tileSize, GamePanel gp) {
+    public void draw(GraphicsContext gc, App app, MainCharacter player) {
         // Berechne die Bildschirmposition basierend auf der Weltposition und der
         // Spielerposition
-        int screenX = worldX - gp.player.weltX + gp.player.screenX;
-        int screenY = worldY - gp.player.weltY + gp.player.screenY;
+        int screenX = worldX - player.weltX + player.screenX;
+        int screenY = worldY - player.weltY + player.screenY;
 
         // Zeichne nur, wenn der Member im sichtbaren Bereich ist
-        if (screenX > -tileSize && screenX < gp.screenWidth && screenY > -tileSize && screenY < gp.screenHeight) {
+        if (screenX > -app.tileSize && screenX < app.screenWidth && screenY > -app.tileSize && screenY < app.screenHeight) {
             
-            gc.drawImage(image, screenX, screenY, tileSize, tileSize);
+            gc.drawImage(image, screenX, screenY, app.tileSize, app.tileSize);
 
         }
     }

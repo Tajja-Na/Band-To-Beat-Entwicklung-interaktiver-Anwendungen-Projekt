@@ -28,10 +28,8 @@ public abstract class Entity {
     public SolideRec solideArea;
     public boolean collisionON = false;
 
-    public GamePanel gp;
+    public Entity() {
 
-    public Entity(GamePanel gp) {
-        this.gp = gp;
     }
 
     // Abstrakte Methode, die alle Unterklassen implementieren müssen
@@ -44,16 +42,4 @@ public abstract class Entity {
         return Math.abs(this.weltX - other.weltX) < distance &&
                 Math.abs(this.weltY - other.weltY) < distance;
     }
-
-    public void facePlayer(MainCharacter player) {
-        int dx = player.weltX - this.weltX;
-        int dy = player.weltY - this.weltY;
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            this.direction = (dx > 0) ? "right" : "left";
-        } else {
-            this.direction = (dy > 0) ? "down" : "up";
-        }
-    }
-
 }

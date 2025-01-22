@@ -42,18 +42,10 @@ public class GamePanelController {
 
     //Objects
     public Objekt obj[] = new Objekt[10];
-    public AssetSetter aSetter = new AssetSetter(gp);
+    //public AssetSetter aSetter = new AssetSetter(gp);
 
     // weil wir brauchen mehrere members
     public Entity members[] = new Entity[3];
-
-    // Dialog
-    private DialogPage dialogPage; // Referenz für DialogPage
-
-    private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
-
-    private boolean showWarning = false; // Zeigt an, ob eine Warnung sichtbar ist
-    private String warningText = ""; // Text der Warnung
 
     // Checker für die Collusion
     public CollisionCheck cChecker;
@@ -71,7 +63,8 @@ public class GamePanelController {
 
     // Im Konstruktor der GamePanel-Klasse
     public GamePanelController(App app) {
-        this.gp = new GamePanel();
+        this.app = app;
+        this.gp = new GamePanel(app);
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
         gp.setOnKeyPressed(this::handleKeyPressed);
@@ -80,36 +73,36 @@ public class GamePanelController {
         // Setze den Fokus für Tasteneingaben
         gp.setFocusTraversable(true);
         gp.requestFocus();
-
-        feldM = new FeldManager(gp);
-        player = new MainCharacter(gp, keyHandler);
+        
+        player = new MainCharacter(app, keyHandler);
+        feldM = new FeldManager(app, player);
 
         // Member erstellen und in der Welt platzieren
-        members[0] = new Member(gp, "assets/Character/Gigi/", "Gigi", "Gitarre");
-        members[0].setPosition(gp.tileSize * 30, gp.tileSize * 27);
+        members[0] = new Member(app, "assets/Character/Gigi/", "Gigi", "Gitarre");
+        members[0].setPosition(app.tileSize * 30, app.tileSize * 27);
 
-        members[1] = new Member(gp, "assets/Character/Ryu/", "Ryu", "Drum");
-        members[1].setPosition(gp.tileSize * 45, gp.tileSize * 4);
+        members[1] = new Member(app, "assets/Character/Ryu/", "Ryu", "Drum");
+        members[1].setPosition(app.tileSize * 45, app.tileSize * 4);
 
-        members[2] = new Member(gp, "assets/Character/Tyler/", "Tyler", "Keyboard");
-        members[2].setPosition(gp.tileSize * 33, gp.tileSize * 41);
+        members[2] = new Member(app, "assets/Character/Tyler/", "Tyler", "Keyboard");
+        members[2].setPosition(app.tileSize * 33, app.tileSize * 41);
 
         // Objekte platzieren
         obj[0] = new Schlagzeug();
-        obj[0].setPosition(4 * gp.tileSize, 4 * gp.tileSize);
+        obj[0].setPosition(4 * app.tileSize, 4 * app.tileSize);
 
         obj[1] = new Keyboard();
-        obj[1].setPosition(61 * gp.tileSize, 11 * gp.tileSize);
+        obj[1].setPosition(61 * app.tileSize, 11 * app.tileSize);
 
         obj[2] = new Mikrofon();
-        obj[2].setPosition(13 * gp.tileSize, 28 * gp.tileSize);
+        obj[2].setPosition(13 * app.tileSize, 28 * app.tileSize);
 
         obj[3] = new Gitarre();
-        obj[3].setPosition(21 * gp.tileSize, 12 * gp.tileSize);
+        obj[3].setPosition(21 * app.tileSize, 12 * app.tileSize);
 
         // Collusion
-        cChecker = new CollisionCheck(gp);
-        oChecker = new CollisionCheck(gp);
+        cChecker = new CollisionCheck(app);
+        oChecker = new CollisionCheck(app);
     }
 
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
@@ -170,47 +163,26 @@ public class GamePanelController {
         // Zeichne alle Entities in der sortierten Reihenfolge
         for (Entity entity : entitiesToDraw) {
             if (entity != null) {
-                entity.draw(gc, gp.tileSize);
+                entity.draw(gc, app.tileSize);
             }
         }
 
         // Objekte zeichnen
-        // obj[0].draw(gc,tileSize, this);
-
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
-                obj[i].draw(gc, gp.tileSize, gp);
+                obj[i].draw(gc, app, player);
             }
         }
 
-        // Warnung anzeigen
-        if (showWarning) {
-            // Hintergrund der Warnung
-            double warningBoxWidth = 400; // Breite des Warnungsrechtecks
-            double warningBoxHeight = 50; // Höhe des Warnungsrechtecks
-            double warningBoxX = (gp.screenWidth - warningBoxWidth) / 2; // Berechnet X für die Mitte
-            double warningBoxY = 20; // Abstand vom oberen Rand
+        // TextBubble anzeigen, wenn showTextBubble aktiv ist
+        if (gp.isShowTextBubble()) {
+            gp.getWarnung().draw(gc, 200, 100); // TextBubble anzeigen
+        }
 
-            // Textposition
-            double textX = warningBoxX + 50; // Kleiner Rand für den Text
-            double textY = warningBoxY + 30; // Text etwas unterhalb der Boxhöhe
-
-            gc.setFill(Color.WHITE);
-            gc.fillRoundRect(warningBoxX, warningBoxY, warningBoxWidth, warningBoxHeight, 10, 10); // Hintergrund von
-                                                                                                   // Warnung
-            gc.setFill(Color.BLACK);
-            gc.fillText(warningText, textX, textY); // Zeichnet den Warnungstext
+        if (gp.isShowWarning()) {
+            gp.getWarnung().draw(gc, 200, 100); // TextBubble anzeigen
         }
     }
-
-    // Musik Methoden
-    /*public void playMusic(int i) {
-
-        sound.loadTrack(i);
-        sound.play();
-        sound.loop();
-        sound.setVolume(0.1); // nicht so laut
-    }*/
 
     public void stopMusic() {
         sound.stop();
@@ -236,7 +208,7 @@ public class GamePanelController {
                     Member m = (Member) member; // Castet Entity zu Member
 
                     // Überprüft, ob der Spieler in der Nähe des Members ist
-                    if (m.isNear(player, gp.tileSize)) {
+                    if (m.isNear(player, app.tileSize)) {
                         // Member schaut den Spieler an
                         m.facePlayer(player);
 
@@ -259,16 +231,16 @@ public class GamePanelController {
                         if (canInteract) {
                             // Der Spieler besitzt das benötigte Instrument -> Dialog starten
                             // DialogPage initialisieren und hinzufügen
-                            dialogPage = new DialogPage(700, 250, gp, m.getName(), app);
-                            gp.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
-                            dialogPage.setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
+                            gp.setDialogPage(new DialogPage(700, 250, gp, m.getName(), app)); 
+                            gp.getChildren().add(gp.getDialogPage()); // Dialog zur GamePanel-Oberfläche hinzufügen
+                            gp.getDialogPage().setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
 
-                            dialogPage.show(); // Zeigt die Dialogseite an
-                            showWarning = false; // Blendet mögliche Warnungen aus
+                            gp.getDialogPage().show(); // Zeigt die Dialogseite an
+                            gp.setShowTextBubble(false);  // Blendet mögliche Warnungen aus
                         } else {
                             // Der Spieler besitzt das benötigte Instrument NICHT -> Warnung anzeigen
-                            showWarning = true;
-                            warningText = "Du benötigst das Instrument " + m.getInstrument() + " für diese Person!";
+                            gp.setShowWarning(true);
+                            gp.setInstrumentWarnung(new TextBubble("Du benötigst das Instrument " + m.getInstrument() + " für diese Person!", 275, 50));
                         }
 
                         break; // Nur ein Dialog oder eine Warnung zur selben Zeit behandeln

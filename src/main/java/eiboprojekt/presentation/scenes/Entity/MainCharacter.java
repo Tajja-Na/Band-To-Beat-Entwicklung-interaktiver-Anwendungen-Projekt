@@ -3,6 +3,7 @@ package eiboprojekt.presentation.scenes.Entity;
 import java.io.File;
 import java.io.IOException;
 
+import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
 import eiboprojekt.presentation.scenes.Object.Gitarre;
@@ -11,10 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class MainCharacter extends Entity {
-    // GamePanel gp;
-    KeyHandlern keyHandler;
+    private KeyHandlern keyHandler;
 
-    private int tileSize; // Hinzugefügt
+    private App app; 
 
     public final int screenX;
     public final int screenY;
@@ -25,17 +25,14 @@ public class MainCharacter extends Entity {
     public boolean hasGitarre = false;
     public boolean hasDrums = false;
 
-    public MainCharacter(GamePanel gamePanel, KeyHandlern keyHandler) {
-        super(gamePanel); // damit es den gp vom Entity bekommz
-
-        this.gp = gamePanel;
+    public MainCharacter(App app, KeyHandlern keyHandler) {
+        this.app = app;
         this.keyHandler = keyHandler;
-        this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // screenX und y is da wo der mc auf dem screen spawnt
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+        screenX = app.screenWidth / 2 - (app.tileSize / 2); // screenX und y is da wo der mc auf dem screen spawnt
+        screenY = app.screenHeight / 2 - (app.tileSize / 2);
 
-        this.solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
+        this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // x,y, width und height vom
         // rechteck
 
         setDefaultValues();
@@ -43,11 +40,11 @@ public class MainCharacter extends Entity {
     }
 
     public void setDefaultValues() {
-        weltX = gp.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
-        weltY = (gp.tileSize * 27) + (gp.tileSize / 2); // Zeile 27
+        weltX = app.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
+        weltY = (app.tileSize * 27) + (app.tileSize / 2); // Zeile 27
 
-        levelX = gp.tileSize * 2;
-        levelY = gp.tileSize * 11;
+        levelX = app.tileSize * 2;
+        levelY = app.tileSize * 11;
 
         speed = 5;
 
@@ -102,10 +99,10 @@ public class MainCharacter extends Entity {
 
             // checkt feld collision -> wenn false kann nicht laufen -> wenn true laufen
             collisionON = false;
-            gp.cChecker.checkFeld(this);
+            app.getGpController().cChecker.checkFeld(this);
 
             // CHECK OBJECT COLLISION
-            int objIndex = gp.oChecker.checkObject(this, true);
+            int objIndex = app.getGpController().oChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
             if (collisionON == false) {
@@ -173,31 +170,31 @@ public class MainCharacter extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            String objectName = gp.obj[i].name;
+            String objectName = app.getGpController().obj[i].name;
 
             switch (objectName) {
                 case "Schlagzeug":
                     hasDrums = true;
-                    gp.obj[i] = null;
-                    gp.playSE(2);
+                    app.getGpController().obj[i] = null;
+                    //gp.playSE(2);
                     System.out.println("You've got drums!");
                     break;
                 case "Gitarre":
                     hasGitarre = true;
-                    gp.obj[i] = null;
-                    gp.playSE(2);
+                    app.getGpController().obj[i] = null;
+                    //gp.playSE(2);
                     System.out.println("You've got a gitarre!");
                     break;
                 case "Mikrofon":
                     hasMicro = true;
-                    gp.obj[i] = null;
-                    gp.playSE(2);
+                    app.getGpController().obj[i] = null;
+                    //gp.playSE(2);
                     System.out.println("You've got a microphone! Let's find some bandmembers!");
                     break;
                 case "Keyboard":
                     hasKeyboard = true;
-                    gp.obj[i] = null;
-                    gp.playSE(2);
+                    app.getGpController().obj[i] = null;
+                    //gp.playSE(2);
                     System.out.println("You've got a keyboard!");
                     break;
             }

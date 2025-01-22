@@ -2,6 +2,7 @@ package eiboprojekt.presentation.scenes.Entity;
 
 import java.io.File;
 
+import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
@@ -21,23 +22,21 @@ public class MainCharacterLevel extends Entity{
     private int tileSize;
 
     private GameLevel level;
+    private App app;
 
     public int velocityY;
     private boolean isOnGround;
 
-    public MainCharacterLevel(GamePanel gamePanel, KeyHandlern keyHandler, GameLevel level) {
-        super(gamePanel); // damit es den gp vom Entity bekommz
-
-        this.gp = gamePanel;
+    public MainCharacterLevel(App app, KeyHandlern keyHandler, GameLevel level) {
+        this.app = app;
         this.level = level;
         this.keyHandler = keyHandler;
-        this.tileSize = gamePanel.tileSize; // `tileSize` aus GamePanel übernehmen
         
-        screenX = gp.screenWidth - (15 * gp.tileSize); //spawnpunkt vom character
-        screenY = gp.screenHeight - (3 * gp.tileSize);
-        groundY = gp.screenHeight - (3 * gp.tileSize);
+        screenX = app.screenWidth - (15 * app.tileSize); //spawnpunkt vom character
+        screenY = app.screenHeight - (3 * app.tileSize);
+        groundY = app.screenHeight - (3 * app.tileSize);
         
-        this.solideArea = new SolideRec(25, gp.tileSize / 2 + 8, 4, gp.tileSize / 2); // x,y, width und height vom
+        this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // x,y, width und height vom
         // rechteck
 
         setDefaultValues();
@@ -46,11 +45,11 @@ public class MainCharacterLevel extends Entity{
     }
 
     public void setDefaultValues() {
-        weltX = gp.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
-        weltY = (gp.tileSize * 27) + (gp.tileSize / 2); // Zeile 27
+        weltX = app.tileSize * 10; // Spalte 10 spawnpunkt von timmy auf der karte
+        weltY = (app.tileSize * 27) + (app.tileSize / 2); // Zeile 27
 
-        levelX = gp.tileSize * 2;
-        levelY = gp.tileSize * 11;
+        levelX = app.tileSize * 2;
+        levelY = app.tileSize * 11;
 
         speed = 5;
 

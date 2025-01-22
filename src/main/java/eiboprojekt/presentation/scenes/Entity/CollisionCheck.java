@@ -1,13 +1,17 @@
 package eiboprojekt.presentation.scenes.Entity;
 
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
+import eiboprojekt.presentation.scenes.GameView.GamePanelController;
+import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.Entity;
 
 public class CollisionCheck {
-    GamePanel gp;
+    App app;
+    //GamePanelController gpc;
 
-    public CollisionCheck(GamePanel gp) {
-        this.gp = gp;
+    public CollisionCheck(App app) {
+        this.app = app;
+        //this.gpc = app.getGpController();
     }
 
     public void checkFeld(Entity entity) {
@@ -22,43 +26,43 @@ public class CollisionCheck {
         int entityBottomWeltY = entity.weltY + entity.solideArea.y + entity.solideArea.height;
 
         // Collum und Row
-        int entityLeftCol = entityLeftWeltX / gp.tileSize;
-        int entityRightCol = entityRightWeltX / gp.tileSize;
-        int entityTopRow = entityTopWeltY / gp.tileSize;
-        int entityBottomRow = entityBottomWeltY / gp.tileSize;
+        int entityLeftCol = entityLeftWeltX / app.tileSize;
+        int entityRightCol = entityRightWeltX / app.tileSize;
+        int entityTopRow = entityTopWeltY / app.tileSize;
+        int entityBottomRow = entityBottomWeltY / app.tileSize;
 
         int feldNr1, feldNr2; // schulter teile fer figur
 
         switch (entity.direction) {
             case "up":
-                entityTopRow = (entityTopWeltY - entity.speed) / gp.tileSize;
-                feldNr1 = gp.feldM.karteFeldNr[entityLeftCol][entityTopRow];
-                feldNr2 = gp.feldM.karteFeldNr[entityRightCol][entityTopRow];
-                if (gp.feldM.alleFelder[feldNr1].collision || gp.feldM.alleFelder[feldNr2].collision) {
+                entityTopRow = (entityTopWeltY - entity.speed) / app.tileSize;
+                feldNr1 = app.getGpController().feldM.karteFeldNr[entityLeftCol][entityTopRow];
+                feldNr2 = app.getGpController().feldM.karteFeldNr[entityRightCol][entityTopRow];
+                if (app.getGpController().feldM.alleFelder[feldNr1].collision || app.getGpController().feldM.alleFelder[feldNr2].collision) {
                     entity.collisionON = true;
                 }
                 break;
             case "down":
-                entityBottomRow = (entityBottomWeltY + entity.speed) / gp.tileSize;
-                feldNr1 = gp.feldM.karteFeldNr[entityLeftCol][entityBottomRow];
-                feldNr2 = gp.feldM.karteFeldNr[entityRightCol][entityBottomRow];
-                if (gp.feldM.alleFelder[feldNr1].collision || gp.feldM.alleFelder[feldNr2].collision) {
+                entityBottomRow = (entityBottomWeltY + entity.speed) / app.tileSize;
+                feldNr1 = app.getGpController().feldM.karteFeldNr[entityLeftCol][entityBottomRow];
+                feldNr2 = app.getGpController().feldM.karteFeldNr[entityRightCol][entityBottomRow];
+                if (app.getGpController().feldM.alleFelder[feldNr1].collision || app.getGpController().feldM.alleFelder[feldNr2].collision) {
                     entity.collisionON = true;
                 }
                 break;
             case "left":
-                entityLeftCol = (entityLeftWeltX - entity.speed) / gp.tileSize;
-                feldNr1 = gp.feldM.karteFeldNr[entityLeftCol][entityTopRow];
-                feldNr2 = gp.feldM.karteFeldNr[entityLeftCol][entityBottomRow];
-                if (gp.feldM.alleFelder[feldNr1].collision || gp.feldM.alleFelder[feldNr2].collision) {
+                entityLeftCol = (entityLeftWeltX - entity.speed) / app.tileSize;
+                feldNr1 = app.getGpController().feldM.karteFeldNr[entityLeftCol][entityTopRow];
+                feldNr2 = app.getGpController().feldM.karteFeldNr[entityLeftCol][entityBottomRow];
+                if (app.getGpController().feldM.alleFelder[feldNr1].collision || app.getGpController().feldM.alleFelder[feldNr2].collision) {
                     entity.collisionON = true;
                 }
                 break;
             case "right":
-                entityRightCol = (entityRightWeltX + entity.speed) / gp.tileSize;
-                feldNr1 = gp.feldM.karteFeldNr[entityRightCol][entityTopRow];
-                feldNr2 = gp.feldM.karteFeldNr[entityRightCol][entityBottomRow];
-                if (gp.feldM.alleFelder[feldNr1].collision || gp.feldM.alleFelder[feldNr2].collision) {
+                entityRightCol = (entityRightWeltX + entity.speed) / app.tileSize;
+                feldNr1 = app.getGpController().feldM.karteFeldNr[entityRightCol][entityTopRow];
+                feldNr2 = app.getGpController().feldM.karteFeldNr[entityRightCol][entityBottomRow];
+                if (app.getGpController().feldM.alleFelder[feldNr1].collision || app.getGpController().feldM.alleFelder[feldNr2].collision) {
                     entity.collisionON = true;
                 }
                 break;
@@ -96,23 +100,23 @@ public class CollisionCheck {
 
         int index = 999; // Standardwert, falls keine Kollision gefunden wird
     
-        for (int i = 0; i < gp.obj.length; i++) {
+        for (int i = 0; i < app.getGpController().obj.length; i++) {
     
-            if (gp.obj[i] != null) {
+            if (app.getGpController().obj[i] != null) {
                 // Setze die Position der solidArea des Spielers
                 entity.solideArea.setX(entity.weltX + entity.solideArea.getX());
                 entity.solideArea.setY(entity.weltY + entity.solideArea.getY());
     
                 // Setze die Position der solidArea des Objekts
-                gp.obj[i].solidArea.setX(gp.obj[i].worldX + gp.obj[i].solidAreaDefaultX);
-                gp.obj[i].solidArea.setY(gp.obj[i].worldY + gp.obj[i].solidAreaDefaultY);
+                app.getGpController().obj[i].solidArea.setX(app.getGpController().obj[i].worldX + app.getGpController().obj[i].solidAreaDefaultX);
+                app.getGpController().obj[i].solidArea.setY(app.getGpController().obj[i].worldY + app.getGpController().obj[i].solidAreaDefaultY);
     
                 // Überprüfe die Bewegungsrichtung
                 switch (entity.direction) {
                     case "up":
                         entity.solideArea.setY(entity.solideArea.getY() - entity.speed);
-                        if (entity.solideArea.intersects(gp.obj[i].solidArea)) {
-                            if (gp.obj[i].collision) {
+                        if (entity.solideArea.intersects(app.getGpController().obj[i].solidArea)) {
+                            if (app.getGpController().obj[i].collision) {
                                 entity.collisionON = true;
                             }
                             if (player) {
@@ -123,8 +127,8 @@ public class CollisionCheck {
     
                     case "down":
                         entity.solideArea.setY(entity.solideArea.getY() + entity.speed);
-                        if (entity.solideArea.intersects(gp.obj[i].solidArea)) {
-                            if (gp.obj[i].collision) {
+                        if (entity.solideArea.intersects(app.getGpController().obj[i].solidArea)) {
+                            if (app.getGpController().obj[i].collision) {
                                 entity.collisionON = true;
                             }
                             if (player) {
@@ -135,8 +139,8 @@ public class CollisionCheck {
     
                     case "left":
                         entity.solideArea.setX(entity.solideArea.getX() - entity.speed);
-                        if (entity.solideArea.intersects(gp.obj[i].solidArea)) {
-                            if (gp.obj[i].collision) {
+                        if (entity.solideArea.intersects(app.getGpController().obj[i].solidArea)) {
+                            if (app.getGpController().obj[i].collision) {
                                 entity.collisionON = true;
                             }
                             if (player) {
@@ -146,8 +150,8 @@ public class CollisionCheck {
                         break;
     
                     case "right":
-                    if (entity.solideArea.intersects(gp.obj[i].solidArea)) {
-                            if (gp.obj[i].collision) {
+                    if (entity.solideArea.intersects(app.getGpController().obj[i].solidArea)) {
+                            if (app.getGpController().obj[i].collision) {
                                 entity.collisionON = true;
                             }
                             if (player) {
@@ -160,8 +164,8 @@ public class CollisionCheck {
                 // Zurücksetzen der Positionen
                 entity.solideArea.setX(entity.solidAreaDefaultX);
                 entity.solideArea.setY(entity.solidAreaDefaultY);
-                gp.obj[i].solidArea.setX(gp.obj[i].solidAreaDefaultX);
-                gp.obj[i].solidArea.setY(gp.obj[i].solidAreaDefaultY);
+                app.getGpController().obj[i].solidArea.setX(app.getGpController().obj[i].solidAreaDefaultX);
+                app.getGpController().obj[i].solidArea.setY(app.getGpController().obj[i].solidAreaDefaultY);
             }
         }
         return index;

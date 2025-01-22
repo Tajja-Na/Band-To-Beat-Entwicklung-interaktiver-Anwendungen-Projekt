@@ -5,21 +5,23 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import java.io.File;
 
+import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 
 public class Member extends Entity {
     private String basePath;
     private String name;
     private String instrumente;
+    private App app;
     private TextBubble textBubble = new TextBubble("Press E", 60, 40);
 
-    public Member(GamePanel gp, String basePath, String name, String instrumente) {
-        super(gp);
+    public Member(App app, String basePath, String name, String instrumente) {
         this.basePath = basePath;
         this.name = name;
         this.instrumente = instrumente;
+        this.app = app;
         direction = "default";
-        this.solideArea = new SolideRec(25, gp.tileSize, 6, gp.tileSize); // x, y, width, height
+        this.solideArea = new SolideRec(25, app.tileSize, 6, app.tileSize); // x, y, width, height
 
         getPlayerImage(); // Bilder laden
     }
@@ -50,12 +52,12 @@ public class Member extends Entity {
     public void draw(GraphicsContext gc, int tileSize) {
         // Berechne die Bildschirmposition basierend auf der Weltposition und der
         // Spielerposition
-        int screenX = weltX - gp.player.weltX + gp.player.screenX;
-        int screenY = weltY - gp.player.weltY + gp.player.screenY;
+        int screenX = weltX - app.getGpController().player.weltX + app.getGpController().player.screenX;
+        int screenY = weltY - app.getGpController().player.weltY + app.getGpController().player.screenY;
 
         // Zeichne nur, wenn der Member im sichtbaren Bereich ist
-        if (screenX > -tileSize && screenX < gp.screenWidth &&
-                screenY > -tileSize && screenY < gp.screenHeight) {
+        if (screenX > -tileSize && screenX < app.screenWidth &&
+                screenY > -tileSize && screenY < app.screenHeight) {
             Image imageToDraw;
             switch (direction) {
                 case "up":
@@ -73,8 +75,8 @@ public class Member extends Entity {
             }
             gc.drawImage(imageToDraw, screenX, screenY, tileSize, tileSize);
             // Prüfe, ob der Spieler nah genug ist
-            if (isNear(gp.player, gp.tileSize)) {
-                textBubble.draw(gc, screenX, screenY - gp.tileSize / 2);
+            if (isNear(app.getGpController().player, app.tileSize)) {
+                textBubble.draw(gc, screenX, screenY - app.tileSize / 2);
             }
         } else {
             // Fehlerbehandlung, falls das Bild nicht geladen wurde

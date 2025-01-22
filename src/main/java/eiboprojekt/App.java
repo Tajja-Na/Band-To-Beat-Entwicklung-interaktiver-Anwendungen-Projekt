@@ -4,6 +4,7 @@ import eiboprojekt.presentation.scenes.Navigation;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.GameView.DialogPage;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
+import eiboprojekt.presentation.scenes.GameView.GameLevelController;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.GamePanelController;
 import eiboprojekt.presentation.scenes.GameView.Introduction;
@@ -18,15 +19,16 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
     private StackPane rootPane;
     private Welcome welcomeView;
     private Introduction introductionView;
     private DialogPage dialogPage; // DialogPage hinzufügen
 
     private GamePanelController gpController;
-    private GameLevel gameLevel; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt, danach
-                                 // wird mit einem LevelManager gearbeitet
+
+    private GameLevelController glController; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt,
+                                              // danach
+    // wird mit einem LevelManager gearbeitet
     // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
     // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
 
@@ -35,16 +37,21 @@ public class App extends Application {
     private boolean ImLevel = false;
 
     private Sound sound;
-
     private SoundController soundController;
 
-    public void setImLevel(boolean imLevel) {
-        ImLevel = imLevel;
-    }
+    public final int tileSize = 64; // hier 128x128
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
 
-    public boolean isImLevel() {
-        return ImLevel;
-    }
+    public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
+    public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
+
+    // Die Weltkarte ist größer als der screen anzeigt, weshalb das nochmal extra
+    // als variable definiert ist
+    public final int MAX_WELT_COL = 64; // 16*4
+    public final int MAX_WELT_ROW = 48; // 12*4 oder *5
+    public final int WORLS_WIDTH = tileSize * MAX_WELT_COL;
+    public final int WORLS_HEIGHT = tileSize * MAX_WELT_ROW;
 
     @Override
     public void start(Stage primaryStage) {
@@ -57,15 +64,16 @@ public class App extends Application {
         gpController = new GamePanelController(this);
         System.out.println("GamePanel wurde initialisiert");
 
-        welcomeView = new Welcome(gpController.getGp().screenWidth, gpController.getGp().screenHeight);
+        welcomeView = new Welcome(screenWidth, screenHeight);
         System.out.println("WelcomeView wurde initialisiert");
 
-        introductionView = new Introduction(gpController.getGp().screenWidth, gpController.getGp().screenHeight);
+        introductionView = new Introduction(screenWidth, screenHeight);
 
-        //gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
+        // gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight,
+        // this, gamePanel);
 
         rootPane = new StackPane();
-        scene = new Scene(rootPane, gpController.getGp().screenWidth, gpController.getGp().screenHeight);
+        scene = new Scene(rootPane, screenWidth, screenHeight);
 
         // Fügen Sie zunächst die Welcome-Ansicht hinzu
         rootPane.getChildren().add(welcomeView);
@@ -74,7 +82,7 @@ public class App extends Application {
         welcomeView.getSwitchButton().setOnAction(e -> switchView("INTRODUCTION"));
         introductionView.getSwitchButton().setOnAction(e -> switchView("GAMEPANEL"));
 
-        //dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
+        // dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
         // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
         // dialogPage = new DialogPage("Dies ist ein Testdialog."); vllt man es sinnn
         // für die verschiedenen sdialoge?
@@ -101,10 +109,13 @@ public class App extends Application {
                 break;
             case "GAMEPANEL":
                 Navigation.getCurrentView().set(viewName);
-                //gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest hier muss dann stop Level Thread später hin!
+                // gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu
+                // startest hier muss dann stop Level Thread später hin!
                 rootPane.getChildren().add(gpController.getGp());
                 gpController.getGp().requestFocus();
-                gpController.startGameThread(gpController.getGp().getCanvas().getGraphicsContext2D()); // Starte den Game-Thread neu
+                gpController.startGameThread(gpController.getGp().getCanvas().getGraphicsContext2D()); // Starte den
+                                                                                                       // Game-Thread
+                                                                                                       // neu
                 setImLevel(false);
                 break;
             /*
@@ -117,36 +128,51 @@ public class App extends Application {
             case "GAMELevel1":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "gitarre.png");
-                rootPane.getChildren().add(gameLevel);
-                gameLevel.requestFocus();
-                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
+                glController = new GameLevelController(screenWidth, screenHeight, this, "gitarre.png");
+                rootPane.getChildren().add(glController.getGl());
+                glController.getGl().requestFocus();
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
+                                                                                                        // Level-Thread
                 setImLevel(true);
                 break;
 
             case "GAMELevel2":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "drum.png");
-                rootPane.getChildren().add(gameLevel);
-                gameLevel.requestFocus();
-                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
+                glController = new GameLevelController(screenWidth, screenHeight, this, "drum.png");
+                rootPane.getChildren().add(glController.getGl());
+                glController.getGl().requestFocus();
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
+                                                                                                        // Level-Thread
                 setImLevel(true);
                 break;
 
             case "GAMELevel3":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                gameLevel = new GameLevel(gpController.getGp().screenWidth, gpController.getGp().screenHeight, this, gpController.getGp(), "keyboard.png");
-                rootPane.getChildren().add(gameLevel);
-                gameLevel.requestFocus();
-                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
+                glController = new GameLevelController(screenWidth, screenHeight, this, "keyboard.png");
+                rootPane.getChildren().add(glController.getGl());
+                glController.getGl().requestFocus();
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
+                                                                                                        // Level-Thread
                 setImLevel(true);
                 break;
             default:
                 System.err.println("Unbekannte Ansicht: " + viewName);
                 break;
         }
+    }
+
+    public void setImLevel(boolean imLevel) {
+        ImLevel = imLevel;
+    }
+
+    public boolean isImLevel() {
+        return ImLevel;
+    }
+
+    public GamePanelController getGpController() {
+        return gpController;
     }
 
     public static void main(String[] args) {

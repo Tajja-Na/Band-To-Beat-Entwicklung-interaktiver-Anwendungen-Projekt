@@ -1,4 +1,4 @@
-package eiboprojekt.presentation.scenes.GameView;
+/*package eiboprojekt.presentation.scenes.GameView;
 
 import eiboprojekt.presentation.scenes.Object.Schlagzeug;
 
@@ -15,6 +15,5 @@ public class AssetSetter {
         gp.obj[0] = new Schlagzeug();
         gp.obj[0].worldX = 4 * gp.tileSize;
         gp.obj[0].worldY = 4 * gp.tileSize; 
-        
     }
-}
+}*/

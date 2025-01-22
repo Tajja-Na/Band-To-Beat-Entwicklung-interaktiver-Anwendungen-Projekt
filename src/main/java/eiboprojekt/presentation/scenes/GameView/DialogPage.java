@@ -54,7 +54,6 @@ public class DialogPage extends StackPane {
         updateDialogText(); // Aktualisiert den Text mit dem ersten Dialog
         getStylesheets()
                 .add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
-
     }
 
     // Initialisiert alle UI-Komponenten
@@ -183,10 +182,9 @@ public class DialogPage extends StackPane {
 
     // Zentriert das Dialogfenster auf dem Bildschirm
     public void centerDialog(int width, int height) {
-        setLayoutX((gp.screenWidth - width) / 2 + 350); // Horizontal zentrieren
-        setLayoutY((gp.screenHeight - height) / 2 + 300); // Vertikal zentrieren
+        setLayoutX((app.screenWidth - width) / 2 + 350); // Horizontal zentrieren
+        setLayoutY((app.screenHeight - height) / 2 + 300); // Vertikal zentrieren
         setPrefSize(width, height); // Fixiere die Größe der gesamten DialogBox
-
     }
 
     // Lädt den Dialog aus einer Datei

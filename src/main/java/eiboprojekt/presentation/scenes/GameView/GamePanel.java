@@ -1,6 +1,7 @@
 package eiboprojekt.presentation.scenes.GameView;
 
 import eiboprojekt.App;
+import eiboprojekt.presentation.scenes.Entity.TextBubble;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 
@@ -8,29 +9,71 @@ public class GamePanel extends BorderPane{
     private App app;
     private final Canvas canvas;
 
-    // Screen settings
-    final int originalTileSize = 64; // 64x64 tile
-    final int scale = 1; // damit man es halt passend skalieren kann
-    
-    public final int tileSize = originalTileSize * scale; // hier 128x128
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
-    
-    public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
-    public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
-    
-    public final int MAX_WELT_COL = 64; // 16*4
-    public final int MAX_WELT_ROW = 48; // 12*4 oder *5
-    public final int WORLS_WIDTH = tileSize * MAX_WELT_COL;
-    public final int WORLS_HEIGHT = tileSize * MAX_WELT_ROW;
+    // Dialog
+    private DialogPage dialogPage; // Referenz für DialogPage
 
-    public GamePanel(){
+    private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
+    private boolean showWarning = false;  // Zeigt an, ob eine Warnung sichtbar ist
+    
+    private TextBubble instrumentWarnung = new TextBubble("", 275, 50);
+    private boolean showTextBubble = true; // TextBubble wird zu Beginn angezeigt
+
+    public GamePanel(App app){
+        this.app = app;
         // Erstelle das Canvas und füge es zum Panel hinzu
-        canvas = new Canvas(screenWidth, screenHeight);
+        canvas = new Canvas(app.screenWidth, app.screenHeight);
         this.getChildren().add(canvas);
     }
 
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public boolean isShowTextBubble() {
+        return showTextBubble;
+    }
+
+    public boolean isShowWarning() {
+        return showWarning;
+    }
+
+    public TextBubble getWarnung() {
+        return warnung;
+    }
+
+    public void setWarnung(TextBubble warnung) {
+        this.warnung = warnung;
+    }
+
+    public void setShowWarning(boolean showWarning) {
+        this.showWarning = showWarning;
+    }
+
+    public void setInstrumentWarnung(TextBubble instumentWarnung) {
+        this.instrumentWarnung = instumentWarnung;
+    }
+
+    public void setShowTextBubble(boolean showTextBubble) {
+        this.showTextBubble = showTextBubble;
+    }
+
+    public App getApp() {
+        return app;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
+    }
+
+    public DialogPage getDialogPage() {
+        return dialogPage;
+    }
+
+    public void setDialogPage(DialogPage dialogPage) {
+        this.dialogPage = dialogPage;
+    }
+
+    public TextBubble getInstrumentWarnung() {
+        return instrumentWarnung;
     }
 }
