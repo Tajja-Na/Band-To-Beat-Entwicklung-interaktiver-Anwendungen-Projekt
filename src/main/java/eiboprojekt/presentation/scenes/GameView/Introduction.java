@@ -20,8 +20,10 @@ public class Introduction extends BorderPane {
     private Button gameStartButton;
     private Button weiterButton;
     private Button zurueckButton;
+
     private List<String> introTexts;
     private int currentPage = 0;
+
     private Text pageText;
     private TextFlow textFlow;
 
@@ -43,7 +45,6 @@ public class Introduction extends BorderPane {
         //Bilder auf der oberen Hälfte des Bildschrimes:
         HBox imageBox = new HBox(10);
         imageBox.setAlignment(Pos.TOP_CENTER);
-
 
         for (int i = 0; i < 4; i++) {
             ImageView imageView = new ImageView(new Image(new File("assets/Welcome/member" + i + ".png").toURI().toString()));
@@ -102,34 +103,46 @@ public class Introduction extends BorderPane {
 
         setCenter(mainBox);
 
-        weiterButton.setOnAction(e -> nextPage());
-        zurueckButton.setOnAction(e -> previousPage());
-
         System.out.println(currentPage + " // " + introTexts.size());
-    }
-
-    private void nextPage() {
-        if (currentPage < introTexts.size() - 1) {
-            currentPage++;
-            updatePage();
-        }
-    }
-
-    private void previousPage() {
-        if (currentPage > 0) {
-            currentPage--;
-            updatePage();
-        }
-    }
-
-    private void updatePage() {
-        pageText.setText(introTexts.get(currentPage));
-        zurueckButton.setDisable(currentPage == 0);
-        weiterButton.setDisable(currentPage == introTexts.size() - 1);
-        gameStartButton.setVisible(currentPage == introTexts.size() - 1);
     }
 
     public Button getSwitchButton() {
         return gameStartButton;
+    }
+
+    public Button getWeiterButton() {
+        return weiterButton;
+    }
+
+    public Button getZurueckButton() {
+        return zurueckButton;
+    }
+
+    public Button getGameStartButton() {
+        return gameStartButton;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public List<String> getIntroTexts() {
+        return introTexts;
+    }
+
+    public void setIntroTexts(List<String> introTexts) {
+        this.introTexts = introTexts;
+    }
+
+    public Text getPageText() {
+        return pageText;
+    }
+
+    public void setPageText(Text pageText) {
+        this.pageText = pageText;
     }
 }

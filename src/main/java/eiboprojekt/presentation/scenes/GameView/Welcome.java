@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 
 public class Welcome extends BorderPane {
 
-    private Button switchButton;
+    Button switchButton;
 
     public Welcome(int width, int height) {
         setPrefSize(width, height);
@@ -52,9 +52,4 @@ public class Welcome extends BorderPane {
         mainPane.getStyleClass().add("view");
         setCenter(mainPane);
     }
-
-    public Button getSwitchButton() {
-        return switchButton;
-    }
 }
-

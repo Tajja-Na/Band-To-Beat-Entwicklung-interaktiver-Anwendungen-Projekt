@@ -32,7 +32,8 @@ public class MainCharacter extends Entity {
         screenX = app.screenWidth / 2 - (app.tileSize / 2); // screenX und y is da wo der mc auf dem screen spawnt
         screenY = app.screenHeight / 2 - (app.tileSize / 2);
 
-        this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // x,y, width und height vom
+        this.solideArea = new SolideRec(25, app.tileSize, 6, app.tileSize); // x, y,
+
         // rechteck
 
         setDefaultValues();

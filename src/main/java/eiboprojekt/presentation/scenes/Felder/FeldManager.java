@@ -47,7 +47,7 @@ public class FeldManager {
         
         alleFelder[1] = new Feld();
         alleFelder[1].image = new Image("file:assets/Background/gras 1 tile neu.png");
-        
+
         // In der Welt Ansicht
         alleFelder[2] = new Feld();
         alleFelder[2].image = new Image("file:assets/Background/worldBackground/grass.png");
@@ -90,15 +90,12 @@ public class FeldManager {
         // Haus 1 Alles -> Soll Solide sein
         alleFelder[13] = new Feld();
         alleFelder[13].image = new Image("file:assets/Haus/Haus1/H11.png");
-        alleFelder[13].collision = true;
 
         alleFelder[14] = new Feld();
         alleFelder[14].image = new Image("file:assets/Haus/Haus1/H12.png");
-        alleFelder[14].collision = true;
 
         alleFelder[15] = new Feld();
         alleFelder[15].image = new Image("file:assets/Haus/Haus1/H13.png");
-        alleFelder[15].collision = true;
 
         alleFelder[16] = new Feld();
         alleFelder[16].image = new Image("file:assets/Haus/Haus1/H14.png");

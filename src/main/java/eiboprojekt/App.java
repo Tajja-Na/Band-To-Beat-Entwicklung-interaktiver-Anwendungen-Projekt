@@ -8,7 +8,9 @@ import eiboprojekt.presentation.scenes.GameView.GameLevelController;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.GamePanelController;
 import eiboprojekt.presentation.scenes.GameView.Introduction;
+import eiboprojekt.presentation.scenes.GameView.IntroductionController;
 import eiboprojekt.presentation.scenes.GameView.Welcome;
+import eiboprojekt.presentation.scenes.GameView.WelcomeController;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
 import eiboprojekt.presentation.scenes.Sounds.SoundController;
 import javafx.application.Application;
@@ -20,8 +22,8 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     private StackPane rootPane;
-    private Welcome welcomeView;
-    private Introduction introductionView;
+    private WelcomeController wController;
+    private IntroductionController iController;
     private DialogPage dialogPage; // DialogPage hinzufügen
 
     private GamePanelController gpController;
@@ -64,10 +66,10 @@ public class App extends Application {
         gpController = new GamePanelController(this);
         System.out.println("GamePanel wurde initialisiert");
 
-        welcomeView = new Welcome(screenWidth, screenHeight);
+        wController = new WelcomeController(this);
         System.out.println("WelcomeView wurde initialisiert");
 
-        introductionView = new Introduction(screenWidth, screenHeight);
+        iController = new IntroductionController(this);
 
         // gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight,
         // this, gamePanel);
@@ -76,11 +78,11 @@ public class App extends Application {
         scene = new Scene(rootPane, screenWidth, screenHeight);
 
         // Fügen Sie zunächst die Welcome-Ansicht hinzu
-        rootPane.getChildren().add(welcomeView);
+        rootPane.getChildren().add(wController.getWelcomeView());
 
         // Konfigurieren Sie den Switch-Button in der Welcome-Ansicht
-        welcomeView.getSwitchButton().setOnAction(e -> switchView("INTRODUCTION"));
-        introductionView.getSwitchButton().setOnAction(e -> switchView("GAMEPANEL"));
+
+
 
         // dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
         // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
@@ -102,10 +104,10 @@ public class App extends Application {
         switch (viewName) {
             case "WELCOME":
                 Navigation.getCurrentView().set(viewName);
-                rootPane.getChildren().add(welcomeView);
+                rootPane.getChildren().add(wController.getWelcomeView());
                 break;
             case "INTRODUCTION":
-                rootPane.getChildren().add(introductionView);
+                rootPane.getChildren().add(iController.getIntro());
                 break;
             case "GAMEPANEL":
                 Navigation.getCurrentView().set(viewName);
@@ -128,7 +130,7 @@ public class App extends Application {
             case "GAMELevel1":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                glController = new GameLevelController(screenWidth, screenHeight, this, "gitarre.png");
+                glController = new GameLevelController(screenWidth, screenHeight, this, "Gigi.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
                 glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
@@ -139,7 +141,7 @@ public class App extends Application {
             case "GAMELevel2":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                glController = new GameLevelController(screenWidth, screenHeight, this, "drum.png");
+                glController = new GameLevelController(screenWidth, screenHeight, this, "Ryu.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
                 glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
@@ -150,7 +152,7 @@ public class App extends Application {
             case "GAMELevel3":
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
-                glController = new GameLevelController(screenWidth, screenHeight, this, "keyboard.png");
+                glController = new GameLevelController(screenWidth, screenHeight, this, "Tyler.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
                 glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den

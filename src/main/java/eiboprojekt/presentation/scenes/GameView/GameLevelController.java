@@ -48,7 +48,7 @@ public class GameLevelController{
 
     private Image obstacleImage;
 
-    private String instrument;
+    private String obstacleName;
 
     //Game Loop bzw Level Loop 
     AnimationTimer gameLoop;
@@ -57,10 +57,10 @@ public class GameLevelController{
 
     private final MainCharacterLevel player;  
 
-    public GameLevelController(int width, int height, App app, String instrument) {
+    public GameLevelController(int width, int height, App app, String obstacleName) {
         this.app = app; 
         this.gl = new GameLevel();
-        this.instrument = instrument;
+        this.obstacleName = obstacleName;
         this.fm = new FeldManagerLevel(app);
 
         // Initialisiere den KeyHandler
@@ -81,7 +81,7 @@ public class GameLevelController{
         obstacles = new ArrayList<>();
         String path = "src/main/java/eiboprojekt/presentation/scenes/Object/assets/";
         // Hindernisbild laden
-        obstacleImage = new Image(new File(path+instrument).toURI().toString());
+        obstacleImage = new Image(new File(path+obstacleName).toURI().toString());
 
         //Sound
         sound = new Sound();
@@ -139,7 +139,7 @@ public class GameLevelController{
         // Neue Hindernisse hinzufügen
         if (Math.random() < 0.02) { // Zufälliges Erzeugen
             if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
-                Double[] newObstacle = new Double[]{(double) app.screenWidth, (double) player.groundY};
+                Double[] newObstacle = new Double[]{(double) app.screenWidth, (double) (player.groundY + app.tileSize/2)};
                 obstacles.add(newObstacle);
             }
         }
