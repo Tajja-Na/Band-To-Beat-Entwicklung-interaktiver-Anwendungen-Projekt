@@ -63,6 +63,8 @@ public class GameLevel extends BorderPane {
 
     private Image obstacleImage;
 
+    private String instrument;
+
     //Game Loop bzw Level Loop 
     AnimationTimer gameLoop;
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
@@ -74,10 +76,11 @@ public class GameLevel extends BorderPane {
         return canvas;
     }
 
-    public GameLevel(int width, int height, App app, GamePanel gp) {
+    public GameLevel(int width, int height, App app, GamePanel gp, String instrument) {
 
         this.app = app;
         this.gp = gp;   //für was?
+        this.instrument = instrument;
         this.fm = gp.getFM();
         canvas = new Canvas(screenWidth, screenHeight);
         this.getChildren().add(canvas);
@@ -98,14 +101,14 @@ public class GameLevel extends BorderPane {
 
         //Objekte
         obstacles = new ArrayList<>();
-
+        String path = "src/main/java/eiboprojekt/presentation/scenes/Object/assets/";
         // Hindernisbild laden
-        obstacleImage = new Image(new File("src/main/java/eiboprojekt/presentation/scenes/Object/assets/gitarre.png").toURI().toString());
+        obstacleImage = new Image(new File(path+instrument).toURI().toString());
 
         //Sound
         sound = new Sound();
         //Hier dann der Index vom Lied des Levels, einfügen des Liedes in der Sound-Klasse
-        playMusic(0);
+        //playMusic(0);
 
         //Style für die Buttons später:
         getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
@@ -133,7 +136,7 @@ public class GameLevel extends BorderPane {
     }
 
     public void stopLevelThread() {
-        stopMusic();
+        //stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             levelThreadRunning = false;
@@ -260,16 +263,16 @@ public class GameLevel extends BorderPane {
         setCenter(centerBox);
     }
 
-    public void playMusic(int i) {
+    /*public void playMusic(int i) {
 
         sound.loadTrack(i);
         sound.play();
         sound.setVolume(0.2); // nicht so laut
-    }
+    }*/
 
-    public void stopMusic() {
+    /*public void stopMusic() {
         sound.stop();
-    }
+    }*/
 
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);

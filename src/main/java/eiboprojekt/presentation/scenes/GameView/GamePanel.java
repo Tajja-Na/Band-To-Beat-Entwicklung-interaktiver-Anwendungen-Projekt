@@ -110,10 +110,7 @@ public class GamePanel extends BorderPane {
         feldM = new FeldManager(this);
         player = new MainCharacter(this, keyHandler);
 
-        // DialogPage initialisieren und hinzufügen
-        dialogPage = new DialogPage(700, 250, this, "default", "default", app);
-        dialogPage.setVisible(false); // Dialog standardmäßig unsichtbar
-        this.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
+
 
         // Member erstellen und in der Welt platzieren
         members[0] = new Member(this, "assets/Character/Gigi/", "Gigi", "Gitarre");
@@ -143,10 +140,10 @@ public class GamePanel extends BorderPane {
         oChecker = new CollisionCheck(this);
 
         // Starte Musik
-        if(!sound.isPlaying) {
+        /*if(!sound.isPlaying) {
             playMusic(0);
             sound.isPlaying = true;
-        }
+        }*/
     }
 
     public FeldManager getFM() {
@@ -155,6 +152,8 @@ public class GamePanel extends BorderPane {
 
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
     private boolean gameThreadRunning = false;
+
+    //gc holen
 
     public void startGameThread(GraphicsContext gc) {
         if (gameThreadRunning) {
@@ -193,25 +192,6 @@ public class GamePanel extends BorderPane {
     }
 
     private void draw(GraphicsContext gc) {
-        // Hole das GraphicsContext des Canvas, um darauf zu zeichnen
-        // GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        // Bildschirm löschen
-        // gc.setFill(Color.BLACK);
-        // gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        // feldM.draw(gc);
-
-        // Spieler zeichnen und tileSize übergeben
-        /// player.draw(gc, tileSize);
-
-        // da alle gezeichnet werden erstekken wir ein array dafür
-        // for (Entity member : members) {
-        // if (member != null) {
-        // member.draw(gc, tileSize);
-        // }
-        // }
-
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         feldM.ladeKarte("assets/Karte/bb.txt");
@@ -259,17 +239,16 @@ public class GamePanel extends BorderPane {
             gc.setFill(Color.BLACK);
             gc.fillText(warningText, textX, textY); // Zeichnet den Warnungstext
         }
-
     }
 
     // Musik Methoden
-    public void playMusic(int i) {
+    /*public void playMusic(int i) {
 
         sound.loadTrack(i);
         sound.play();
         sound.loop();
         sound.setVolume(0.1); // nicht so laut
-    }
+    }*/
 
     public void stopMusic() {
         sound.stop();
@@ -317,7 +296,11 @@ public class GamePanel extends BorderPane {
 
                         if (canInteract) {
                             // Der Spieler besitzt das benötigte Instrument -> Dialog starten
+                            // DialogPage initialisieren und hinzufügen
+                            dialogPage = new DialogPage(700, 250, this, m.getName(), app);
+                            this.getChildren().add(dialogPage); // Dialog zur GamePanel-Oberfläche hinzufügen
                             dialogPage.setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
+
                             dialogPage.show(); // Zeigt die Dialogseite an
                             showWarning = false; // Blendet mögliche Warnungen aus
                         } else {

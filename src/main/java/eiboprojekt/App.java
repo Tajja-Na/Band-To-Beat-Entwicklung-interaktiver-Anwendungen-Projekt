@@ -1,12 +1,17 @@
 package eiboprojekt;
 
+import eiboprojekt.presentation.scenes.Navigation;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.GameView.DialogPage;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.Introduction;
 import eiboprojekt.presentation.scenes.GameView.Welcome;
+import eiboprojekt.presentation.scenes.Sounds.Sound;
+import eiboprojekt.presentation.scenes.Sounds.SoundController;
 import javafx.application.Application;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -28,6 +33,10 @@ public class App extends Application {
 
     private boolean ImLevel = false;
 
+    private Sound sound;
+
+    private SoundController soundController;
+
     public void setImLevel(boolean imLevel) {
         ImLevel = imLevel;
     }
@@ -38,6 +47,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Navigation.setCurrentView(new SimpleStringProperty());
+
+        sound = new Sound();
+        soundController = new SoundController(sound);
 
         // Null-Prüfung und Initialisierung
         gamePanel = new GamePanel(this);
@@ -50,7 +63,6 @@ public class App extends Application {
 
         //gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
 
-        dialogPage = new DialogPage(500, 250, gamePanel, "default", "default", this);
         rootPane = new StackPane();
         scene = new Scene(rootPane, gamePanel.screenWidth, gamePanel.screenHeight);
 
@@ -80,12 +92,14 @@ public class App extends Application {
         rootPane.getChildren().clear();
         switch (viewName) {
             case "WELCOME":
+                Navigation.getCurrentView().set(viewName);
                 rootPane.getChildren().add(welcomeView);
                 break;
             case "INTRODUCTION":
                 rootPane.getChildren().add(introductionView);
                 break;
             case "GAMEPANEL":
+                Navigation.getCurrentView().set(viewName);
                 //gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu startest hier muss dann stop Level Thread später hin!
                 rootPane.getChildren().add(gamePanel);
                 gamePanel.requestFocus();
@@ -100,8 +114,29 @@ public class App extends Application {
              * break;
              */
             case "GAMELevel1":
+                Navigation.getCurrentView().set(viewName);
                 gamePanel.stopGameThread();
-                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel);
+                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "gitarre.png");
+                rootPane.getChildren().add(gameLevel);
+                gameLevel.requestFocus();
+                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
+                setImLevel(true);
+                break;
+
+            case "GAMELevel2":
+                Navigation.getCurrentView().set(viewName);
+                gamePanel.stopGameThread();
+                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "drum.png");
+                rootPane.getChildren().add(gameLevel);
+                gameLevel.requestFocus();
+                gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread
+                setImLevel(true);
+                break;
+
+            case "GAMELevel3":
+                Navigation.getCurrentView().set(viewName);
+                gamePanel.stopGameThread();
+                gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight, this, gamePanel, "keyboard.png");
                 rootPane.getChildren().add(gameLevel);
                 gameLevel.requestFocus();
                 gameLevel.startLevelThread(gameLevel.getCanvas().getGraphicsContext2D()); // Starte den Level-Thread

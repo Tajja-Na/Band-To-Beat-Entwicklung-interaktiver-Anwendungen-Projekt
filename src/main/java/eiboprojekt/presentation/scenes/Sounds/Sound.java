@@ -7,6 +7,7 @@ public class Sound {
 
     Track tracks[] = new Track[15];
         public SimpleAudioPlayer audioPlayer;
+
         public SimpleMinim minim;
         public boolean isPlaying = false;
 
@@ -19,12 +20,7 @@ public class Sound {
     }
 
     public Sound() {
-
-        this.minim = new SimpleMinim(true);
-
-        if (minim != null) {
-            System.out.println("Minim ist nicht null");
-        }
+        this.minim = new SimpleMinim();
 
         try {
             tracks[0] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/undertale_music2.mp3"); //Titelsong
@@ -33,22 +29,24 @@ public class Sound {
             tracks[3] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/gameover.mp3"); 
             tracks[4] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/levelup.mp3"); 
             tracks[5] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/powerup.mp3"); 
-            tracks[6] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/speak.mp3"); 
+            tracks[6] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/speak.mp3");
+            tracks[7] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/w2e(musik).mp3");  //level1
+            tracks[8] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/w2e(musik,bass).mp3");  //level2
+            tracks[9] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/w2e(musik,bass,drums).mp3");  //level3
+            tracks[10] = new Track("src/main/java/eiboprojekt/presentation/scenes/Sounds/Media/w2e(normal).mp3");  //ende?
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-
     }
 
     public void loadTrack(int i) {
-
-            this.audioPlayer = minim.loadMP3File(tracks[i].filepath);
+        stop();
+        this.audioPlayer = minim.loadMP3File(tracks[i].filepath);
     }
 
     public void play() {
-        audioPlayer.play();
         isPlaying = true;
+        audioPlayer.play();
     }
 
     public void loop() {
@@ -58,16 +56,17 @@ public class Sound {
 
     public void stop() {
         if (audioPlayer != null) {
-            audioPlayer.pause();
             isPlaying = false;
+            audioPlayer.pause();
         }
-        
     }
 
     public void setVolume(double value) {
         float volume = 20 * (float) Math.log10(value); // Umrechnung in Dezibel
         audioPlayer.setGain(volume);
     }
-    
-    
+            
+    public SimpleAudioPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
 }

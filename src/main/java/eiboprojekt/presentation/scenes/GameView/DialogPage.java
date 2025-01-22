@@ -42,14 +42,12 @@ public class DialogPage extends StackPane {
     private ImageView leftImageIdle, leftImageTalking, rightImageIdle, rightImageTalking;
 
     private String currentPartner; // Aktueller Dialogpartner
-    private String instrumente;
 
     // Konstruktor, der die Dialogseite mit der Partnerbezeichnung initialisiert
-    public DialogPage(int width, int height, GamePanel gp, String partnerName, String instrumente, App app) {
+    public DialogPage(int width, int height, GamePanel gp, String partnerName, App app) {
         this.app = app;
         this.gp = gp;
         this.currentPartner = partnerName; // Setzt den Dialogpartner
-        this.instrumente = instrumente;
         initializeUI(width, height); // UI-Elemente initialisieren
         centerDialog(width, height); // Positioniert das Dialogfenster
         loadDialogs(partnerName + "_dialog.txt"); // Lädt den Dialog des Partners
@@ -95,20 +93,20 @@ public class DialogPage extends StackPane {
         startButton = new Button("Start Game");
         startButton.setVisible(false); // Anfangs unsichtbar
 
-        //Je nach Partner anderes Level auswählen!
+        //Je nach Partner anderes Level auswählen!   funktioniert nicht 
         switch (currentPartner) {
             case "Gigi":
                 startButton.setOnAction(e -> app.switchView("GAMELevel1"));
                 break;
             case "Ryu":
-                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+                startButton.setOnAction(e -> app.switchView("GAMELevel2"));
                 break;
             case "Tyler":
-                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+                startButton.setOnAction(e -> app.switchView("GAMELevel3"));
                 break;
         }
 
-        startButton.setOnAction(e -> app.switchView("GAMELevel1"));
+        //startButton.setOnAction(e -> app.switchView("GAMELevel3"));
 
         // VBox für alle Dialog-Elemente
         VBox dialogContent = new VBox(20);
