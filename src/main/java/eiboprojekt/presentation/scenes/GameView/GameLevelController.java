@@ -27,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class GameLevelController {
@@ -56,6 +57,10 @@ public class GameLevelController {
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
     private boolean levelThreadRunning = false;
 
+    private long startTime; // Startzeit des Levels
+    private final int MAX_TIME = 105; // Maximale Zeit in Sekunden
+    private int elapsedTime; // Vergangene Zeit in Sekunden
+
     private final MainCharacterLevel player;
 
     public GameLevelController(int width, int height, App app, String obstacleName) {
@@ -63,6 +68,8 @@ public class GameLevelController {
         this.gl = new GameLevel();
         this.obstacleName = obstacleName;
         this.fm = new FeldManagerLevel(app);
+        startTime = System.currentTimeMillis();
+        elapsedTime = 0;
 
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
@@ -121,6 +128,13 @@ public class GameLevelController {
     }
 
     public void update() {
+
+        elapsedTime = (int) ((System.currentTimeMillis() - startTime) / 1000); // Zeit in Sekunden
+        if (elapsedTime > MAX_TIME) {
+            elapsedTime = MAX_TIME; // Begrenze die Zeit
+            gl.running = false; // Stoppe das Spiel, wenn die Zeit abläuft
+        }
+
         player.update();
 
         if (!youWon) {
@@ -200,6 +214,11 @@ public class GameLevelController {
         // Kollisionszähler zeichnen
         gc.setFill(Color.PURPLE);
         gc.fillText("Kollisionen: " + collisionCount, 10, 20);
+
+        // Zeitanzeige zeichnen
+        gc.setFill(Color.PURPLE);
+        gc.setFont(Font.font("System", FontWeight.BOLD, 20));
+        gc.fillText(elapsedTime + "s / " + MAX_TIME + "s", 10, 50);
 
         // Bei Game Over
         if (!gl.running) {
