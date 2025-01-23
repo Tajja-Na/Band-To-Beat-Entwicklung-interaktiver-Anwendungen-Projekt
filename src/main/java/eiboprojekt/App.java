@@ -164,6 +164,10 @@ public class App extends Application {
                                                                                                         // Level-Thread
                 setImLevel(true);
                 break;
+
+            case "GameEndeScreen":
+                Navigation.getCurrentView().set(viewName);
+                break;
             default:
                 System.err.println("Unbekannte Ansicht: " + viewName);
                 break;

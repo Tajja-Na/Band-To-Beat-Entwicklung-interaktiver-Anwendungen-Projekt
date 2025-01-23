@@ -15,6 +15,7 @@ public class Sound {
     public SimpleAudioPlayer audioPlayer;
     public SimpleMinim minim;
     public boolean isPlaying = false;
+    public final int RESETSONG = 0;
 
     public class Track {
         String filepath;
@@ -47,15 +48,19 @@ public class Sound {
 
     public void loadTrack(int i) {
         pause();
+
         this.audioPlayer = minim.loadMP3File(tracks[i].filepath);
+        System.out.println("Audioplayer Zustand in LoadTrack: " + audioPlayer.isPlaying());
     }
 
     public void play() {
         if (audioPlayer != null) {
-
             Thread playThread = new Thread(() -> {
-                audioPlayer.play(0);
+                System.out.println("Position anfang thread: " + audioPlayer.position());
+                System.out.println("Audioplayer Zustand: " + audioPlayer.isPlaying());
+                audioPlayer.play(RESETSONG);
                 while(audioPlayer.isPlaying()){
+                    System.out.println("Position in while: " + audioPlayer.position());
                     Platform.runLater(() -> getcurrentPosition().set(audioPlayer.position()/1000));
                     try {
                         Thread.sleep(1000);

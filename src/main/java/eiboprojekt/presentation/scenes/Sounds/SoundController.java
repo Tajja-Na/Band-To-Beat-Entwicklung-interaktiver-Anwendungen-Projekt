@@ -22,7 +22,6 @@ public class SoundController {
             switch(newValue){
                 case "GAMEPANEL":
                     sound.loadTrack(0);
-                    sound.loop();
                     System.out.println("ich hab den titel song geladen und spiel es von hier ab");
                     //startSEThread();
                     break;

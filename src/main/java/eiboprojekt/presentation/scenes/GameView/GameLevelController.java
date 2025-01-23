@@ -37,7 +37,7 @@ public class GameLevelController {
     private KeyHandlern keyHandler;
 
     private Sound sound;
-    private final int LEVEL_LAENGE = 103; // 103 sekunden
+    private final int LEVEL_LAENGE = 105; // 103 sekunden
 
     private boolean youWon;
 
@@ -165,6 +165,7 @@ public class GameLevelController {
         // Bei Game Over
         if (!gl.running) {
             gl.setzeCanvasLose();
+            app.switchView("test");
             gl.retryButton.setOnAction(e -> {
                 stopLevelThread();
                 restartGame();
