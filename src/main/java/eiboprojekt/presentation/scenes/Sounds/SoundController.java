@@ -45,6 +45,12 @@ public class SoundController {
                             sound.setVolume(0.1);
                             sound.play();
                             break;
+
+                        case "ENDEVIEW":
+                            sound.loadTrack(10);
+                            sound.setVolume(0.1);
+                            sound.play();
+                            break;
                     }
                 });
     }

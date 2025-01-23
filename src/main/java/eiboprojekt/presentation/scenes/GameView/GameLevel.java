@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class GameLevel extends BorderPane {
@@ -29,11 +30,15 @@ public class GameLevel extends BorderPane {
 
     private Canvas canvas;
     Text gameOverText;
+    Text winHL;
+    Text winText;
     Button retryButton;
     Button backToMapButton;
     VBox gameOverScreen;
     HBox buttons;
     VBox centerBox;
+    private VBox winScreen;
+    Button backToMapButtonWin;
 
     public boolean running;
 
@@ -44,6 +49,7 @@ public class GameLevel extends BorderPane {
         //Style für die Buttons später:
         getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
 
+        //GAME OVER SCREEN:
         gameOverScreen = new VBox(40);
         gameOverScreen.setAlignment(Pos.CENTER);
         gameOverScreen.setPrefSize(screenWidth, screenHeight);
@@ -52,10 +58,12 @@ public class GameLevel extends BorderPane {
 
         gameOverText = new Text("Oh no, Game Over!");
         gameOverText.setFont(new Font(80));
-        gameOverText.setFill(Color.RED);
+        gameOverText.setFont(Font.font("System", FontWeight.BOLD, 100));
+        gameOverText.setFill(Color.BLACK);
 
         retryButton = new Button("Versuch's nochmal");
         retryButton.getStyleClass().add("button");
+
         backToMapButton = new Button("Zurück zur Map");
         backToMapButton.getStyleClass().add("button");
 
@@ -64,6 +72,27 @@ public class GameLevel extends BorderPane {
         buttons.getChildren().addAll(retryButton, backToMapButton);
 
         gameOverScreen.getChildren().addAll(gameOverText, buttons);
+
+        //WIN SCREEN:
+        winScreen = new VBox(40);
+        winScreen.setAlignment(Pos.CENTER);
+        winScreen.setPrefSize(screenWidth, screenHeight);
+
+        winScreen.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+
+        winHL = new Text("Congratulations! You wooooon!");
+        winHL.setFont(new Font(80));
+        winHL.setFill(Color.BLUEVIOLET);
+
+        backToMapButtonWin = new Button("Zurück zur Map");
+        backToMapButtonWin.getStyleClass().add("button");
+
+        winText = new Text("Du hast ein Bandmitglied überzeugt Teil deiner Band zu sein! Amazing, immer weiter so!");
+        winText.setFont(new Font(20));
+        winText.setFill(Color.BLACK);
+
+        winScreen.getChildren().addAll(winHL, winText, backToMapButtonWin);
+
 
         centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
@@ -76,7 +105,7 @@ public class GameLevel extends BorderPane {
     }
 
     public void setzeCanvasWin(){
-        //this.setCenter(winScreen);
+        this.setCenter(winScreen);
     }
 
     public Canvas getCanvas() {

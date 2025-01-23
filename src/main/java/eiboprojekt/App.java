@@ -3,6 +3,7 @@ package eiboprojekt;
 import eiboprojekt.presentation.scenes.Navigation;
 import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.GameView.DialogPage;
+import eiboprojekt.presentation.scenes.GameView.EndeView;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GameLevelController;
 import eiboprojekt.presentation.scenes.GameView.GamePanel;
@@ -33,6 +34,8 @@ public class App extends Application {
     // wird mit einem LevelManager gearbeitet
     // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
     // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
+
+    private EndeView endeView;
 
     private Scene scene;
 
@@ -167,7 +170,14 @@ public class App extends Application {
                                                                                                         // Level-Thread
                 setImLevel(true);
                 break;
-
+            
+            case "ENDEVIEW":
+                Navigation.getCurrentView().set(viewName);
+                glController.stopLevelThread();
+                endeView = new EndeView(this);
+                rootPane.getChildren().add(endeView);
+                endeView.requestFocus();
+                break;
             default:
                 System.err.println("Unbekannte Ansicht: " + viewName);
                 break;

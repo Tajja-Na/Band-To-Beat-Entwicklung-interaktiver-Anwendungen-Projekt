@@ -123,29 +123,56 @@ public class GameLevelController {
     public void update() {
         player.update();
 
-        // Hindernisse bewegen
-        for (Double[] obstacle : obstacles) {
-            obstacle[0] -= 5; // Bewegung nach links
-        }
+        if (!youWon) {
+            // Hindernisse bewegen
+            for (Double[] obstacle : obstacles) {
+                obstacle[0] -= 5; // Bewegung nach links
+            }
 
-        // Aktualisiere die Position des letzten Hindernisses
-        if (!obstacles.isEmpty()) {
-            lastObstacleX = obstacles.get(obstacles.size() - 1)[0];
-        } else {
-            lastObstacleX = null;
-        }
+            // Aktualisiere die Position des letzten Hindernisses
+            if (!obstacles.isEmpty()) {
+                lastObstacleX = obstacles.get(obstacles.size() - 1)[0];
+            } else {
+                lastObstacleX = null;
+            }
 
-        // Kollisionserkennung
-        checkCollisions();
+            // Kollisionserkennung
+            checkCollisions();
 
-        // Neue Hindernisse hinzufügen
-        if (Math.random() < 0.02) { // Zufälliges Erzeugen
-            if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
-                Double[] newObstacle = new Double[] { (double) app.screenWidth,
-                        (double) (player.groundY + app.tileSize / 2) };
-                obstacles.add(newObstacle);
+            // Neue Hindernisse hinzufügen
+
+            if (Math.random() < 0.02) { // Zufälliges Erzeugen
+                if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
+                    Double[] newObstacle = new Double[] { (double) app.screenWidth,
+                            (double) (player.groundY + app.tileSize / 2) };
+                    obstacles.add(newObstacle);
+                }
             }
         }
+
+        if (gl.running) {
+            sound.getcurrentPosition().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue.intValue() >= LEVEL_LAENGE) {
+                        youWon = true;
+                        if (obstacleName != "Tyler.png") {
+                            gl.setzeCanvasWin();
+                            gl.backToMapButtonWin.setOnAction(e -> {
+                                stopLevelThread();
+                                goToMap();
+                            });
+                        } else {
+                            if(gl.running) {
+                                stopLevelThread();
+                                app.switchView("ENDEVIEW");
+                            }
+                            
+                            
+                        }
+                    }
+                });
+        }
+
     }
 
     public void draw(GraphicsContext gc) {
@@ -165,37 +192,17 @@ public class GameLevelController {
         // Bei Game Over
         if (!gl.running) {
             gl.setzeCanvasLose();
-            //app.switchView("test");
+            stopLevelThread();
+            // app.switchView("test");
             gl.retryButton.setOnAction(e -> {
-                stopLevelThread();
                 restartGame();
             });
 
             gl.backToMapButton.setOnAction(e -> {
-                stopLevelThread();
                 goToMap();
             });
         }
-        sound.getcurrentPosition().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (newValue.intValue() >= LEVEL_LAENGE) {
-                        gl.setzeCanvasLose();
-                        gl.retryButton.setOnAction(e -> {
-                            stopLevelThread();
-                            restartGame();
-                        });
-
-                        gl.backToMapButton.setOnAction(e -> {
-                            stopLevelThread();
-                            goToMap();
-                        });
-                    }
-                });
-
-        if (youWon) {
-            // Hier dann Dialog mit Character, der sich der Band anschließt! Yey!
-            // hier noch gamethread beenden und
-        }
+        
     }
 
     private void checkCollisions() {
@@ -206,7 +213,6 @@ public class GameLevelController {
                 iterator.remove();
                 if (collisionCount >= maxCollisions) {
                     gl.running = false;
-                    // gameOver();
                 }
             }
         }
