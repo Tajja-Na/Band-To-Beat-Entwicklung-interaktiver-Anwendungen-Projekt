@@ -133,6 +133,7 @@ public class App extends Application {
              * break;
              */
             case "GAMELevel1":
+                Navigation.getCurrentView().set("reset");
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Gigi.png");
@@ -144,6 +145,7 @@ public class App extends Application {
                 break;
 
             case "GAMELevel2":
+                Navigation.getCurrentView().set("reset");
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Ryu.png");
@@ -155,6 +157,7 @@ public class App extends Application {
                 break;
 
             case "GAMELevel3":
+                Navigation.getCurrentView().set("reset");
                 Navigation.getCurrentView().set(viewName);
                 gpController.stopGameThread();
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Tyler.png");
@@ -165,9 +168,6 @@ public class App extends Application {
                 setImLevel(true);
                 break;
 
-            case "GameEndeScreen":
-                Navigation.getCurrentView().set(viewName);
-                break;
             default:
                 System.err.println("Unbekannte Ansicht: " + viewName);
                 break;

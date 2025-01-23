@@ -82,4 +82,5 @@ public class GameLevel extends BorderPane {
     public Canvas getCanvas() {
         return canvas;
     }
+
 }

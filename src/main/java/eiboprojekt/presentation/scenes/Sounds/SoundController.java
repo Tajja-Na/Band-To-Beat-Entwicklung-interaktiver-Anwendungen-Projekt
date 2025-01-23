@@ -9,37 +9,43 @@ import javafx.beans.value.ObservableValue;
 public class SoundController {
     Sound sound;
 
-    public SoundController(Sound sound){
+    public SoundController(Sound sound) {
         this.sound = sound;
 
         initialize();
     }
-        
+
     private void initialize() {
-        Navigation.getCurrentView().addListener( 
-           (observable,  oldValue, newValue) -> {
+        Navigation.getCurrentView().addListener(
+                (observable, oldValue, newValue) -> {
 
-            switch(newValue){
-                case "GAMEPANEL":
-                    sound.loadTrack(0);
-                    System.out.println("ich hab den titel song geladen und spiel es von hier ab");
-                    //startSEThread();
-                    break;
+                    switch (newValue) {
+                        case "GAMEPANEL":
+                            sound.loadTrack(0);
+                            sound.loop();
+                            System.out.println("ich hab den titel song geladen und spiel es von hier ab");
+                            sound.setVolume(0.1);
+                            sound.play();
+                            break;
 
-                case "GAMELevel1":
-                    sound.loadTrack(7);
-                    break;
+                        case "GAMELevel1":
+                            sound.loadTrack(7);
+                            sound.setVolume(0.1);
+                            sound.play();
+                            break;
 
-                case "GAMELevel2":
-                    sound.loadTrack(8);
-                    break;
+                        case "GAMELevel2":
+                            sound.loadTrack(8);
+                            sound.setVolume(0.1);
+                            sound.play();
+                            break;
 
-                case "GAMELevel3":
-                    sound.loadTrack(9);
-                    break;
-            }
-            sound.setVolume(0.1);
-            sound.play();
-        });
+                        case "GAMELevel3":
+                            sound.loadTrack(9);
+                            sound.setVolume(0.1);
+                            sound.play();
+                            break;
+                    }
+                });
     }
 }

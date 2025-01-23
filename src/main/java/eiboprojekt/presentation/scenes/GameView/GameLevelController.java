@@ -165,7 +165,7 @@ public class GameLevelController {
         // Bei Game Over
         if (!gl.running) {
             gl.setzeCanvasLose();
-            app.switchView("test");
+            //app.switchView("test");
             gl.retryButton.setOnAction(e -> {
                 stopLevelThread();
                 restartGame();
