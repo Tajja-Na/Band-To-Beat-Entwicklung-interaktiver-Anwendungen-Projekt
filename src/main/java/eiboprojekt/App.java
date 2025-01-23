@@ -24,7 +24,7 @@ public class App extends Application {
     private StackPane rootPane;
     private WelcomeController wController;
     private IntroductionController iController;
-    private DialogPage dialogPage; // DialogPage hinzufügen
+    //private DialogPage dialogPage; // DialogPage hinzufügen
 
     private GamePanelController gpController;
 

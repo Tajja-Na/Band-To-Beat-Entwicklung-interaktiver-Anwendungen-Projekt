@@ -230,11 +230,12 @@ public class GamePanelController {
                         if (canInteract) {
                             // Der Spieler besitzt das benötigte Instrument -> Dialog starten
                             // DialogPage initialisieren und hinzufügen
-                            gp.setDialogPage(new DialogPage(700, 250, gp, m.getName(), app)); 
-                            gp.getChildren().add(gp.getDialogPage()); // Dialog zur GamePanel-Oberfläche hinzufügen
-                            gp.getDialogPage().setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
+                            //gp.setDpController(new DialogPageController(700, 250, gp, m.getName(), app));
+                            gp.setDpController(new DialogPageController(app, m.getName())); //DialogPageController rein tun
+                            gp.getChildren().add(gp.getDpController().getDp()); // Dialog zur GamePanel-Oberfläche hinzufügen
+                            gp.getDpController().setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
 
-                            gp.getDialogPage().show(); // Zeigt die Dialogseite an
+                            gp.getDpController().getDp().show(); // Zeigt die Dialogseite an
                             gp.setShowTextBubble(false);  // Blendet mögliche Warnungen aus
                         } else {
                             // Der Spieler besitzt das benötigte Instrument NICHT -> Warnung anzeigen

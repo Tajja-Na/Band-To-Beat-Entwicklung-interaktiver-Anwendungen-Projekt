@@ -10,7 +10,7 @@ public class GamePanel extends BorderPane{
     private final Canvas canvas;
 
     // Dialog
-    private DialogPage dialogPage; // Referenz für DialogPage
+    private DialogPageController dpController; // Referenz für DialogPage
 
     private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
     private boolean showWarning = true;  // Zeigt an, ob eine Warnung sichtbar ist
@@ -65,15 +65,15 @@ public class GamePanel extends BorderPane{
         this.app = app;
     }
 
-    public DialogPage getDialogPage() {
-        return dialogPage;
-    }
-
-    public void setDialogPage(DialogPage dialogPage) {
-        this.dialogPage = dialogPage;
-    }
-
     public TextBubble getInstrumentWarnung() {
         return instrumentWarnung;
     }
+
+    public DialogPageController getDpController() {
+        return dpController;
+    }
+
+    public void setDpController(DialogPageController dpController) {
+        this.dpController = dpController;
+    }   
 }

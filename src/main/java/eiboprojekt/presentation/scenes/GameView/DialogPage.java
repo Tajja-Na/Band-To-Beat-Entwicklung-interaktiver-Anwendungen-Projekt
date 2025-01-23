@@ -30,10 +30,10 @@ public class DialogPage extends StackPane {
     private static final String DIALOG_PATH = ASSETS_PATH + "Dialog/";
     private static final String CHARACTER_PATH = ASSETS_PATH + "Character/";
 
-    private GamePanel gp;
     private App app;
     private Rectangle background;
     private Button closeButton, nextButton, backButton, startButton;
+
     private TextFlow textFlow;
     private Text pageText;
     private List<String> dialogs;
@@ -44,16 +44,13 @@ public class DialogPage extends StackPane {
     private String currentPartner; // Aktueller Dialogpartner
 
     // Konstruktor, der die Dialogseite mit der Partnerbezeichnung initialisiert
-    public DialogPage(int width, int height, GamePanel gp, String partnerName, App app) {
+    public DialogPage(int width, int height, String partnerName, App app) {
         this.app = app;
-        this.gp = gp;
         this.currentPartner = partnerName; // Setzt den Dialogpartner
         initializeUI(width, height); // UI-Elemente initialisieren
         centerDialog(width, height); // Positioniert das Dialogfenster
         loadDialogs(partnerName + "_dialog.txt"); // Lädt den Dialog des Partners
-        updateDialogText(); // Aktualisiert den Text mit dem ersten Dialog
-        getStylesheets()
-                .add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
     }
 
     // Initialisiert alle UI-Komponenten
@@ -92,28 +89,11 @@ public class DialogPage extends StackPane {
         startButton = new Button("Start Game");
         startButton.setVisible(false); // Anfangs unsichtbar
 
-        //Je nach Partner anderes Level auswählen!   funktioniert nicht 
-        switch (currentPartner) {
-            case "Gigi":
-                startButton.setOnAction(e -> app.switchView("GAMELevel1"));
-                break;
-            case "Ryu":
-                startButton.setOnAction(e -> app.switchView("GAMELevel2"));
-                break;
-            case "Tyler":
-                startButton.setOnAction(e -> app.switchView("GAMELevel3"));
-                break;
-        }
-
-        //startButton.setOnAction(e -> app.switchView("GAMELevel3"));
-
         // VBox für alle Dialog-Elemente
         VBox dialogContent = new VBox(20);
         dialogContent.setAlignment(Pos.CENTER);
-        // dialogContent.minHeight(height);
-        // dialogContent.minWidth(width);
+
         dialogContent.getChildren().addAll(textBox, buttonBox, startButton);
-        // dialogContent.getStyleClass().add("main-box");
 
         // Alle Komponenten zum Dialog hinzufügen
         getChildren().addAll(background, dialogContent, imageContainer);
@@ -170,11 +150,6 @@ public class DialogPage extends StackPane {
 
         backButton.setDisable(true); // Der "Zurück"-Button ist am Anfang deaktiviert
 
-        // Event-Handler für die Schaltflächen
-        closeButton.setOnAction(e -> hide());
-        nextButton.setOnAction(e -> nextDialog());
-        backButton.setOnAction(e -> previousDialog());
-
         buttonBox.getChildren().addAll(backButton, closeButton, nextButton);
 
         return buttonBox;
@@ -209,60 +184,8 @@ public class DialogPage extends StackPane {
         }
     }
 
-    // Aktualisiert den Dialogtext
-    public void updateDialogText() {
-        if (!dialogs.isEmpty() && currentDialogIndex < dialogs.size()) {
-            String line = dialogs.get(currentDialogIndex);
-            String[] parts = line.split(":", 2);
-
-            if (parts.length == 2) {
-                String speaker = parts[0].trim(); // Sprecher extrahieren
-                String dialog = parts[1].trim(); // Dialog extrahieren
-
-                pageText.setText(speaker + ": " + dialog); // Text anzeigen
-                // pageText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill:
-                // white;");
-
-                updateImages(speaker); // Bild des Sprechers aktualisieren
-            } else {
-                pageText.setText(line); // Einzeilige Dialoge ohne Sprecher
-            }
-
-            backButton.setDisable(currentDialogIndex == 0); // "Zurück"-Button deaktivieren, wenn es der erste Dialog
-                                                            // ist
-            nextButton.setDisable(currentDialogIndex == dialogs.size() - 1); // "Weiter"-Button deaktivieren, wenn es
-                                                                             // der letzte Dialog ist
-
-            // Start-Button anzeigen, wenn der letzte Dialog erreicht ist
-            startButton.setVisible(currentDialogIndex == dialogs.size() - 1);
-
-            System.out.println("Current Dialog Index: " + currentDialogIndex); // Debugging-Information
-            // System.out.println("Current Dialog: " + line); // Debugging-Information
-        }
-    }
-
-    // Aktualisiert die Bilder des Sprechers
-    public void updateImages(String speaker) {
-        try {
-            loadCharacterImages(); // Lädt die Charakterbilder
-
-            ColorAdjust darkerEffect = new ColorAdjust(0, 0, -0.5, 0); // Dunklerer Effekt für inaktive Charaktere
-
-            if (speaker.equalsIgnoreCase("Timmy")) {
-                setImagesVisibility(true, false); // Timmy spricht
-                rightImageIdle.setEffect(darkerEffect); // Partnerbild dunkeln
-            } else if (speaker.equalsIgnoreCase(currentPartner)) {
-                setImagesVisibility(false, true); // Partner spricht
-                leftImageIdle.setEffect(darkerEffect); // Timmy-Bild dunkeln
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading images: " + e.getMessage());
-            setImagesVisibility(false, false); // Alle Bilder ausblenden bei einem Fehler
-        }
-    }
-
     // Lädt die Bilder für Timmy und den Partner
-    private void loadCharacterImages() throws Exception {
+    public void loadCharacterImages() throws Exception {
         Image timmyIdle = loadImage(CHARACTER_PATH + "Charakter1/timmy1.png");
         Image timmyTalking = loadImage(CHARACTER_PATH + "Charakter1/timmy2.png");
         Image partnerIdle = loadImage(CHARACTER_PATH + currentPartner + "/idle.png");
@@ -278,7 +201,7 @@ public class DialogPage extends StackPane {
     }
 
     // Hilfsmethode zum Laden eines Bildes
-    private Image loadImage(String path) throws Exception {
+    public Image loadImage(String path) throws Exception {
         File file = new File(path);
         if (!file.exists())
             throw new IOException("File not found: " + path);
@@ -286,7 +209,7 @@ public class DialogPage extends StackPane {
     }
 
     // Setzt die Sichtbarkeit der Bilder
-    private void setImagesVisibility(boolean timmyTalkingVisible, boolean partnerTalkingVisible) {
+    public void setImagesVisibility(boolean timmyTalkingVisible, boolean partnerTalkingVisible) {
         leftImageIdle.setVisible(!timmyTalkingVisible);
         leftImageTalking.setVisible(timmyTalkingVisible);
 
@@ -294,33 +217,8 @@ public class DialogPage extends StackPane {
         rightImageTalking.setVisible(partnerTalkingVisible);
     }
 
-    // Nächsten Dialog anzeigen
-    public void nextDialog() {
-        if (currentDialogIndex < dialogs.size() - 1) {
-            currentDialogIndex++;
-            updateDialogText();
-        }
-    }
-
-    // Vorherigen Dialog anzeigen
-    public void previousDialog() {
-        if (currentDialogIndex > 0) {
-            currentDialogIndex--;
-            updateDialogText();
-        }
-    }
-
-    // Setzt den aktuellen Partner und lädt dessen Dialoge
     public void setCurrentPartner(String partnerName) {
         this.currentPartner = partnerName; // Partnername aktualisieren
-        loadDialogs(partnerName + "_dialog.txt"); // Dialoge für den neuen Partner laden
-        resetDialog(); // Dialog zurücksetzen und den ersten Dialogtext anzeigen
-    }
-
-    // Setzt den Dialog auf den Anfang zurück
-    public void resetDialog() {
-        currentDialogIndex = 0; // Index zurücksetzen
-        updateDialogText(); // Text und Schaltflächen aktualisieren
     }
 
     // Zeigt das Dialogfenster an
@@ -336,5 +234,77 @@ public class DialogPage extends StackPane {
     // Gibt den Start-Button zurück
     public Button getSwitchButton() {
         return startButton;
+    }
+
+    public Button getCloseButton() {
+        return closeButton;
+    }
+
+    public Button getNextButton() {
+        return nextButton;
+    }
+
+    public Button getBackButton() {
+        return backButton;
+    }
+
+    public Button getStartButton() {
+        return startButton;
+    }
+
+    public int getCurrentDialogIndex() {
+        return currentDialogIndex;
+    }
+
+    public void setCurrentDialogIndex(int currentDialogIndex) {
+        this.currentDialogIndex = currentDialogIndex;
+    }
+
+    public List<String> getDialogs() {
+        return dialogs;
+    }
+
+    public void setDialogs(List<String> dialogs) {
+        this.dialogs = dialogs;
+    }
+
+    public ImageView getLeftImageIdle() {
+        return leftImageIdle;
+    }
+
+    public void setLeftImageIdle(ImageView leftImageIdle) {
+        this.leftImageIdle = leftImageIdle;
+    }
+
+    public ImageView getLeftImageTalking() {
+        return leftImageTalking;
+    }
+
+    public void setLeftImageTalking(ImageView leftImageTalking) {
+        this.leftImageTalking = leftImageTalking;
+    }
+
+    public ImageView getRightImageIdle() {
+        return rightImageIdle;
+    }
+
+    public void setRightImageIdle(ImageView rightImageIdle) {
+        this.rightImageIdle = rightImageIdle;
+    }
+
+    public ImageView getRightImageTalking() {
+        return rightImageTalking;
+    }
+
+    public void setRightImageTalking(ImageView rightImageTalking) {
+        this.rightImageTalking = rightImageTalking;
+    }
+
+    public Text getPageText() {
+        return pageText;
+    }
+
+    public void setPageText(Text pageText) {
+        this.pageText = pageText;
     }
 }
