@@ -3,47 +3,24 @@ package eiboprojekt.presentation.scenes.Sounds;
 import de.hsrm.mi.eibo.simpleplayer.SimpleAudioPlayer;
 import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 import eiboprojekt.presentation.scenes.Navigation;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Sound {
 
-    private SimpleIntegerProperty currentPosition;
+    private SimpleIntegerProperty currentPosition = new SimpleIntegerProperty();
     private SimpleIntegerProperty property;
 
     Track tracks[] = new Track[15];
     public SimpleAudioPlayer audioPlayer;
-    public PlayThread playThread;
     public SimpleMinim minim;
     public boolean isPlaying = false;
 
     public class Track {
         String filepath;
-        int length = 30; // 103 sekunden jeder song
 
         public Track(String filepath) {
             this.filepath = filepath;
-        }
-    }
-
-    public class PlayThread extends Thread {
-        public void run() {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    property = new SimpleIntegerProperty(audioPlayer.position());
-                    System.out.println("Property: " + property);
-                    setcurrentPosition(property);
-
-                    if (!getAudioPlayer().isPlaying()) {
-                        isPlaying = true;
-                        audioPlayer.play(0);
-                    }
-
-                    Thread.sleep(1000);
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.out.println("Thread wurde unterbrochen.");
-            }
         }
     }
 
@@ -74,17 +51,22 @@ public class Sound {
     }
 
     public void play() {
-        // Falls ein alter Thread läuft, unterbreche ihn
-        if (playThread != null && playThread.isAlive()) {
-            playThread.interrupt(); // Setzt das Interrupt-Flag
-            System.out.println("Alter Thread wurde unterbrochen.");
+        if (audioPlayer != null) {
+
+            Thread playThread = new Thread(() -> {
+                audioPlayer.play(0);
+                while(audioPlayer.isPlaying()){
+                    Platform.runLater(() -> getcurrentPosition().set(audioPlayer.position()/1000));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            });
+            playThread.start();
         }
-    
-        // Starte einen neuen Thread
-        playThread = new PlayThread();
-        playThread.setDaemon(true); // Hintergrund-Thread
-        playThread.start();
-        System.out.println("Neuer Thread wurde gestartet.");
     }
     
 

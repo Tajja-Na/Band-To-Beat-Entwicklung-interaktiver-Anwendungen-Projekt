@@ -132,7 +132,6 @@ public class GamePanelController {
     }
 
     public void stopGameThread() {
-        stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             gameThreadRunning = false;
@@ -184,16 +183,6 @@ public class GamePanelController {
         if (gp.isShowWarning()) {
             gp.getWarnung().draw(gc, 200, 100); // TextBubble anzeigen
         }
-    }
-
-    public void stopMusic() {
-        sound.pause();
-    }
-
-    public void playSE(int i) { // SE = Sound Effect! YEY!
-
-        sound.loadTrack(i);
-        sound.play();
     }
 
     public void handleKeyPressed(KeyEvent event) {

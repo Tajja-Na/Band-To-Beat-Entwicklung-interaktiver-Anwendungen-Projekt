@@ -29,18 +29,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class GameLevelController{
-    //Setup
+public class GameLevelController {
+    // Setup
     private App app;
     private GameLevel gl;
     private FeldManagerLevel fm;
     private KeyHandlern keyHandler;
 
     private Sound sound;
+    private final int LEVEL_LAENGE = 103; // 103 sekunden
 
     private boolean youWon;
 
-    //Objekte und Kollision
+    // Objekte und Kollision
     private int collisionCount = 0; // Kollisionen zählen
     private final int maxCollisions = 3;
     private List<Double[]> obstacles = new ArrayList<>();
@@ -50,15 +51,15 @@ public class GameLevelController{
 
     private String obstacleName;
 
-    //Game Loop bzw Level Loop 
+    // Game Loop bzw Level Loop
     AnimationTimer gameLoop;
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
     private boolean levelThreadRunning = false;
 
-    private final MainCharacterLevel player;  
+    private final MainCharacterLevel player;
 
     public GameLevelController(int width, int height, App app, String obstacleName) {
-        this.app = app; 
+        this.app = app;
         this.gl = new GameLevel();
         this.obstacleName = obstacleName;
         this.fm = new FeldManagerLevel(app);
@@ -72,21 +73,22 @@ public class GameLevelController{
         gl.setFocusTraversable(true);
         gl.requestFocus(); // Fokus setzen
 
-        //Player
+        // Player
         player = new MainCharacterLevel(app, keyHandler, gl);
         gl.running = true;
         youWon = false;
 
-        //Objekte
+        // Objekte
         obstacles = new ArrayList<>();
         String path = "src/main/java/eiboprojekt/presentation/scenes/Object/assets/";
         // Hindernisbild laden
-        obstacleImage = new Image(new File(path+obstacleName).toURI().toString());
+        obstacleImage = new Image(new File(path + obstacleName).toURI().toString());
 
-        //Sound
+        // Sound
         sound = app.getSound();
-        //Hier dann der Index vom Lied des Levels, einfügen des Liedes in der Sound-Klasse
-        //playMusic(0);
+        // Hier dann der Index vom Lied des Levels, einfügen des Liedes in der
+        // Sound-Klasse
+        // playMusic(0);
     }
 
     public void startLevelThread(GraphicsContext gc) {
@@ -111,7 +113,7 @@ public class GameLevelController{
     }
 
     public void stopLevelThread() {
-        //stopMusic();
+        // stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             levelThreadRunning = false;
@@ -120,7 +122,7 @@ public class GameLevelController{
 
     public void update() {
         player.update();
-        
+
         // Hindernisse bewegen
         for (Double[] obstacle : obstacles) {
             obstacle[0] -= 5; // Bewegung nach links
@@ -139,7 +141,8 @@ public class GameLevelController{
         // Neue Hindernisse hinzufügen
         if (Math.random() < 0.02) { // Zufälliges Erzeugen
             if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
-                Double[] newObstacle = new Double[]{(double) app.screenWidth, (double) (player.groundY + app.tileSize/2)};
+                Double[] newObstacle = new Double[] { (double) app.screenWidth,
+                        (double) (player.groundY + app.tileSize / 2) };
                 obstacles.add(newObstacle);
             }
         }
@@ -154,12 +157,12 @@ public class GameLevelController{
         for (Double[] obstacle : obstacles) {
             gc.drawImage(obstacleImage, obstacle[0], obstacle[1], app.tileSize, app.tileSize);
         }
-    
+
         // Kollisionszähler zeichnen
         gc.setFill(Color.PURPLE);
         gc.fillText("Kollisionen: " + collisionCount, 10, 20);
 
-        //Bei Game Over
+        // Bei Game Over
         if (!gl.running) {
             gl.setzeCanvasLose();
             gl.retryButton.setOnAction(e -> {
@@ -173,54 +176,52 @@ public class GameLevelController{
             });
         }
         sound.getcurrentPosition().addListener(
-            (observable, oldValue, newValue) -> {
-            System.out.println("Position: "+newValue.intValue());
-            if (newValue.intValue() >= 30) {
-      
-                gl.setzeCanvasLose();
-                gl.retryButton.setOnAction(e -> {
-                    stopLevelThread();
-                    restartGame();
-                });
+                (observable, oldValue, newValue) -> {
+                    if (newValue.intValue() >= LEVEL_LAENGE) {
+                        gl.setzeCanvasLose();
+                        gl.retryButton.setOnAction(e -> {
+                            stopLevelThread();
+                            restartGame();
+                        });
 
-                gl.backToMapButton.setOnAction(e -> {
-                    stopLevelThread();
-                    goToMap();
+                        gl.backToMapButton.setOnAction(e -> {
+                            stopLevelThread();
+                            goToMap();
+                        });
+                    }
                 });
-            }
-        });
 
         if (youWon) {
             // Hier dann Dialog mit Character, der sich der Band anschließt! Yey!
-            // hier noch gamethread beenden und 
+            // hier noch gamethread beenden und
         }
     }
 
     private void checkCollisions() {
-        for (Iterator<Double[]> iterator = obstacles.iterator(); iterator.hasNext(); ) {
+        for (Iterator<Double[]> iterator = obstacles.iterator(); iterator.hasNext();) {
             Double[] obstacle = iterator.next();
             if (player.getBounds().intersects(obstacle[0], obstacle[1], app.tileSize, app.tileSize)) {
                 collisionCount++;
                 iterator.remove();
                 if (collisionCount >= maxCollisions) {
                     gl.running = false;
-                    //gameOver();
+                    // gameOver();
                 }
             }
         }
     }
 
     private void restartGame() {
-        switch(obstacleName){
+        switch (obstacleName) {
             case "Gigi.png":
                 app.switchView("GAMELevel1");
-            break;
+                break;
             case "Ryu.png":
                 app.switchView("GAMELevel2");
-            break;
+                break;
             case "Tyler.png":
                 app.switchView("GAMELevel3");
-            break;
+                break;
         }
 
     }
@@ -229,23 +230,27 @@ public class GameLevelController{
         app.switchView("GAMEPANEL");
     }
 
-    private void drawLevel(){
+    private void drawLevel() {
         fm.ladeKarte("assets/Karte/levelbase1.txt", gl.MAX_LEVEL_COL, gl.MAX_LEVEL_ROW);
-        fm.drawLevel(gl.getCanvas().getGraphicsContext2D(), gl.MAX_LEVEL_COL, gl.MAX_LEVEL_ROW); 
+        fm.drawLevel(gl.getCanvas().getGraphicsContext2D(), gl.MAX_LEVEL_COL, gl.MAX_LEVEL_ROW);
 
         player.draw(gl.getCanvas().getGraphicsContext2D(), app.tileSize);
     }
 
-    /*public void playMusic(int i) {
+    /*
+     * public void playMusic(int i) {
+     * 
+     * sound.loadTrack(i);
+     * sound.play();
+     * sound.setVolume(0.2); // nicht so laut
+     * }
+     */
 
-        sound.loadTrack(i);
-        sound.play();
-        sound.setVolume(0.2); // nicht so laut
-    }*/
-
-    /*public void stopMusic() {
-        sound.stop();
-    }*/
+    /*
+     * public void stopMusic() {
+     * sound.stop();
+     * }
+     */
 
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);
@@ -255,7 +260,7 @@ public class GameLevelController{
         keyHandler.keyReleased(event);
     }
 
-    public GameLevel getGl(){
+    public GameLevel getGl() {
         return gl;
     }
 }
