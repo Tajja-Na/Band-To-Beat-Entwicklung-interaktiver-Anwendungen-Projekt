@@ -39,6 +39,11 @@ public class App extends Application {
     private boolean ImLevel = false;
 
     private Sound sound;
+    
+    public Sound getSound() {
+        return sound;
+    }
+
     private SoundController soundController;
 
     public final int tileSize = 64; // hier 128x128

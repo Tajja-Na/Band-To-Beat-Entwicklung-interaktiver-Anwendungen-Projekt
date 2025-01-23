@@ -84,7 +84,7 @@ public class GameLevelController{
         obstacleImage = new Image(new File(path+obstacleName).toURI().toString());
 
         //Sound
-        sound = new Sound();
+        sound = app.getSound();
         //Hier dann der Index vom Lied des Levels, einfügen des Liedes in der Sound-Klasse
         //playMusic(0);
     }
@@ -161,7 +161,7 @@ public class GameLevelController{
 
         //Bei Game Over
         if (!gl.running) {
-            gl.setzeCanvas();
+            gl.setzeCanvasLose();
             gl.retryButton.setOnAction(e -> {
                 stopLevelThread();
                 restartGame();
@@ -172,6 +172,23 @@ public class GameLevelController{
                 goToMap();
             });
         }
+        sound.getcurrentPosition().addListener(
+            (observable, oldValue, newValue) -> {
+            System.out.println("Position: "+newValue.intValue());
+            if (newValue.intValue() >= 30) {
+      
+                gl.setzeCanvasLose();
+                gl.retryButton.setOnAction(e -> {
+                    stopLevelThread();
+                    restartGame();
+                });
+
+                gl.backToMapButton.setOnAction(e -> {
+                    stopLevelThread();
+                    goToMap();
+                });
+            }
+        });
 
         if (youWon) {
             // Hier dann Dialog mit Character, der sich der Band anschließt! Yey!
@@ -194,7 +211,18 @@ public class GameLevelController{
     }
 
     private void restartGame() {
-        app.switchView("GAMELevel1");
+        switch(obstacleName){
+            case "Gigi.png":
+                app.switchView("GAMELevel1");
+            break;
+            case "Ryu.png":
+                app.switchView("GAMELevel2");
+            break;
+            case "Tyler.png":
+                app.switchView("GAMELevel3");
+            break;
+        }
+
     }
 
     private void goToMap() {

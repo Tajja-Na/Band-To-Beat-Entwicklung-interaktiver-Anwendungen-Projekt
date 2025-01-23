@@ -71,8 +71,12 @@ public class GameLevel extends BorderPane {
         setCenter(centerBox);
     }
 
-    public void setzeCanvas(){
+    public void setzeCanvasLose(){
         this.setCenter(gameOverScreen);
+    }
+
+    public void setzeCanvasWin(){
+        //this.setCenter(winScreen);
     }
 
     public Canvas getCanvas() {

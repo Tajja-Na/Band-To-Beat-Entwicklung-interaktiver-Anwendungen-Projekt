@@ -8,24 +8,6 @@ import javafx.beans.value.ObservableValue;
 
 public class SoundController {
     Sound sound;
-    PlayThread playThread;
-
-    public class PlayThread extends Thread{
-        public void run(){
-            try {
-                while (!Thread.currentThread().isInterrupted()) { 
-                    if (!sound.getAudioPlayer().isPlaying()) {
-                        sound.play();
-                    }
-                    Thread.sleep(100); 
-                }
-            } catch (InterruptedException e) {
-                sound.stop();
-                Thread.currentThread().interrupt(); 
-                System.out.println("Thread wurde unterbrochen.");
-            }
-        }
-    }
 
     public SoundController(Sound sound){
         this.sound = sound;
@@ -58,24 +40,7 @@ public class SoundController {
                     break;
             }
             sound.setVolume(0.1);
-            play();
+            sound.play();
         });
     }
-
-    public void play(){
-        if(playThread != null && playThread.isAlive()){
-            playThread.interrupt();
-            System.out.println("hi bin in interrupted");
-        }
-        playThread = new PlayThread();
-        playThread.setDaemon(true);
-        playThread.start();
-    }
-
-    /*public void startSEThread(){
-        playThread = new PlayThread();
-        playThread.setDaemon(true);
-        sound.loadTrack(1);
-        playThread.start();
-    }*/
 }

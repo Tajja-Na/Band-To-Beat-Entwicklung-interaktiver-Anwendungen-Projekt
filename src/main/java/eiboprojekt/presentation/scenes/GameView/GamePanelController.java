@@ -52,7 +52,7 @@ public class GamePanelController {
     public CollisionCheck oChecker;
 
     // Sound
-    Sound sound = new Sound();
+    Sound sound;
 
     // AnimationTimer für die Spielschleife
     AnimationTimer gameLoop;
@@ -65,6 +65,7 @@ public class GamePanelController {
     public GamePanelController(App app) {
         this.app = app;
         this.gp = new GamePanel(app);
+        this.sound = app.getSound();
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
         gp.setOnKeyPressed(this::handleKeyPressed);
@@ -186,7 +187,7 @@ public class GamePanelController {
     }
 
     public void stopMusic() {
-        sound.stop();
+        sound.pause();
     }
 
     public void playSE(int i) { // SE = Sound Effect! YEY!
