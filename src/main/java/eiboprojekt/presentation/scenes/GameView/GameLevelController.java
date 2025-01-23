@@ -152,25 +152,37 @@ public class GameLevelController {
 
         if (gl.running) {
             sound.getcurrentPosition().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (newValue.intValue() >= LEVEL_LAENGE) {
-                        youWon = true;
-                        if (obstacleName != "Tyler.png") {
-                            gl.setzeCanvasWin();
-                            gl.backToMapButtonWin.setOnAction(e -> {
-                                stopLevelThread();
-                                goToMap();
-                            });
-                        } else {
-                            if(gl.running) {
-                                stopLevelThread();
-                                app.switchView("ENDEVIEW");
+                    (observable, oldValue, newValue) -> {
+                        if (newValue.intValue() >= LEVEL_LAENGE) {
+                            youWon = true;
+                            if (gl.running) {
+                                switch (obstacleName) {
+                                    case "Gigi.png":
+                                        gl.setzeCanvasWinGigi();
+                                        gl.backToMapButtonWinGigi.setOnAction(e -> {
+                                            stopLevelThread();
+                                            goToMap();
+                                        });
+                                        break;
+                                    case "Ryu.png":
+                                        gl.setzeCanvasWinRyu();
+                                        gl.backToMapButtonWinRyu.setOnAction(e -> {
+                                            stopLevelThread();
+                                            goToMap();
+                                        });
+                                        break;
+                                    case "Tyler.png":
+
+                                        stopLevelThread();
+                                        app.switchView("ENDEVIEW");
+                                        break;
+
+                                    default:
+                                        break;
+                                }
                             }
-                            
-                            
                         }
-                    }
-                });
+                    });
         }
 
     }
@@ -202,7 +214,7 @@ public class GameLevelController {
                 goToMap();
             });
         }
-        
+
     }
 
     private void checkCollisions() {

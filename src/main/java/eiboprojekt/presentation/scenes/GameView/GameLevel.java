@@ -1,15 +1,24 @@
 package eiboprojekt.presentation.scenes.GameView;
 
+import java.io.File;
+
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 public class GameLevel extends BorderPane {
     // Screen settings
@@ -29,16 +38,24 @@ public class GameLevel extends BorderPane {
     public final int WORLS_HEIGHT = tileSize * MAX_LEVEL_ROW;
 
     private Canvas canvas;
+    
+    Text winHLGigi;
+    Text winTextGigi;
+    private VBox winScreenGigi;
+    Button backToMapButtonWinGigi;
+
+    Text winHLRyu;
+    Text winTextRyu;
+    Button backToMapButtonRyu;
+    private VBox winScreenRyu;
+    Button backToMapButtonWinRyu;
+
+    VBox gameOverScreen;
     Text gameOverText;
-    Text winHL;
-    Text winText;
     Button retryButton;
     Button backToMapButton;
-    VBox gameOverScreen;
     HBox buttons;
     VBox centerBox;
-    private VBox winScreen;
-    Button backToMapButtonWin;
 
     public boolean running;
 
@@ -73,27 +90,93 @@ public class GameLevel extends BorderPane {
 
         gameOverScreen.getChildren().addAll(gameOverText, buttons);
 
-        //WIN SCREEN:
-        winScreen = new VBox(40);
-        winScreen.setAlignment(Pos.CENTER);
-        winScreen.setPrefSize(screenWidth, screenHeight);
+        //WIN SCREEN Gigi:
+        winScreenGigi = new VBox(40);
+        winScreenGigi.setAlignment(Pos.CENTER);
+        winScreenGigi.setPrefSize(screenWidth, screenHeight);
 
-        winScreen.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+        winScreenGigi.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
 
-        winHL = new Text("Congratulations! You wooooon!");
-        winHL.setFont(new Font(80));
-        winHL.setFill(Color.BLUEVIOLET);
+        winHLGigi = new Text("Congratulations! \nYou wooooon!");
+        winHLGigi.setFont(new Font(80));
+        winHLGigi.setFill(Color.BLUEVIOLET);
+        winHLGigi.setTextAlignment(TextAlignment.CENTER);
 
-        backToMapButtonWin = new Button("Zurück zur Map");
-        backToMapButtonWin.getStyleClass().add("button");
+        backToMapButtonWinGigi = new Button("Zurück zur Map");
+        backToMapButtonWinGigi.getStyleClass().add("button");
 
-        winText = new Text("Du hast ein Bandmitglied überzeugt Teil deiner Band zu sein! Amazing, immer weiter so!");
-        winText.setFont(new Font(20));
-        winText.setFill(Color.BLACK);
+        winTextGigi = new Text("Du hast Gigi davon überzeugt Teil deiner Band zu sein! Amazing! Und jetzt geht's direkt weiter, du brauchst noch einen Drummer.");
+        winTextGigi.setFont(new Font(20));
+        winTextGigi.setFill(Color.BLACK);
+        TextFlow textFlowGigi = new TextFlow(winTextGigi);
+        textFlowGigi.setPrefWidth(screenWidth - 160);
+        textFlowGigi.setPadding(new Insets(0, 80, 0, 80));
+        textFlowGigi.setTextAlignment(TextAlignment.CENTER);
 
-        winScreen.getChildren().addAll(winHL, winText, backToMapButtonWin);
+        Region spacer1 = new Region();
+        Region spacer2 = new Region();
+        VBox.setVgrow(spacer1, Priority.ALWAYS);
+        VBox.setVgrow(spacer2, Priority.ALWAYS);
+
+        HBox imageBoxGigi = new HBox(10);
+        imageBoxGigi.setAlignment(Pos.BOTTOM_CENTER);
+        imageBoxGigi.setPadding(new Insets(0, 0, 64, 0));
+
+        for (int i = 0; i < 4; i++) {
+            ImageView imageView = new ImageView(new Image(new File("assets/LevelWin/gigiLevel" + i + ".png").toURI().toString()));
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(100);
+
+            imageBoxGigi.getChildren().add(imageView);
+        }
+
+        winScreenGigi.getChildren().addAll(spacer1, winHLGigi, textFlowGigi, backToMapButtonWinGigi, spacer2, imageBoxGigi);
+
+        //WIN SCREEN Ryu:
+        winScreenRyu = new VBox(40);
+        winScreenRyu.setAlignment(Pos.CENTER);
+        winScreenRyu.setPrefSize(screenWidth, screenHeight);
+
+        winScreenRyu.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+
+        winHLRyu = new Text("Congratulations! \nYou won again!");
+        winHLRyu.setFont(new Font(80));
+        winHLRyu.setFill(Color.BLUEVIOLET);
+        winHLRyu.setTextAlignment(TextAlignment.CENTER);
+
+        backToMapButtonWinRyu = new Button("Zurück zur Map");
+        backToMapButtonWinRyu.getStyleClass().add("button");
+
+        winTextRyu = new Text("Jetzt hast du auch Ryu davon überzeugt teil deiner Band zu werden! Wow, du bist so nah dran deinen Traum zu verwirklichen. Dir fehlt noch ein Star-Band-Mitgllied und ich glaube du hast schon eine gute Idee wer das sein könnte, nicht wahr?");
+        winTextRyu.setFont(new Font(20));
+        winTextRyu.setFill(Color.BLACK);
+        TextFlow textFlowRyu = new TextFlow(winTextRyu);
+        textFlowRyu.setPrefWidth(screenWidth - 160);
+        textFlowRyu.setPadding(new Insets(0, 80, 0, 80));
+        textFlowRyu.setTextAlignment(TextAlignment.CENTER);
+
+        Region spacer3 = new Region();
+        Region spacer4 = new Region();
+        VBox.setVgrow(spacer3, Priority.ALWAYS);
+        VBox.setVgrow(spacer4, Priority.ALWAYS);
+
+        HBox imageBoxRyu = new HBox(10);
+        imageBoxRyu.setAlignment(Pos.BOTTOM_CENTER);
+        imageBoxRyu.setPadding(new Insets(0, 0, 64, 0));
+
+        for (int i = 0; i < 4; i++) {
+            ImageView imageView = new ImageView(new Image(new File("assets/LevelWin/ryuLevel" + i + ".png").toURI().toString()));
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(100);
+
+            imageBoxRyu.getChildren().add(imageView);
+        }
+
+        winScreenRyu.getChildren().addAll(spacer3, winHLRyu, textFlowRyu, backToMapButtonWinRyu, spacer4, imageBoxRyu);
 
 
+
+        //DEFAULT IN GAME:
         centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(getCanvas());
@@ -104,8 +187,12 @@ public class GameLevel extends BorderPane {
         this.setCenter(gameOverScreen);
     }
 
-    public void setzeCanvasWin(){
-        this.setCenter(winScreen);
+    public void setzeCanvasWinGigi(){
+        this.setCenter(winScreenGigi);
+    }
+
+    public void setzeCanvasWinRyu(){
+        this.setCenter(winScreenRyu);
     }
 
     public Canvas getCanvas() {
