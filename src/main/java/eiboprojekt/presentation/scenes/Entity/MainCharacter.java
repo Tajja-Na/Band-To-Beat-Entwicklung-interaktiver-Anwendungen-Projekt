@@ -159,22 +159,18 @@ public class MainCharacter extends Entity {
                 case "Schlagzeug":
                     hasDrums = true;
                     app.getGpController().obj[i] = null;
-                    System.out.println("You've got drums!");
                     break;
                 case "Gitarre":
                     hasGitarre = true;
                     app.getGpController().obj[i] = null;
-                    System.out.println("You've got a gitarre!");
                     break;
                 case "Mikrofon":
                     hasMicro = true;
                     app.getGpController().obj[i] = null;
-                    System.out.println("You've got a microphone! Let's find some bandmembers!");
                     break;
                 case "Keyboard":
                     hasKeyboard = true;
                     app.getGpController().obj[i] = null;
-                    System.out.println("You've got a keyboard!");
                     break;
             }
         }
