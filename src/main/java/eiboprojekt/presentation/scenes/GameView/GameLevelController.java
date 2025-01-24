@@ -141,7 +141,7 @@ public class GameLevelController {
         if (gl.running) {
             sound.getcurrentPosition().addListener(
                     (observable, oldValue, newValue) -> {
-                        if (newValue.intValue() >= LEVEL_LAENGE) {
+                        if (newValue.intValue() >= 6) {
                             youWon = true;
                             if (gl.running) {
                                 switch (obstacleName) {

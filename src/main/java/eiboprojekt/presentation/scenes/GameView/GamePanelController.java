@@ -139,7 +139,7 @@ public class GamePanelController {
     private void draw(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, gp.getCanvas().getWidth(), gp.getCanvas().getHeight());
-        feldM.ladeKarte("assets/Karte/bb.txt");
+        feldM.ladeKarte("assets/Karte/weltMap.txt");
         feldM.draw(gc);
 
         // Erstellt ein Array aller zu zeichnenden Entities
