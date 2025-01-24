@@ -7,17 +7,12 @@ import javafx.scene.image.Image;
 public class Mikrofon extends Objekt {
 
     public Mikrofon() {
-
         name = "Mikrofon";
         try {
-
-            image = new Image(new File("src/main/java/eiboprojekt/presentation/scenes/Object/assets/micro.png").toURI().toString());            
-
+            image = new Image(new File("assets/Objects/micro.png").toURI().toString());            
         } catch (Exception e) {
-
             e.printStackTrace();
         }
         collision = true;
     }
-    
 }

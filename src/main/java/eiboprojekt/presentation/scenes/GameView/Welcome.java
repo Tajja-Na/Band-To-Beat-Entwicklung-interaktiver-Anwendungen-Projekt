@@ -25,8 +25,7 @@ public class Welcome extends BorderPane {
     }
 
     private void initializeUI() {
-        // Center Container
-        VBox centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
+        VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.TOP_CENTER);
 
         // Logo
@@ -40,7 +39,8 @@ public class Welcome extends BorderPane {
         centerBox.getChildren().addAll(logoView, switchButton);
 
         // Background Image
-        ImageView backgroundImage = new ImageView(new Image(new File("assets/Welcome/timmy_detail_ansicht_mund_zu.png").toURI().toString()));
+        ImageView backgroundImage = new ImageView(
+                new Image(new File("assets/Welcome/timmy_detail_ansicht_mund_zu.png").toURI().toString()));
         backgroundImage.setOpacity(0.4);
         backgroundImage.setPreserveRatio(true);
         backgroundImage.setFitWidth(280);

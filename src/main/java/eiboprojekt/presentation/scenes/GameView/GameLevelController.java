@@ -4,31 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.io.File;
-
 import eiboprojekt.App;
-import eiboprojekt.presentation.scenes.Entity.Entity;
-import eiboprojekt.presentation.scenes.Entity.MainCharacter;
 import eiboprojekt.presentation.scenes.Entity.MainCharacterLevel;
-import eiboprojekt.presentation.scenes.Entity.Member;
-import eiboprojekt.presentation.scenes.Felder.FeldManager;
 import eiboprojekt.presentation.scenes.Felder.FeldManagerLevel;
-import eiboprojekt.presentation.scenes.Object.Objekt;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class GameLevelController {
     // Setup
@@ -36,30 +22,26 @@ public class GameLevelController {
     private GameLevel gl;
     private FeldManagerLevel fm;
     private KeyHandlern keyHandler;
-
-    private Sound sound;
-    private final int LEVEL_LAENGE = 105; // 103 sekunden
-
     private boolean youWon;
+    private Sound sound;
+    private final int LEVEL_LAENGE = 105; // 105 sekunden
 
     // Objekte und Kollision
     private int collisionCount = 0; // Kollisionen zählen
     private final int maxCollisions = 3;
     private List<Double[]> obstacles = new ArrayList<>();
     private Double lastObstacleX = null;
-
     private Image obstacleImage;
-
     private String obstacleName;
 
-    // Game Loop bzw Level Loop
-    AnimationTimer gameLoop;
-    // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
+    // GameLevel Loop
+    public AnimationTimer gameLoop;
     private boolean levelThreadRunning = false;
 
-    private long startTime; // Startzeit des Levels
-    private final int MAX_TIME = 105; // Maximale Zeit in Sekunden
-    private int elapsedTime; // Vergangene Zeit in Sekunden
+    // Timer
+    private long startTime;
+    private final int MAX_TIME = 105;
+    private int elapsedTime;
 
     private final MainCharacterLevel player;
 
@@ -71,32 +53,25 @@ public class GameLevelController {
         startTime = System.currentTimeMillis();
         elapsedTime = 0;
 
-
-        // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
         gl.setOnKeyPressed(this::handleKeyPressed);
         gl.setOnKeyReleased(this::handleKeyReleased);
 
-        // Setze den Fokus für Tasteneingaben
         gl.setFocusTraversable(true);
-        gl.requestFocus(); // Fokus setzen
+        gl.requestFocus();
 
         // Player
-        player = new MainCharacterLevel(app, keyHandler, gl);
+        player = new MainCharacterLevel(app, keyHandler);
         gl.running = true;
         youWon = false;
 
         // Objekte
         obstacles = new ArrayList<>();
-        String path = "src/main/java/eiboprojekt/presentation/scenes/Object/assets/";
-        // Hindernisbild laden
+        String path = "assets/Objects/";
         obstacleImage = new Image(new File(path + obstacleName).toURI().toString());
 
         // Sound
         sound = app.getSound();
-        // Hier dann der Index vom Lied des Levels, einfügen des Liedes in der
-        // Sound-Klasse
-        // playMusic(0);
     }
 
     public void startLevelThread(GraphicsContext gc) {
@@ -104,7 +79,6 @@ public class GameLevelController {
             return; // Verhindere, dass der Game-Thread mehrfach gestartet wird
         }
         levelThreadRunning = true;
-        System.out.println("Level Thread gestartet.");
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -121,7 +95,6 @@ public class GameLevelController {
     }
 
     public void stopLevelThread() {
-        // stopMusic();
         if (gameLoop != null) {
             gameLoop.stop();
             levelThreadRunning = false;
@@ -130,10 +103,10 @@ public class GameLevelController {
 
     public void update() {
 
-        elapsedTime = (int) ((System.currentTimeMillis() - startTime) / 1000); // Zeit in Sekunden
+        elapsedTime = (int) ((System.currentTimeMillis() - startTime) / 1000);
         if (elapsedTime > MAX_TIME) {
-            elapsedTime = MAX_TIME; // Begrenze die Zeit
-            gl.running = false; // Stoppe das Spiel, wenn die Zeit abläuft
+            elapsedTime = MAX_TIME;
+            gl.running = false;
         }
 
         player.update();
@@ -155,7 +128,6 @@ public class GameLevelController {
             checkCollisions();
 
             // Neue Hindernisse hinzufügen
-
             if (Math.random() < 0.02) { // Zufälliges Erzeugen
                 if (lastObstacleX == null || app.screenWidth - lastObstacleX >= 4 * app.tileSize) {
                     Double[] newObstacle = new Double[] { (double) app.screenWidth,
@@ -165,6 +137,7 @@ public class GameLevelController {
             }
         }
 
+        // Listener für den Fall Win
         if (gl.running) {
             sound.getcurrentPosition().addListener(
                     (observable, oldValue, newValue) -> {
@@ -227,7 +200,6 @@ public class GameLevelController {
         if (!gl.running) {
             gl.setzeCanvasLose();
             stopLevelThread();
-            // app.switchView("test");
             gl.retryButton.setOnAction(e -> {
                 restartGame();
             });
@@ -277,21 +249,6 @@ public class GameLevelController {
 
         player.draw(gl.getCanvas().getGraphicsContext2D(), app.tileSize);
     }
-
-    /*
-     * public void playMusic(int i) {
-     * 
-     * sound.loadTrack(i);
-     * sound.play();
-     * sound.setVolume(0.2); // nicht so laut
-     * }
-     */
-
-    /*
-     * public void stopMusic() {
-     * sound.stop();
-     * }
-     */
 
     public void handleKeyPressed(KeyEvent event) {
         keyHandler.keyPressed(event);

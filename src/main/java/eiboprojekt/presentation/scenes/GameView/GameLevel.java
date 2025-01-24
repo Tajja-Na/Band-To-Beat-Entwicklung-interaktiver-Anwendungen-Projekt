@@ -22,56 +22,54 @@ import javafx.scene.text.TextFlow;
 
 public class GameLevel extends BorderPane {
     // Screen settings
-    final int originalTileSize = 64; // 64x64 tile
-    final int scale = 1; // damit man es halt passend skalieren kann
-
-    public final int tileSize = originalTileSize * scale; // hier 128x128
+    public final int TILESIZE = 64;
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
 
-    public final int screenWidth = tileSize * maxScreenCol; // Fensterbreite in Pixel
-    public final int screenHeight = tileSize * maxScreenRow; // Fensterhöhe in Pixel
+    public final int SCREEN_WIDTH = TILESIZE * maxScreenCol; // Fensterbreite in Pixel
+    public final int SCREEN_HEIGHT = TILESIZE * maxScreenRow; // Fensterhöhe in Pixel
 
-    public int MAX_LEVEL_COL = 32; // 16*2
-    public int MAX_LEVEL_ROW = 12; // 12*1
-    public final int WORLS_WIDTH = tileSize * MAX_LEVEL_COL;
-    public final int WORLS_HEIGHT = tileSize * MAX_LEVEL_ROW;
+    public final int MAX_LEVEL_COL = 32; // 16*2
+    public final int MAX_LEVEL_ROW = 12; // 12*1
+    public final int WORLS_WIDTH = TILESIZE * MAX_LEVEL_COL;
+    public final int WORLS_HEIGHT = TILESIZE * MAX_LEVEL_ROW;
 
     private Canvas canvas;
-    
-    Text winHLGigi;
-    Text winTextGigi;
+
+    public Text winHLGigi;
+    public Text winTextGigi;
     private VBox winScreenGigi;
-    Button backToMapButtonWinGigi;
+    public Button backToMapButtonWinGigi;
 
-    Text winHLRyu;
-    Text winTextRyu;
-    Button backToMapButtonRyu;
+    public Text winHLRyu;
+    public Text winTextRyu;
+    public Button backToMapButtonRyu;
     private VBox winScreenRyu;
-    Button backToMapButtonWinRyu;
+    public Button backToMapButtonWinRyu;
 
-    VBox gameOverScreen;
-    Text gameOverText;
-    Button retryButton;
-    Button backToMapButton;
-    HBox buttons;
-    VBox centerBox;
+    public VBox gameOverScreen;
+    public Text gameOverText;
+    public Button retryButton;
+    public Button backToMapButton;
+    public HBox buttons;
+    public VBox centerBox;
 
     public boolean running;
 
     public GameLevel() {
-        canvas = new Canvas(screenWidth, screenHeight);
+        canvas = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
         this.getChildren().add(canvas);
 
-        //Style für die Buttons später:
-        getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
+        getStylesheets()
+                .add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
 
-        //GAME OVER SCREEN:
+        // GAME OVER SCREEN:
         gameOverScreen = new VBox(40);
         gameOverScreen.setAlignment(Pos.CENTER);
-        gameOverScreen.setPrefSize(screenWidth, screenHeight);
+        gameOverScreen.setPrefSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        gameOverScreen.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+        gameOverScreen.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");"
+                + "-fx-background-size: cover;");
 
         gameOverText = new Text("Oh no, Game Over!");
         gameOverText.setFont(new Font(80));
@@ -90,12 +88,13 @@ public class GameLevel extends BorderPane {
 
         gameOverScreen.getChildren().addAll(gameOverText, buttons);
 
-        //WIN SCREEN Gigi:
+        // WIN SCREEN Gigi:
         winScreenGigi = new VBox(40);
         winScreenGigi.setAlignment(Pos.CENTER);
-        winScreenGigi.setPrefSize(screenWidth, screenHeight);
+        winScreenGigi.setPrefSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        winScreenGigi.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+        winScreenGigi.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");"
+                + "-fx-background-size: cover;");
 
         winHLGigi = new Text("Congratulations! \nYou wooooon!");
         winHLGigi.setFont(new Font(80));
@@ -105,11 +104,12 @@ public class GameLevel extends BorderPane {
         backToMapButtonWinGigi = new Button("Zurück zur Map");
         backToMapButtonWinGigi.getStyleClass().add("button");
 
-        winTextGigi = new Text("Du hast Gigi davon überzeugt Teil deiner Band zu sein! Amazing! Und jetzt geht's direkt weiter, du brauchst noch einen Drummer.");
+        winTextGigi = new Text(
+                "Du hast Gigi davon überzeugt Teil deiner Band zu sein! Amazing! Und jetzt geht's direkt weiter, du brauchst noch einen Drummer.");
         winTextGigi.setFont(new Font(20));
         winTextGigi.setFill(Color.BLACK);
         TextFlow textFlowGigi = new TextFlow(winTextGigi);
-        textFlowGigi.setPrefWidth(screenWidth - 160);
+        textFlowGigi.setPrefWidth(SCREEN_WIDTH - 160);
         textFlowGigi.setPadding(new Insets(0, 80, 0, 80));
         textFlowGigi.setTextAlignment(TextAlignment.CENTER);
 
@@ -123,21 +123,24 @@ public class GameLevel extends BorderPane {
         imageBoxGigi.setPadding(new Insets(0, 0, 64, 0));
 
         for (int i = 0; i < 4; i++) {
-            ImageView imageView = new ImageView(new Image(new File("assets/LevelWin/gigiLevel" + i + ".png").toURI().toString()));
+            ImageView imageView = new ImageView(
+                    new Image(new File("assets/LevelWin/gigiLevel" + i + ".png").toURI().toString()));
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(100);
 
             imageBoxGigi.getChildren().add(imageView);
         }
 
-        winScreenGigi.getChildren().addAll(spacer1, winHLGigi, textFlowGigi, backToMapButtonWinGigi, spacer2, imageBoxGigi);
+        winScreenGigi.getChildren().addAll(spacer1, winHLGigi, textFlowGigi, backToMapButtonWinGigi, spacer2,
+                imageBoxGigi);
 
-        //WIN SCREEN Ryu:
+        // WIN SCREEN Ryu:
         winScreenRyu = new VBox(40);
         winScreenRyu.setAlignment(Pos.CENTER);
-        winScreenRyu.setPrefSize(screenWidth, screenHeight);
+        winScreenRyu.setPrefSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        winScreenRyu.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");" + "-fx-background-size: cover;");
+        winScreenRyu.setStyle("-fx-background-image: url(\"file:assets/background/background-test.jpg\");"
+                + "-fx-background-size: cover;");
 
         winHLRyu = new Text("Congratulations! \nYou won again!");
         winHLRyu.setFont(new Font(80));
@@ -147,11 +150,12 @@ public class GameLevel extends BorderPane {
         backToMapButtonWinRyu = new Button("Zurück zur Map");
         backToMapButtonWinRyu.getStyleClass().add("button");
 
-        winTextRyu = new Text("Jetzt hast du auch Ryu davon überzeugt teil deiner Band zu werden! Wow, du bist so nah dran deinen Traum zu verwirklichen. Dir fehlt noch ein Star-Band-Mitgllied und ich glaube du hast schon eine gute Idee wer das sein könnte, nicht wahr?");
+        winTextRyu = new Text(
+                "Jetzt hast du auch Ryu davon überzeugt teil deiner Band zu werden! Wow, du bist so nah dran deinen Traum zu verwirklichen. Dir fehlt noch ein Star-Band-Mitgllied und ich glaube du hast schon eine gute Idee wer das sein könnte, nicht wahr?");
         winTextRyu.setFont(new Font(20));
         winTextRyu.setFill(Color.BLACK);
         TextFlow textFlowRyu = new TextFlow(winTextRyu);
-        textFlowRyu.setPrefWidth(screenWidth - 160);
+        textFlowRyu.setPrefWidth(SCREEN_WIDTH - 160);
         textFlowRyu.setPadding(new Insets(0, 80, 0, 80));
         textFlowRyu.setTextAlignment(TextAlignment.CENTER);
 
@@ -165,7 +169,8 @@ public class GameLevel extends BorderPane {
         imageBoxRyu.setPadding(new Insets(0, 0, 64, 0));
 
         for (int i = 0; i < 4; i++) {
-            ImageView imageView = new ImageView(new Image(new File("assets/LevelWin/ryuLevel" + i + ".png").toURI().toString()));
+            ImageView imageView = new ImageView(
+                    new Image(new File("assets/LevelWin/ryuLevel" + i + ".png").toURI().toString()));
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(100);
 
@@ -174,24 +179,22 @@ public class GameLevel extends BorderPane {
 
         winScreenRyu.getChildren().addAll(spacer3, winHLRyu, textFlowRyu, backToMapButtonWinRyu, spacer4, imageBoxRyu);
 
-
-
-        //DEFAULT IN GAME:
+        // DEFAULT IN GAME:
         centerBox = new VBox(20); // 20 ist der vertikale Abstand zwischen Elementen
         centerBox.setAlignment(Pos.CENTER);
         centerBox.getChildren().addAll(getCanvas());
         setCenter(centerBox);
     }
 
-    public void setzeCanvasLose(){
+    public void setzeCanvasLose() {
         this.setCenter(gameOverScreen);
     }
 
-    public void setzeCanvasWinGigi(){
+    public void setzeCanvasWinGigi() {
         this.setCenter(winScreenGigi);
     }
 
-    public void setzeCanvasWinRyu(){
+    public void setzeCanvasWinRyu() {
         this.setCenter(winScreenRyu);
     }
 

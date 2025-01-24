@@ -10,7 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +30,8 @@ public class Introduction extends BorderPane {
         setPrefSize(width, height);
         setMinSize(width, height);
         setMaxSize(width, height);
-        getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
+        getStylesheets()
+                .add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
 
         introTexts = Arrays.asList(
                 "Dein Name ist Timmy und dein Traum war es schon immer eine Band zu gründen. Aber das muss ich dir ja nicht sagen, das weißt du selbst, denn du bist ja Timmy. Deine Mission ist es Bandmitglieder zu finden und diese von deinem Talent zu überzeugen, damit sie sich dir anschließen! Das wird nicht immer leicht sein, aber du bist ja auch nicht der Typ, der schnell aufgibt. \n",
@@ -42,12 +42,12 @@ public class Introduction extends BorderPane {
 
     private void initializeUI() {
 
-        //Bilder auf der oberen Hälfte des Bildschrimes:
         HBox imageBox = new HBox(10);
         imageBox.setAlignment(Pos.TOP_CENTER);
 
         for (int i = 0; i < 4; i++) {
-            ImageView imageView = new ImageView(new Image(new File("assets/Welcome/member" + i + ".png").toURI().toString()));
+            ImageView imageView = new ImageView(
+                    new Image(new File("assets/Welcome/member" + i + ".png").toURI().toString()));
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(100);
 
@@ -62,8 +62,7 @@ public class Introduction extends BorderPane {
             }
         }
 
-        //Textbox und Navigationsbuttons
-
+        // Textbox und Navigationsbuttons
         VBox textBox = new VBox(10);
         textBox.setAlignment(Pos.CENTER);
         textBox.setPadding(new Insets(0, 100, 0, 100));
@@ -73,8 +72,8 @@ public class Introduction extends BorderPane {
         pageText = new Text(introTexts.get(currentPage));
         pageText.setStyle("-fx-fill: white;");
         textFlow = new TextFlow(pageText);
-        textFlow.setPrefWidth(600); 
-        textFlow.setPadding(new Insets(20, 20, 20, 20)); 
+        textFlow.setPrefWidth(600);
+        textFlow.setPadding(new Insets(20, 20, 20, 20));
         textFlow.setStyle("-fx-text-fill: white;");
 
         textBox.setPadding(new Insets(0, 100, 0, 100));
@@ -94,9 +93,9 @@ public class Introduction extends BorderPane {
 
         navigationBox.getChildren().addAll(zurueckButton, weiterButton);
 
-        //Alles zusammen:
+        // Alles zusammen in mainBox:
         VBox mainBox = new VBox(50);
-        
+
         mainBox.setAlignment(Pos.CENTER);
         mainBox.getChildren().addAll(imageBox, textBox, navigationBox, gameStartButton);
         mainBox.getStyleClass().add("main-box");

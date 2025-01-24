@@ -1,7 +1,5 @@
 package eiboprojekt.presentation.scenes.GameView;
 
-//import javax.swing.plaf.synth.SynthScrollBarUI;
-
 import javafx.scene.input.KeyEvent;
 
 public class KeyHandlern {
@@ -9,19 +7,19 @@ public class KeyHandlern {
 
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
-            case W: // W-Taste für hoch
+            case W:
                 up = true;
                 break;
-            case S: // S-Taste für runter
+            case S:
                 down = true;
                 break;
-            case A: // A-Taste für links
+            case A:
                 left = true;
                 break;
-            case D: // D-Taste für rechts
+            case D:
                 right = true;
                 break;
-            case SPACE: // Leertaste für Springen
+            case SPACE:
                 jump = true;
                 break;
             default:
@@ -29,7 +27,6 @@ public class KeyHandlern {
         }
     }
 
-    // Auf Tastenfreigabe reagieren (KeyReleased)
     public void keyReleased(KeyEvent e) {
         switch (e.getCode()) {
             case W:
@@ -44,7 +41,7 @@ public class KeyHandlern {
             case D:
                 right = false;
                 break;
-            case SPACE: // Leertaste für Springen
+            case SPACE:
                 jump = false;
                 break;
             default:

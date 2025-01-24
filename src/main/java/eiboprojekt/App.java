@@ -1,21 +1,14 @@
 package eiboprojekt;
 
 import eiboprojekt.presentation.scenes.Navigation;
-import eiboprojekt.presentation.scenes.Felder.FeldManager;
-import eiboprojekt.presentation.scenes.GameView.DialogPage;
 import eiboprojekt.presentation.scenes.GameView.EndeView;
-import eiboprojekt.presentation.scenes.GameView.GameLevel;
 import eiboprojekt.presentation.scenes.GameView.GameLevelController;
-import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.GamePanelController;
-import eiboprojekt.presentation.scenes.GameView.Introduction;
 import eiboprojekt.presentation.scenes.GameView.IntroductionController;
-import eiboprojekt.presentation.scenes.GameView.Welcome;
 import eiboprojekt.presentation.scenes.GameView.WelcomeController;
 import eiboprojekt.presentation.scenes.Sounds.Sound;
 import eiboprojekt.presentation.scenes.Sounds.SoundController;
 import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -25,31 +18,18 @@ public class App extends Application {
     private StackPane rootPane;
     private WelcomeController wController;
     private IntroductionController iController;
-    //private DialogPage dialogPage; // DialogPage hinzufügen
-
     private GamePanelController gpController;
-
-    private GameLevelController glController; // vorläufig damit ein Level gemacht werden kann und die LOgik stimmt,
-                                              // danach
-    // wird mit einem LevelManager gearbeitet
-    // -> grobe idee ist das jeder NPC mit einem Level verknüpft ist und somit dann
-    // erkannt wird welches Level geladen und welche Karte dezeichnet werden muss
-
+    private GameLevelController glController;
     private EndeView endeView;
-
     private Scene scene;
 
     private boolean ImLevel = false;
 
     private Sound sound;
 
-    //Level geschafft
+    // Level geschafft
     private boolean gigiLevelGeschafft = false;
     private boolean ryuLevelGeschafft = false;
-
-    public Sound getSound() {
-        return sound;
-    }
 
     private SoundController soundController;
 
@@ -73,37 +53,14 @@ public class App extends Application {
 
         sound = new Sound();
         soundController = new SoundController(sound);
-
-        // Null-Prüfung und Initialisierung
         gpController = new GamePanelController(this);
-        System.out.println("GamePanel wurde initialisiert");
-
         wController = new WelcomeController(this);
-        System.out.println("WelcomeView wurde initialisiert");
-
         iController = new IntroductionController(this);
-
-        // gameLevel = new GameLevel(gamePanel.screenWidth, gamePanel.screenHeight,
-        // this, gamePanel);
 
         rootPane = new StackPane();
         scene = new Scene(rootPane, screenWidth, screenHeight);
 
-        // Fügen Sie zunächst die Welcome-Ansicht hinzu
         rootPane.getChildren().add(wController.getWelcomeView());
-
-        // Konfigurieren Sie den Switch-Button in der Welcome-Ansicht
-
-
-
-        // dialogPage.getSwitchButton().setOnAction(e -> switchView("GAMELevel1"));
-        // Dialog-Seite initialisieren (ohne sofort anzuzeigen)
-        // dialogPage = new DialogPage("Dies ist ein Testdialog."); vllt man es sinnn
-        // für die verschiedenen sdialoge?
-        // dialogPage = new DialogPage(this); // Pass 'this' as the App instance
-        // dialogPage.getNextButton().setOnAction(e -> switchView("GAMELevel1"));
-
-        // hier vllt auch so ein action ding für gamePanel
 
         primaryStage.setTitle("Game Game Game Game");
         primaryStage.setScene(scene);
@@ -123,22 +80,11 @@ public class App extends Application {
                 break;
             case "GAMEPANEL":
                 Navigation.getCurrentView().set(viewName);
-                // gamePanel.stopGameThread(); // Beende den Game-Thread, bevor du ihn neu
-                // startest hier muss dann stop Level Thread später hin!
                 rootPane.getChildren().add(gpController.getGp());
                 gpController.getGp().requestFocus();
-                gpController.startGameThread(gpController.getGp().getCanvas().getGraphicsContext2D()); // Starte den
-                                                                                                       // Game-Thread
-                                                                                                       // neu
+                gpController.startGameThread(gpController.getGp().getCanvas().getGraphicsContext2D());
                 setImLevel(false);
                 break;
-            /*
-             * case "DIALOG":
-             * gamePanel.stopGameThread(); // Beende den Game-Thread
-             * rootPane.getChildren().add(dialogPage);
-             * setImLevel(false);
-             * break;
-             */
             case "GAMELevel1":
                 Navigation.getCurrentView().set("reset");
                 Navigation.getCurrentView().set(viewName);
@@ -146,8 +92,7 @@ public class App extends Application {
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Gigi.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
-                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
-                                                                                                        // Level-Thread
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D());
                 setImLevel(true);
                 break;
 
@@ -158,8 +103,7 @@ public class App extends Application {
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Ryu.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
-                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
-                                                                                                        // Level-Thread
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D());
                 setImLevel(true);
                 break;
 
@@ -170,11 +114,10 @@ public class App extends Application {
                 glController = new GameLevelController(screenWidth, screenHeight, this, "Tyler.png");
                 rootPane.getChildren().add(glController.getGl());
                 glController.getGl().requestFocus();
-                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D()); // Starte den
-                                                                                                        // Level-Thread
+                glController.startLevelThread(glController.getGl().getCanvas().getGraphicsContext2D());
                 setImLevel(true);
                 break;
-            
+
             case "ENDEVIEW":
                 Navigation.getCurrentView().set(viewName);
                 glController.stopLevelThread();
@@ -186,6 +129,10 @@ public class App extends Application {
                 System.err.println("Unbekannte Ansicht: " + viewName);
                 break;
         }
+    }
+
+    public Sound getSound() {
+        return sound;
     }
 
     public void setImLevel(boolean imLevel) {
@@ -200,7 +147,6 @@ public class App extends Application {
         return gpController;
     }
 
-
     public boolean isGigiLevelGeschafft() {
         return gigiLevelGeschafft;
     }
@@ -208,7 +154,7 @@ public class App extends Application {
     public void setGigiLevelGeschafft(boolean gigiLevelGeschafft) {
         this.gigiLevelGeschafft = gigiLevelGeschafft;
     }
-    
+
     public boolean isRyuLevelGeschafft() {
         return ryuLevelGeschafft;
     }

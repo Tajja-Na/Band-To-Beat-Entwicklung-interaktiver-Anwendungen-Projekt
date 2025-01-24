@@ -5,22 +5,18 @@ import eiboprojekt.presentation.scenes.Entity.TextBubble;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 
-public class GamePanel extends BorderPane{
+public class GamePanel extends BorderPane {
     private App app;
     private final Canvas canvas;
 
-    // Dialog
-    private DialogPageController dpController; // Referenz für DialogPage
-
+    private DialogPageController dpController;
     private TextBubble warnung = new TextBubble("Achtung der Spielstand wird nicht gespeichert!", 275, 50);
-    private boolean showWarning = true;  // Zeigt an, ob eine Warnung sichtbar ist
-    
+    private boolean showWarning = true;
     private TextBubble instrumentWarnung = new TextBubble("", 300, 50);
-    private boolean showTextBubble = false; // TextBubble wird zu Beginn angezeigt
+    private boolean showTextBubble = false;
 
-    public GamePanel(App app){
+    public GamePanel(App app) {
         this.app = app;
-        // Erstelle das Canvas und füge es zum Panel hinzu
         canvas = new Canvas(app.screenWidth, app.screenHeight);
         this.getChildren().add(canvas);
     }
@@ -75,5 +71,5 @@ public class GamePanel extends BorderPane{
 
     public void setDpController(DialogPageController dpController) {
         this.dpController = dpController;
-    }   
+    }
 }

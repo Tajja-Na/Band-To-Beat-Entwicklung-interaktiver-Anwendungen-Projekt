@@ -1,48 +1,40 @@
 package eiboprojekt.presentation.scenes.Entity;
 
 import java.io.File;
-
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.GameView.GameLevel;
-import eiboprojekt.presentation.scenes.GameView.GamePanel;
 import eiboprojekt.presentation.scenes.GameView.KeyHandlern;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
-public class MainCharacterLevel extends Entity{
-    final double scale = 1.5; // damit man es halt passend skalieren kann
+public class MainCharacterLevel extends Entity {
+    final double scale = 1.5; // Timmy ist bisschen größer im Level
 
     public int screenX;
     public int screenY;
     public int groundY;
     private KeyHandlern keyHandler;
     private int tileSize;
-
-    private GameLevel level;
     private App app;
 
     public int velocityY;
     private boolean isOnGround;
 
-    public MainCharacterLevel(App app, KeyHandlern keyHandler, GameLevel level) {
+    public MainCharacterLevel(App app, KeyHandlern keyHandler) {
         this.app = app;
-        this.level = level;
         this.keyHandler = keyHandler;
         this.tileSize = app.tileSize;
-        
-        screenX = app.screenWidth - (15 * app.tileSize); //spawnpunkt vom character
-        screenY = app.screenHeight - (3 * app.tileSize); 
+
+        screenX = app.screenWidth - (15 * app.tileSize); // spawnpunkt vom character
+        screenY = app.screenHeight - (3 * app.tileSize);
         groundY = app.screenHeight - (3 * app.tileSize);
-        
-        this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // x,y, width und height vom
-        // rechteck
+
+        this.solideArea = new SolideRec(25, app.tileSize / 2 + 8, 4, app.tileSize / 2); // für collisioncheck
 
         setDefaultValues();
-        getPlayerImage(); // Spielerbilder direkt laden
-        
+        getPlayerImage();
     }
 
     public void setDefaultValues() {
@@ -62,37 +54,32 @@ public class MainCharacterLevel extends Entity{
             String basePath = "assets/Character/Charakter1/";
             walkR1 = new Image(new File(basePath + "timmy pixel sprint 1 R.png").toURI().toString());
             walkR2 = new Image(new File(basePath + "timmy pixel sprint 2 R.png").toURI().toString());
-            jumpL = new Image(new File(basePath + "jumpL.png").toURI().toString());
-            jumpR = new Image(new File(basePath + "jumpR.png").toURI().toString());
-
-            System.out.println("Front image loaded: " + (front != null));
-            // Wiederholen Sie diese Prüfung für die anderen Bilder
-
         } catch (Exception e) {
-            System.err.println("Error loading images: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void update() {
 
-    velocityY += 1; // Geschwindigkeit, mit der er wieder auf den Boden kommt
-    screenY += velocityY;
+        velocityY += 1; // Geschwindigkeit, mit der er wieder auf den Boden kommt
+        screenY += velocityY;
 
-    // Bodenprüfung
-    if (screenY > groundY) {
-        screenY = groundY;
-        velocityY = 0;
-    }
+        // Bodenprüfung
+        if (screenY > groundY) {
+            screenY = groundY;
+            velocityY = 0;
+        }
 
-    if (keyHandler.isJump()) {
-        jump();
-    }
-            sprintCountr++;
-            if (sprintCountr > 12) {
-                sprintNum = sprintNum == 1 ? 2 : 1;
-                sprintCountr = 0;
-            } 
+        if (keyHandler.isJump()) {
+            jump();
+        }
+
+        // Running
+        sprintCountr++;
+        if (sprintCountr > 12) {
+            sprintNum = sprintNum == 1 ? 2 : 1;
+            sprintCountr = 0;
+        }
     }
 
     public void jump() {
@@ -100,18 +87,13 @@ public class MainCharacterLevel extends Entity{
             velocityY = -24; // Höhe des Sprungs
         }
     }
-    
 
     public void draw(GraphicsContext gc, int tileSize) {
-        // Wechsle dann zu deinem Bild, wenn das Rechteck funktioniert
         Image image = sprintNum == 1 ? walkR1 : walkR2;
-        
         if (image != null) {
-            gc.drawImage(image, screenX, screenY, tileSize*scale, tileSize*scale);
-            //System.out.println("Drawing player at: x=" + screenX + ", y=" + screenY + ", direction: " + direction);
+            gc.drawImage(image, screenX, screenY, tileSize * scale, tileSize * scale);
         } else {
             System.err.println("Failed to draw player: Image is null");
-            // Zeichne ein Ersatz-Rechteck
             gc.setFill(Color.RED);
             gc.fillRect(screenX, screenY, tileSize, tileSize);
         }
@@ -132,7 +114,7 @@ public class MainCharacterLevel extends Entity{
     public Rectangle2D getBounds() {
         return new javafx.geometry.Rectangle2D(screenX, screenY, tileSize * scale, tileSize * scale);
     }
-    
+
     @Override
     public void setPosition(int x, int y) {
         this.weltX = x;

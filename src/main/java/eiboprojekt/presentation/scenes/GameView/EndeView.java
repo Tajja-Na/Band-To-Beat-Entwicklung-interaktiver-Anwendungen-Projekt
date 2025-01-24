@@ -10,7 +10,7 @@ public class EndeView extends BorderPane {
     int height;
     int width;
     VBox endScene;
-    
+
     public EndeView(App app) {
         this.width = app.screenWidth;
         this.height = app.screenHeight;
@@ -23,7 +23,8 @@ public class EndeView extends BorderPane {
         endScene.setAlignment(Pos.CENTER);
         endScene.setPrefSize(width, height);
 
-        endScene.setStyle("-fx-background-image: url(\"file:assets/background/Test_Ende_.png\");" + "-fx-background-size: cover;");
+        endScene.setStyle("-fx-background-image: url(\"file:assets/background/Test_Ende_.png\");"
+                + "-fx-background-size: cover;");
 
         setCenter(endScene);
     }

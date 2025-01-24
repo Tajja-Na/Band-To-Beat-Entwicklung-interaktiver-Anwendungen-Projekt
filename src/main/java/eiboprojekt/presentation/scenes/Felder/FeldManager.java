@@ -3,32 +3,18 @@ package eiboprojekt.presentation.scenes.Felder;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.MainCharacter;
-import eiboprojekt.presentation.scenes.GameView.GamePanel;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class FeldManager {
     private final int ANZAHL_FELDER_GESAMT = 150;
-    //private GamePanel gp;
     private App app;
     private MainCharacter player;
 
     public Feld[] alleFelder;
     public int[][] karteFeldNr;
-
-    // vorerst erste levelkarte hardcoded drinne,
-                                                          // danach dynamisch mit den npc interaktion zu
-                                                          // erkennen
-                                                          // maybe dann einfach das man beim levelstart den
-                                                          // setter von zuladeneKarte aufruft und es dadurch
-                                                          // ändert?
 
     public FeldManager(App app, MainCharacter player) {
         this.app = app;
@@ -37,14 +23,14 @@ public class FeldManager {
         alleFelder = new Feld[ANZAHL_FELDER_GESAMT];
         karteFeldNr = new int[app.MAX_WELT_COL][app.MAX_WELT_ROW];
 
-        getFeldImage(); 
+        getFeldImage();
     }
 
     public void getFeldImage() {
         // Im Level
         alleFelder[0] = new Feld();
         alleFelder[0].image = new Image("file:assets/Background/himmel 1 tile.png");
-        
+
         alleFelder[1] = new Feld();
         alleFelder[1].image = new Image("file:assets/Background/gras 1 tile neu.png");
 
@@ -87,7 +73,7 @@ public class FeldManager {
         alleFelder[12] = new Feld();
         alleFelder[12].image = new Image("file:assets/Background/worldBackground/EndeR.png");
 
-        // Haus 1 Alles -> Soll Solide sein
+        // Haus
         alleFelder[13] = new Feld();
         alleFelder[13].image = new Image("file:assets/Haus/Haus1/H11.png");
 
@@ -136,9 +122,6 @@ public class FeldManager {
     }
 
     public void ladeKarte(String zuladeneKarte) {
-
-        // System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        // "assets/Karte/levelbase1.txt"
         try {
             String path = zuladeneKarte;
             BufferedReader br = new BufferedReader(new FileReader(path));
@@ -164,38 +147,34 @@ public class FeldManager {
             }
             br.close();
 
-            //System.out.println("hab die karte geladen!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void draw(GraphicsContext gc) {
-        //System.out.println("hi ich bin in draw vom fm drinne");
         int weltCol = 0;
         int weltRow = 0;
 
         while (weltCol < app.MAX_WELT_COL && weltRow < app.MAX_WELT_ROW) {
             int feldNr = karteFeldNr[weltCol][weltRow];
 
-            int weltX = weltCol * app.tileSize;
-            int weltY = weltRow * app.tileSize;
-            int screenX = weltX - player.weltX + player.screenX;
             // hier geht es darum wo die tiles gezeichnet werden, die karten koordinaten
             // sind anders als die vom player, der sich auf dem screen bewegt, die karten
             // koordinate 0 0 mag bei der karte zwar 0 0 sein aber sie ist zum beispiel vom
-            // player 500 500 entfernt, da er sich in der mitt bewegt
+            // player 500 500 entfernt, da er sich in der mit bewegt
+            int weltX = weltCol * app.tileSize;
+            int weltY = weltRow * app.tileSize;
+            int screenX = weltX - player.weltX + player.screenX;
             int screenY = weltY - player.weltY + player.screenY;
 
+            // hier wird überprüft welche koordinate der karte sich auf dem screen befindet
+            // und nur diese werden dann gezeichnet,
+            // damit die performance geschont wird
             if (weltX + app.tileSize * 2 > player.weltX - player.screenX &&
                     weltX - app.tileSize * 2 < player.weltX + player.screenX &&
                     weltY + app.tileSize * 2 > player.weltY - player.screenY &&
-                    weltY - app.tileSize * 2 < player.weltY + player.screenY) { // hier wird überprüft welche
-                                                                                     // koordinate der karte sich auf
-                                                                                     // dem screen befindet und nur
-                                                                                     // diese werden dann gezeichnet,
-                                                                                     // damit die performance geschont
-                                                                                     // wird
+                    weltY - app.tileSize * 2 < player.weltY + player.screenY) {
 
                 gc.drawImage(alleFelder[feldNr].image, screenX, screenY, app.tileSize, app.tileSize);
             }

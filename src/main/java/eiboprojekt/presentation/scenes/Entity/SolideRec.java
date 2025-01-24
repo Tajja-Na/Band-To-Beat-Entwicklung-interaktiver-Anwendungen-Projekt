@@ -5,7 +5,6 @@ import javafx.scene.Node;
 public class SolideRec {
     int x, y, width, height;
 
-
     public SolideRec(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -21,7 +20,6 @@ public class SolideRec {
     }
 
     public Node getBoundsInParent() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBoundsInParent'");
     }
 
@@ -56,6 +54,5 @@ public class SolideRec {
     public void setHeight(int height) {
         this.height = height;
     }
-    
 
 }

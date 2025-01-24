@@ -1,11 +1,8 @@
 
 package eiboprojekt.presentation.scenes.GameView;
 
-import java.io.InterruptedIOException;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import de.hsrm.mi.eibo.simpleplayer.SimpleMinim;
 import eiboprojekt.App;
 import eiboprojekt.presentation.scenes.Entity.CollisionCheck;
 import eiboprojekt.presentation.scenes.Entity.Entity;
@@ -20,34 +17,32 @@ import eiboprojekt.presentation.scenes.Object.Mikrofon;
 import eiboprojekt.presentation.scenes.Object.Objekt;
 import eiboprojekt.presentation.scenes.Object.Schlagzeug;
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class GamePanelController {
-    // zur referenz dass es mit dem switch geht
     private App app;
     public FeldManager feldM;
     private GamePanel gp;
-
-    // KeyHandler -> Tasteneingaben
     public final KeyHandlern keyHandler;
+    private boolean gameThreadRunning;
+
+    // AnimationTimer aktualisiert das Spiel in einem nahezu konstanten Intervall,
+    // was einem typischen Wert von 60 FPS entspricht -> also mam braucht kein
+    // Thread oder sleep einbauensss
+    // Spielerposition und Geschwindigkeit
+    public AnimationTimer gameLoop;
 
     // Player
     public final MainCharacter player;
+    public Entity members[] = new Entity[3];
 
     // Objects
     public Objekt obj[] = new Objekt[10];
     private boolean isSchlagzeugPlatziert = false;
     private boolean isKeyboardPlatziert = false;
-
-
-    // weil wir brauchen mehrere members
-    public Entity members[] = new Entity[3];
 
     // Checker für die Collusion
     public CollisionCheck cChecker;
@@ -56,20 +51,12 @@ public class GamePanelController {
     // Sound
     Sound sound;
 
-    // AnimationTimer für die Spielschleife
-    AnimationTimer gameLoop;
-    // AnimationTimer aktualisiert das Spiel in einem nahezu konstanten Intervall,
-    // was einem typischen Wert von 60 FPS entspricht -> also mam braucht kein
-    // Thread oder sleep einbauensss
-    // Spielerposition und Geschwindigkeit
-
-    // Im Konstruktor der GamePanel-Klasse
     public GamePanelController(App app) {
         this.app = app;
         this.gp = new GamePanel(app);
         this.sound = app.getSound();
-        // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
+        this.gameThreadRunning = false;
         gp.setOnKeyPressed(this::handleKeyPressed);
         gp.setOnKeyReleased(this::handleKeyReleased);
 
@@ -91,26 +78,20 @@ public class GamePanelController {
         members[2].setPosition(app.tileSize * 33, app.tileSize * 41);
 
         // Objekte platzieren
-
         obj[2] = new Mikrofon();
         obj[2].setPosition(13 * app.tileSize, 28 * app.tileSize);
 
         obj[3] = new Gitarre();
         obj[3].setPosition(21 * app.tileSize, 12 * app.tileSize);
 
-        // Collusion
+        // Collision
         cChecker = new CollisionCheck(app);
         oChecker = new CollisionCheck(app);
     }
 
-    // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
-    private boolean gameThreadRunning = false;
-
-    // gc holen
-
     public void startGameThread(GraphicsContext gc) {
         if (gameThreadRunning) {
-            return; // Verhindere, dass der Game-Thread mehrfach gestartet wird
+            return; // Verhindert, dass der Game-Thread mehrfach gestartet wird
         }
         gameThreadRunning = true;
 
@@ -136,10 +117,8 @@ public class GamePanelController {
     }
 
     public void update() {
-        // also hier wird das bild vom player geholt
+
         player.update();
-        // hier wird immer geupdated -> collision von member und player
-        cChecker.checkPlayerMemberCollision(player, members);
 
         // Schlagzeug platzieren, wenn Gigi-Level geschafft
         if (app.isGigiLevelGeschafft() && !isSchlagzeugPlatziert) {
@@ -163,15 +142,15 @@ public class GamePanelController {
         feldM.ladeKarte("assets/Karte/bb.txt");
         feldM.draw(gc);
 
-        // Erstelle ein Array aller zu zeichnenden Entities
+        // Erstellt ein Array aller zu zeichnenden Entities
         Entity[] entitiesToDraw = new Entity[members.length + 1];
         entitiesToDraw[0] = player;
         System.arraycopy(members, 0, entitiesToDraw, 1, members.length);
 
-        // Sortiere das Array basierend auf der Y-Position
+        // Sortiert das Array basierend auf der Y-Position
         Arrays.sort(entitiesToDraw, Comparator.comparingInt(e -> e != null ? e.weltY : Integer.MAX_VALUE));
 
-        // Zeichne alle Entities in der sortierten Reihenfolge
+        // Zeichnet alle Entities in der sortierten Reihenfolge
         for (Entity entity : entitiesToDraw) {
             if (entity != null) {
                 entity.draw(gc, app.tileSize);
@@ -188,58 +167,57 @@ public class GamePanelController {
         // TextBubble anzeigen, wenn showTextBubble aktiv ist
         if (gp.isShowTextBubble()) {
             gp.setShowWarning(false);
-            gp.getInstrumentWarnung().draw(gc, 500, 100); // TextBubble anzeigen
+            gp.getInstrumentWarnung().draw(gc, 500, 100);
         }
 
         if (gp.isShowWarning()) {
-            gp.getWarnung().draw(gc, 200, 100); // TextBubble anzeigen
+            gp.getWarnung().draw(gc, 200, 100);
         }
     }
 
     public void handleKeyPressed(KeyEvent event) {
         // Übergibt die Tasteneingabe an den KeyHandler, um generelle Tastenaktionen zu
         // verarbeiten
+
+        // Entfernt die TextBubble, wenn eine WASD-Taste gedrückt wird
+        if (gp.isShowWarning() && (event.getCode() == KeyCode.W || event.getCode() == KeyCode.A
+                || event.getCode() == KeyCode.S || event.getCode() == KeyCode.D)) {
+            gp.setShowWarning(false);
+        }
+
         keyHandler.keyPressed(event);
 
         // Wenn die Taste "E" gedrückt wurde
         if (event.getCode() == KeyCode.E) {
-            // Iteriert über alle Entities die "members" darstellen
             for (Entity member : members) {
                 // Prüft, ob das aktuelle Entity ein Member-Objekt ist
                 if (member instanceof Member) {
-                    Member m = (Member) member; // Castet Entity zu Member
-
-                    // Überprüft, ob der Spieler in der Nähe des Members ist
+                    Member m = (Member) member;
                     if (m.isNear(player, app.tileSize)) {
-
                         // Prüft, ob der Spieler das benötigte Instrument besitzt
                         boolean canInteract = false; // Standardmäßig kann keine Interaktion erfolgen
-                        switch (m.getInstrument()) { // Prüft, welches Instrument der Member benötigt
+                        switch (m.getInstrument()) {
                             case "Gitarre":
-                                canInteract = player.hasGitarre; // Hat der Spieler die Gitarre?
+                                canInteract = player.hasGitarre;
                                 break;
                             case "Drum":
-                                canInteract = player.hasDrums; // Hat der Spieler das Schlagzeug?
+                                canInteract = player.hasDrums;
                                 break;
                             case "Keyboard":
-                                canInteract = player.hasKeyboard; // Hat der Spieler das Keyboard?
+                                canInteract = player.hasKeyboard;
                                 break;
                             default:
-                                break; // Für unbekannte Instrumente wird keine Interaktion erlaubt
+                                break;
                         }
 
                         if (canInteract) {
                             // Der Spieler besitzt das benötigte Instrument -> Dialog starten
                             // DialogPage initialisieren und hinzufügen
-                            // gp.setDpController(new DialogPageController(700, 250, gp, m.getName(), app));
-                            gp.setDpController(new DialogPageController(app, m.getName())); // DialogPageController rein
-                                                                                            // tun
-                            gp.getChildren().add(gp.getDpController().getDp()); // Dialog zur GamePanel-Oberfläche
-                                                                                // hinzufügen
+                            gp.setDpController(new DialogPageController(app, m.getName()));
+                            gp.getChildren().add(gp.getDpController().getDp());
                             gp.getDpController().setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
-
-                            gp.getDpController().getDp().show(); // Zeigt die Dialogseite an
-                            gp.setShowTextBubble(false); // Blendet mögliche Warnungen aus
+                            gp.getDpController().getDp().show();
+                            gp.setShowTextBubble(false);
                         } else {
                             // Der Spieler besitzt das benötigte Instrument NICHT -> Warnung anzeigen
                             gp.setShowTextBubble(true);
@@ -256,7 +234,6 @@ public class GamePanelController {
     }
 
     public void handleKeyReleased(KeyEvent event) {
-        System.out.println("Key Released: " + event.getCode()); // Testausgabe
         keyHandler.keyReleased(event);
     }
 

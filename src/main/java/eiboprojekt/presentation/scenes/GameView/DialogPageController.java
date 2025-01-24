@@ -22,12 +22,12 @@ public class DialogPageController {
         this.backButton = dp.getBackButton();
         this.startButton = dp.getStartButton();
 
-        updateDialogText(); // Aktualisiert den Text mit dem ersten Dialog
+        updateDialogText();
         initialize();
     }
 
     public void initialize() {
-        // Je nach Partner anderes Level auswählen! funktioniert nicht
+        // Je nach Partner anderes Level auswählen!
         switch (currentPartner) {
             case "Gigi":
                 startButton.setOnAction(e -> app.switchView("GAMELevel1"));
@@ -40,91 +40,77 @@ public class DialogPageController {
                 break;
         }
 
-        // Event-Handler für die Schaltflächen
         closeButton.setOnAction(e -> dp.hide());
         nextButton.setOnAction(e -> nextDialog());
         backButton.setOnAction(e -> previousDialog());
     }
 
-    // Aktualisiert den Dialogtext
     public void updateDialogText() {
         if (!dp.getDialogs().isEmpty() && dp.getCurrentDialogIndex() < dp.getDialogs().size()) {
             String line = dp.getDialogs().get(dp.getCurrentDialogIndex());
             String[] parts = line.split(":", 2);
 
             if (parts.length == 2) {
-                String speaker = parts[0].trim(); // Sprecher extrahieren
-                String dialog = parts[1].trim(); // Dialog extrahieren
+                String speaker = parts[0].trim();
+                String dialog = parts[1].trim();
 
-                dp.getPageText().setText(speaker + ": " + dialog); // Text anzeigen
-                // pageText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill:
-                // white;");
+                dp.getPageText().setText(speaker + ": " + dialog);
 
-                updateImages(speaker); // Bild des Sprechers aktualisieren
+                updateImages(speaker);
             } else {
-                dp.getPageText().setText(line); // Einzeilige Dialoge ohne Sprecher
+                dp.getPageText().setText(line);
             }
 
-            backButton.setDisable(dp.getCurrentDialogIndex() == 0); // "Zurück"-Button deaktivieren, wenn es der erste Dialog
-                                                            // ist
-            nextButton.setDisable(dp.getCurrentDialogIndex() == dp.getDialogs().size() - 1); // "Weiter"-Button deaktivieren, wenn es
-                                                                             // der letzte Dialog ist
+            backButton.setDisable(dp.getCurrentDialogIndex() == 0);
+            nextButton.setDisable(dp.getCurrentDialogIndex() == dp.getDialogs().size() - 1);
 
             // Start-Button anzeigen, wenn der letzte Dialog erreicht ist
             startButton.setVisible(dp.getCurrentDialogIndex() == dp.getDialogs().size() - 1);
-
-            System.out.println("Current Dialog Index: " + dp.getCurrentDialogIndex()); // Debugging-Information
-            // System.out.println("Current Dialog: " + line); // Debugging-Information
         }
     }
 
-    // Aktualisiert die Bilder des Sprechers
     public void updateImages(String speaker) {
         try {
-            dp.loadCharacterImages(); // Lädt die Charakterbilder
+            dp.loadCharacterImages();
 
-            ColorAdjust darkerEffect = new ColorAdjust(0, 0, -0.5, 0); // Dunklerer Effekt für inaktive Charaktere
+            ColorAdjust darkerEffect = new ColorAdjust(0, 0, -0.5, 0);
 
             if (speaker.equalsIgnoreCase("Timmy")) {
-                dp.setImagesVisibility(true, false); // Timmy spricht
-                dp.getRightImageIdle().setEffect(darkerEffect); // Partnerbild dunkeln
+                dp.setImagesVisibility(true, false);
+                dp.getRightImageIdle().setEffect(darkerEffect);
             } else if (speaker.equalsIgnoreCase(currentPartner)) {
-                dp.setImagesVisibility(false, true); // Partner spricht
-                dp.getLeftImageIdle().setEffect(darkerEffect); // Timmy-Bild dunkeln
+                dp.setImagesVisibility(false, true);
+                dp.getLeftImageIdle().setEffect(darkerEffect);
             }
         } catch (Exception e) {
             System.err.println("Error loading images: " + e.getMessage());
-            dp.setImagesVisibility(false, false); // Alle Bilder ausblenden bei einem Fehler
+            dp.setImagesVisibility(false, false);
         }
     }
 
-    // Nächsten Dialog anzeigen
     public void nextDialog() {
         if (dp.getCurrentDialogIndex() < dp.getDialogs().size() - 1) {
-            dp.setCurrentDialogIndex(dp.getCurrentDialogIndex()+1);
+            dp.setCurrentDialogIndex(dp.getCurrentDialogIndex() + 1);
             updateDialogText();
         }
     }
 
-    // Vorherigen Dialog anzeigen
     public void previousDialog() {
         if (dp.getCurrentDialogIndex() > 0) {
-            dp.setCurrentDialogIndex(dp.getCurrentDialogIndex()-1);
+            dp.setCurrentDialogIndex(dp.getCurrentDialogIndex() - 1);
             updateDialogText();
         }
     }
 
-    // Setzt den aktuellen Partner und lädt dessen Dialoge
     public void setCurrentPartner(String partnerName) {
-        dp.setCurrentPartner(partnerName); // Partnername aktualisieren
-        dp.loadDialogs(partnerName + "_dialog.txt"); // Dialoge für den neuen Partner laden
-        resetDialog(); // Dialog zurücksetzen und den ersten Dialogtext anzeigen
+        dp.setCurrentPartner(partnerName);
+        dp.loadDialogs(partnerName + "_dialog.txt");
+        resetDialog();
     }
 
-    // Setzt den Dialog auf den Anfang zurück
     public void resetDialog() {
-        dp.setCurrentDialogIndex(0); // Index zurücksetzen
-        updateDialogText(); // Text und Schaltflächen aktualisieren
+        dp.setCurrentDialogIndex(0);
+        updateDialogText();
     }
 
     public DialogPage getDp() {

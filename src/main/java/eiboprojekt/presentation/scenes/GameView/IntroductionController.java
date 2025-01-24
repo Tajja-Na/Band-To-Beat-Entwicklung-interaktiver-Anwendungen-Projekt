@@ -9,8 +9,8 @@ public class IntroductionController {
     private Button weiterButton;
     private Button zurueckButton;
     private Button gameStartButton;
-    
-    public IntroductionController(App app){
+
+    public IntroductionController(App app) {
         this.app = app;
         intro = new Introduction(app.screenWidth, app.screenHeight);
         weiterButton = intro.getWeiterButton();
@@ -20,25 +20,23 @@ public class IntroductionController {
         initialize();
     }
 
-    public void initialize(){
-        
+    public void initialize() {
+
         weiterButton.setOnAction(e -> nextPage());
-
         zurueckButton.setOnAction(e -> previousPage());
-
-        intro.getSwitchButton().setOnAction(e -> app.switchView("GAMEPANEL")); 
+        intro.getSwitchButton().setOnAction(e -> app.switchView("GAMEPANEL"));
     }
 
     public void nextPage() {
         if (intro.getCurrentPage() < intro.getIntroTexts().size() - 1) {
-            intro.setCurrentPage(intro.getCurrentPage()+1);
+            intro.setCurrentPage(intro.getCurrentPage() + 1);
             updatePage();
         }
     }
 
     public void previousPage() {
         if (intro.getCurrentPage() > 0) {
-            intro.setCurrentPage(intro.getCurrentPage()-1);
+            intro.setCurrentPage(intro.getCurrentPage() - 1);
             updatePage();
         }
     }
