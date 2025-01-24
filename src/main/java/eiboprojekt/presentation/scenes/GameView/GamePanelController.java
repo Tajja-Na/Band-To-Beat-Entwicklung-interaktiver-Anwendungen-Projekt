@@ -40,9 +40,11 @@ public class GamePanelController {
     // Player
     public final MainCharacter player;
 
-    //Objects
+    // Objects
     public Objekt obj[] = new Objekt[10];
-    //public AssetSetter aSetter = new AssetSetter(gp);
+    private boolean isSchlagzeugPlatziert = false;
+    private boolean isKeyboardPlatziert = false;
+
 
     // weil wir brauchen mehrere members
     public Entity members[] = new Entity[3];
@@ -74,7 +76,7 @@ public class GamePanelController {
         // Setze den Fokus für Tasteneingaben
         gp.setFocusTraversable(true);
         gp.requestFocus();
-        
+
         player = new MainCharacter(app, keyHandler);
         feldM = new FeldManager(app, player);
 
@@ -89,11 +91,6 @@ public class GamePanelController {
         members[2].setPosition(app.tileSize * 33, app.tileSize * 41);
 
         // Objekte platzieren
-        obj[0] = new Schlagzeug();
-        obj[0].setPosition(4 * app.tileSize, 4 * app.tileSize);
-
-        obj[1] = new Keyboard();
-        obj[1].setPosition(61 * app.tileSize, 11 * app.tileSize);
 
         obj[2] = new Mikrofon();
         obj[2].setPosition(13 * app.tileSize, 28 * app.tileSize);
@@ -109,7 +106,7 @@ public class GamePanelController {
     // Füge eine Variable hinzu, um den Zustand des Timers zu verfolgen
     private boolean gameThreadRunning = false;
 
-    //gc holen
+    // gc holen
 
     public void startGameThread(GraphicsContext gc) {
         if (gameThreadRunning) {
@@ -143,6 +140,20 @@ public class GamePanelController {
         player.update();
         // hier wird immer geupdated -> collision von member und player
         cChecker.checkPlayerMemberCollision(player, members);
+
+        // Schlagzeug platzieren, wenn Gigi-Level geschafft
+        if (app.isGigiLevelGeschafft() && !isSchlagzeugPlatziert) {
+            obj[0] = new Schlagzeug();
+            obj[0].setPosition(4 * app.tileSize, 4 * app.tileSize);
+            isSchlagzeugPlatziert = true; // Sicherstellen, dass es nur einmal platziert wird
+        }
+
+        // Keyboard platzieren, wenn Ryu-Level geschafft
+        if (app.isRyuLevelGeschafft() && !isKeyboardPlatziert) {
+            obj[1] = new Keyboard();
+            obj[1].setPosition(61 * app.tileSize, 11 * app.tileSize);
+            isKeyboardPlatziert = true; // Sicherstellen, dass es nur einmal platziert wird
+        }
 
     }
 
@@ -220,17 +231,21 @@ public class GamePanelController {
                         if (canInteract) {
                             // Der Spieler besitzt das benötigte Instrument -> Dialog starten
                             // DialogPage initialisieren und hinzufügen
-                            //gp.setDpController(new DialogPageController(700, 250, gp, m.getName(), app));
-                            gp.setDpController(new DialogPageController(app, m.getName())); //DialogPageController rein tun
-                            gp.getChildren().add(gp.getDpController().getDp()); // Dialog zur GamePanel-Oberfläche hinzufügen
+                            // gp.setDpController(new DialogPageController(700, 250, gp, m.getName(), app));
+                            gp.setDpController(new DialogPageController(app, m.getName())); // DialogPageController rein
+                                                                                            // tun
+                            gp.getChildren().add(gp.getDpController().getDp()); // Dialog zur GamePanel-Oberfläche
+                                                                                // hinzufügen
                             gp.getDpController().setCurrentPartner(m.getName()); // Setzt den aktuellen Dialogpartner
 
                             gp.getDpController().getDp().show(); // Zeigt die Dialogseite an
-                            gp.setShowTextBubble(false);  // Blendet mögliche Warnungen aus
+                            gp.setShowTextBubble(false); // Blendet mögliche Warnungen aus
                         } else {
                             // Der Spieler besitzt das benötigte Instrument NICHT -> Warnung anzeigen
                             gp.setShowTextBubble(true);
-                            gp.setInstrumentWarnung(new TextBubble("Du benötigst das Instrument " + m.getInstrument() + " für diese Person!", 350, 50));
+                            gp.setInstrumentWarnung(new TextBubble(
+                                    "Du benötigst das Instrument " + m.getInstrument() + " für diese Person!", 350,
+                                    50));
                         }
 
                         break; // Nur ein Dialog oder eine Warnung zur selben Zeit behandeln
@@ -245,7 +260,7 @@ public class GamePanelController {
         keyHandler.keyReleased(event);
     }
 
-    public GamePanel getGp(){
+    public GamePanel getGp() {
         return this.gp;
     }
 

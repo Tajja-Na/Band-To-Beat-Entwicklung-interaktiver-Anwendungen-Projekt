@@ -71,6 +71,7 @@ public class GameLevelController {
         startTime = System.currentTimeMillis();
         elapsedTime = 0;
 
+
         // Initialisiere den KeyHandler
         keyHandler = new KeyHandlern();
         gl.setOnKeyPressed(this::handleKeyPressed);
@@ -167,11 +168,12 @@ public class GameLevelController {
         if (gl.running) {
             sound.getcurrentPosition().addListener(
                     (observable, oldValue, newValue) -> {
-                        if (newValue.intValue() >= LEVEL_LAENGE) {
+                        if (newValue.intValue() >= 6) {
                             youWon = true;
                             if (gl.running) {
                                 switch (obstacleName) {
                                     case "Gigi.png":
+                                        app.setGigiLevelGeschafft(true);
                                         gl.setzeCanvasWinGigi();
                                         gl.backToMapButtonWinGigi.setOnAction(e -> {
                                             stopLevelThread();
@@ -179,6 +181,7 @@ public class GameLevelController {
                                         });
                                         break;
                                     case "Ryu.png":
+                                        app.setRyuLevelGeschafft(true);
                                         gl.setzeCanvasWinRyu();
                                         gl.backToMapButtonWinRyu.setOnAction(e -> {
                                             stopLevelThread();
@@ -213,7 +216,7 @@ public class GameLevelController {
 
         // Kollisionszähler zeichnen
         gc.setFill(Color.PURPLE);
-        gc.fillText("Kollisionen: " + collisionCount, 10, 20);
+        gc.fillText("Kollisionen: " + collisionCount + " (bei 3 bist du raus!)", 10, 20);
 
         // Zeitanzeige zeichnen
         gc.setFill(Color.PURPLE);

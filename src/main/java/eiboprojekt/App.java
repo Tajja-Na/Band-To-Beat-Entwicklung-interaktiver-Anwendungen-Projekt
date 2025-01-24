@@ -42,7 +42,11 @@ public class App extends Application {
     private boolean ImLevel = false;
 
     private Sound sound;
-    
+
+    //Level geschafft
+    private boolean gigiLevelGeschafft = false;
+    private boolean ryuLevelGeschafft = false;
+
     public Sound getSound() {
         return sound;
     }
@@ -194,6 +198,23 @@ public class App extends Application {
 
     public GamePanelController getGpController() {
         return gpController;
+    }
+
+
+    public boolean isGigiLevelGeschafft() {
+        return gigiLevelGeschafft;
+    }
+
+    public void setGigiLevelGeschafft(boolean gigiLevelGeschafft) {
+        this.gigiLevelGeschafft = gigiLevelGeschafft;
+    }
+    
+    public boolean isRyuLevelGeschafft() {
+        return ryuLevelGeschafft;
+    }
+
+    public void setRyuLevelGeschafft(boolean ryuLevelGeschafft) {
+        this.ryuLevelGeschafft = ryuLevelGeschafft;
     }
 
     public static void main(String[] args) {

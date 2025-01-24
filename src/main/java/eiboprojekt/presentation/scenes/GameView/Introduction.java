@@ -34,8 +34,8 @@ public class Introduction extends BorderPane {
         getStylesheets().add(getClass().getResource("/eiboprojekt/presentation/scenes/GameView/style.css").toExternalForm());
 
         introTexts = Arrays.asList(
-                "Dein Name ist Timmy und dein Traum war es schon immer eine Band zu gründen. Aber das muss ich dir ja nicht sagen, das weißt du selbst, denn du bist ja Timmy. Deine Mission ist es Bandmitglieder zu finden und diese von deinem Talent zu überzeugen, damit sie sich dir anschließen! Das wird nicht immer leicht sein, aber du bist ja auch nicht der Typ, der schnell aufgibt.",
-                "Also los, gehe hinaus in die Welt und suche deine Teammates! Sei nicht schüchtern und spreche sie an! (Wie im echten Leben einfach e drücken, wenn du in der Nähe bist.) Sie halten sicher spannende Abenteuer für dich bereit, mit ein wenig Geschick und Taktgefühl hast du sicher im Handumdrehen deine Band beisammen! \n Let's goooooo Timmy!");
+                "Dein Name ist Timmy und dein Traum war es schon immer eine Band zu gründen. Aber das muss ich dir ja nicht sagen, das weißt du selbst, denn du bist ja Timmy. Deine Mission ist es Bandmitglieder zu finden und diese von deinem Talent zu überzeugen, damit sie sich dir anschließen! Das wird nicht immer leicht sein, aber du bist ja auch nicht der Typ, der schnell aufgibt. \n",
+                "Also los, gehe hinaus in die Welt und suche deine Teammates! Sei nicht schüchtern und spreche sie an! (Wie im echten Leben einfach e drücken, wenn du in der Nähe bist.) Vielleicht wollen sie nicht direkt mit dir reden, aber dann bring ihnen doch ein cooles Instrument, vielleicht lockert das die Stimmung. Dann steht dir nichts mehr im Weg, mit ein wenig Geschick und Taktgefühl hast du sicher im Handumdrehen deine Band beisammen! \nLet's goooooo Timmy!");
 
         initializeUI();
     }
