@@ -72,7 +72,6 @@ public class GameLevel extends BorderPane {
                 + "-fx-background-size: cover;");
 
         gameOverText = new Text("Oh no, Game Over!");
-        gameOverText.setFont(new Font(80));
         gameOverText.setFont(Font.font("System", FontWeight.BOLD, 100));
         gameOverText.setFill(Color.BLACK);
 
@@ -97,7 +96,7 @@ public class GameLevel extends BorderPane {
                 + "-fx-background-size: cover;");
 
         winHLGigi = new Text("Congratulations! \nYou wooooon!");
-        winHLGigi.setFont(new Font(80));
+        winHLGigi.setFont(Font.font("System", FontWeight.BOLD, 100));
         winHLGigi.setFill(Color.BLUEVIOLET);
         winHLGigi.setTextAlignment(TextAlignment.CENTER);
 
@@ -143,7 +142,7 @@ public class GameLevel extends BorderPane {
                 + "-fx-background-size: cover;");
 
         winHLRyu = new Text("Congratulations! \nYou won again!");
-        winHLRyu.setFont(new Font(80));
+        winHLRyu.setFont(Font.font("System", FontWeight.BOLD, 100));
         winHLRyu.setFill(Color.BLUEVIOLET);
         winHLRyu.setTextAlignment(TextAlignment.CENTER);
 

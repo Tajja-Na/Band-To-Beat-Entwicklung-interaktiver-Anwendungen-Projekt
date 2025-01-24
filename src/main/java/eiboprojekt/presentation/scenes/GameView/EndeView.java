@@ -23,7 +23,7 @@ public class EndeView extends BorderPane {
         endScene.setAlignment(Pos.CENTER);
         endScene.setPrefSize(width, height);
 
-        endScene.setStyle("-fx-background-image: url(\"file:assets/background/Test_Ende_.png\");"
+        endScene.setStyle("-fx-background-image: url(\"file:assets/background/Endscreen.png\");"
                 + "-fx-background-size: cover;");
 
         setCenter(endScene);
