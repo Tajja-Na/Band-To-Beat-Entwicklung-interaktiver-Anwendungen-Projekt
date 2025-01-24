@@ -24,7 +24,7 @@ public class GameLevelController {
     private KeyHandlern keyHandler;
     private boolean youWon;
     private Sound sound;
-    private final int LEVEL_LAENGE = 105; // 105 sekunden
+    private final int LEVEL_LAENGE = 103; // 103 sekunden
 
     // Objekte und Kollision
     private int collisionCount = 0; // Kollisionen zählen
@@ -106,7 +106,6 @@ public class GameLevelController {
         elapsedTime = (int) ((System.currentTimeMillis() - startTime) / 1000);
         if (elapsedTime > MAX_TIME) {
             elapsedTime = MAX_TIME;
-            gl.running = false;
         }
 
         player.update();
