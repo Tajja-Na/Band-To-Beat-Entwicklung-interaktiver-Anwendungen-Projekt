@@ -24,7 +24,7 @@ public class GameLevelController {
     private KeyHandlern keyHandler;
     private boolean youWon;
     private Sound sound;
-    private final int LEVEL_LAENGE = 103; // 103 sekunden
+    private final int LEVEL_LAENGE = 102; // 103 sekunden
 
     // Objekte und Kollision
     private int collisionCount = 0; // Kollisionen zählen
@@ -40,7 +40,7 @@ public class GameLevelController {
 
     // Timer
     private long startTime;
-    private final int MAX_TIME = 105;
+    private final int MAX_TIME = 102;
     private int elapsedTime;
 
     private final MainCharacterLevel player;
@@ -161,7 +161,6 @@ public class GameLevelController {
                                         });
                                         break;
                                     case "Tyler.png":
-
                                         stopLevelThread();
                                         app.switchView("ENDEVIEW");
                                         break;
