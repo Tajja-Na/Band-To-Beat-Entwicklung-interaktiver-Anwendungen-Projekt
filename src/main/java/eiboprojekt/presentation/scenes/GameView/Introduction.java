@@ -101,8 +101,6 @@ public class Introduction extends BorderPane {
         mainBox.getStyleClass().add("main-box");
 
         setCenter(mainBox);
-
-        System.out.println(currentPage + " // " + introTexts.size());
     }
 
     public Button getSwitchButton() {
